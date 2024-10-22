@@ -32,11 +32,11 @@ window.onload = function init() {
   const loader = new THREE.TextureLoader();
 
   // 텍스처 파일 로드
-  const baseColor = loader.load("textures/Snow_004_COLOR.jpg");
-  const normalMap = loader.load("textures/Snow_004_NORM.jpg");
-  const roughnessMap = loader.load("textures/Snow_004_ROUGH.jpg");
-  const heightMap = loader.load("textures/Snow_004_DISP.png");
-  const ambientOcclusionMap = loader.load("textures/Snow_004_OCC.jpg");
+  const baseColor = loader.load("./textures/Snow_004_COLOR.jpg");
+  const normalMap = loader.load("./textures/Snow_004_NORM.jpg");
+  const roughnessMap = loader.load("./textures/Snow_004_ROUGH.jpg");
+  const heightMap = loader.load("./textures/Snow_004_DISP.png");
+  const ambientOcclusionMap = loader.load("./textures/Snow_004_OCC.jpg");
 
   // 텍스처 스케일 조정
   baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
