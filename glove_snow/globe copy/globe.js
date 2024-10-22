@@ -7,7 +7,7 @@ window.onload = function init() {
   renderer.outputEncoding = THREE.sRGBEncoding;
 
   // 구체 설정 (크기 및 세그먼트)
-  const radius = 0.5; // 큰 구체의 반지름
+  const radius = 0.5; // 구체의 반지름
   const segments = 64;
   const rotation = 6;
 
@@ -24,30 +24,25 @@ window.onload = function init() {
   // Ambient Light 추가
   scene.add(new THREE.AmbientLight(0x333333));
 
-  const light = new THREE.DirectionalLight(0xffffff, 0.1);
-  light.position.set(-1, 0, 0); // 빛의 방향 고정
+  // Directional Light 추가
+  const light = new THREE.DirectionalLight(0xffffff, 1); // 기본 밝기는 1
+  light.position.set(5, 5, 5); // 빛의 초기 방향
   scene.add(light);
 
-  // Light target (focuses on the sphere)
+  // 빛의 타겟 설정 (구체의 중심으로 설정)
   const lightTarget = new THREE.Object3D();
-  lightTarget.position.set(0, 0, 0); // focus at origin
   scene.add(lightTarget);
   light.target = lightTarget;
-
-  // Sun's rotation variables
-  const orbitRadius = 3;  // Radius of sun's orbit around the sphere
-  let angle = 0;  // Angle of rotation (in radians)
-  const rotationSpeed = 0.01;  // Speed of the sun's orbit
 
   // 텍스처 로더 생성
   const loader = new THREE.TextureLoader();
 
   // 텍스처 파일 로드
-  const baseColor = loader.load("./textures/Snow_004_COLOR.jpg");
-  const normalMap = loader.load("./textures/Snow_004_NORM.jpg");
-  const roughnessMap = loader.load("./textures/Snow_004_ROUGH.jpg");
-  const heightMap = loader.load("./textures/Snow_004_DISP.png");
-  const ambientOcclusionMap = loader.load("./textures/Snow_004_OCC.jpg");
+  const baseColor = loader.load("textures/Snow_004_COLOR.jpg");
+  const normalMap = loader.load("textures/Snow_004_NORM.jpg");
+  const roughnessMap = loader.load("textures/Snow_004_ROUGH.jpg");
+  const heightMap = loader.load("textures/Snow_004_DISP.png");
+  const ambientOcclusionMap = loader.load("textures/Snow_004_OCC.jpg");
 
   // 텍스처 스케일 조정
   baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
@@ -73,21 +68,19 @@ window.onload = function init() {
   // 카메라 제어
   const controls = new THREE.TrackballControls(camera, canvas);
 
+  // 슬라이드 바로 광원 밝기 조절
+  const slider = document.getElementById("light-intensity");
+  slider.addEventListener("input", function () {
+    light.intensity = parseFloat(slider.value); // 슬라이드 바 값을 광원의 밝기로 설정
+  });
+
   // 렌더 함수
   function render() {
     controls.update();
 
-     // Sun's orbit (circular path on the XY-plane)
-     angle += rotationSpeed;
-     const x = orbitRadius * Math.cos(angle);  // X-coordinate of the sun
-     const y = orbitRadius * Math.sin(angle);  // Y-coordinate of the sun
-     const z = orbitRadius * Math.sin(angle);
-     light.position.set(x, y, z);  // Update sun's position
- 
-     // Light intensity variation (Day/Night cycle)
-    //  const intensity = Math.max(0.1, (y+1.5) / orbitRadius);  // Intensity increases as sun moves toward Y-axis
-     const intensity = 1;  // Intensity increases as sun moves toward Y-axis
-     light.intensity = intensity;
+    // 카메라 방향에 따라 빛의 위치와 방향을 카메라 위치에 맞춤
+    light.position.copy(camera.position);
+    lightTarget.position.set(0, 0, 0); // 빛의 타겟을 구체의 중심으로 고정
 
     requestAnimationFrame(render);
     renderer.render(scene, camera);
