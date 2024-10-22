@@ -24,9 +24,20 @@ window.onload = function init() {
   // Ambient Light 추가
   scene.add(new THREE.AmbientLight(0x333333));
 
-  const light = new THREE.DirectionalLight(0xffffff, 1);
-  light.position.set(5, 5, 5); // 빛의 방향 고정
+  const light = new THREE.DirectionalLight(0xffffff, 0.1);
+  light.position.set(-1, 0, 0); // 빛의 방향 고정
   scene.add(light);
+
+  // Light target (focuses on the sphere)
+  const lightTarget = new THREE.Object3D();
+  lightTarget.position.set(0, 0, 0); // focus at origin
+  scene.add(lightTarget);
+  light.target = lightTarget;
+
+  // Sun's rotation variables
+  const orbitRadius = 3;  // Radius of sun's orbit around the sphere
+  let angle = 0;  // Angle of rotation (in radians)
+  const rotationSpeed = 0.01;  // Speed of the sun's orbit
 
   // 텍스처 로더 생성
   const loader = new THREE.TextureLoader();
@@ -65,6 +76,18 @@ window.onload = function init() {
   // 렌더 함수
   function render() {
     controls.update();
+
+     // Sun's orbit (circular path on the XY-plane)
+     angle += rotationSpeed;
+     const x = orbitRadius * Math.cos(angle);  // X-coordinate of the sun
+     const y = orbitRadius * Math.sin(angle);  // Y-coordinate of the sun
+     const z = orbitRadius * Math.sin(angle);
+     light.position.set(x, y, z);  // Update sun's position
+ 
+     // Light intensity variation (Day/Night cycle)
+    //  const intensity = Math.max(0.1, (y+1.5) / orbitRadius);  // Intensity increases as sun moves toward Y-axis
+     const intensity = 1;  // Intensity increases as sun moves toward Y-axis
+     light.intensity = intensity;
 
     requestAnimationFrame(render);
     renderer.render(scene, camera);
