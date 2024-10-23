@@ -8,15 +8,24 @@
       body {
         margin: 0;
       }
-      canvas {
-        display: block;
-      }
+    #colorSlider {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
     </style>
   </head>
   <body>
     <canvas id="gl-canvas" width="1024" height="1024">
       Oops ... your browser doesn't support the HTML5 canvas element
     </canvas>
+
+
+    <input type="range" id="colorSlider" min="0" max="100" value="0">
+  <canvas id="gl-canvas"></canvas>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://threejs.org/examples/js/controls/TrackballControls.js"></script>
+  <!-- <script src="script.js"></script> -->
 
     <!-- Three.js 라이브러리 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>

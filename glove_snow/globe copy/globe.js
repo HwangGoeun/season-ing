@@ -3,6 +3,9 @@ window.onload = function init() {
   const renderer = new THREE.WebGLRenderer({ canvas });
   renderer.setSize(canvas.width, canvas.height);
 
+  // 배경 색을 처음에 하늘색으로 설정
+  renderer.setClearColor(new THREE.Color(0x87CEEB)); // 하늘색
+
   // 감마 설정
   renderer.outputEncoding = THREE.sRGBEncoding;
 
@@ -86,6 +89,17 @@ window.onload = function init() {
       })
     );
   }
+
+  // 배경 색상 변경을 위한 슬라이더 제어
+  const colorSlider = document.getElementById("colorSlider");
+  colorSlider.addEventListener("input", (event) => {
+    const value = event.target.value / 100;
+    const skyColor = new THREE.Color(0x87CEEB); // 하늘색 (밝은 색)
+    const eveningColor = new THREE.Color(0x1C1C72); // 저녁 하늘색 (어두운 색)
+    const currentColor = skyColor.lerp(eveningColor, value); // 색상 보간
+
+    renderer.setClearColor(currentColor); // 배경 색상 변경
+  });
 
   // 초기 렌더 호출
   render();
