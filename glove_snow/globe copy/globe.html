@@ -43,15 +43,35 @@
         background: #74a7fe; /* Firefox용 슬라이드 바 손잡이 색상 */
         cursor: pointer;
       }
+      
+      body {
+        margin: 0;
+        overflow: hidden; /* 스크롤을 방지하기 위해 overflow hidden */
+      }
+    canvas {
+      display: block;
+    }
+    /* 시계 스타일 */
+    #clock {
+      position: absolute;
+      top: 10px; /* 상단으로부터 10px */
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 24px;
+      font-family: 'Arial', sans-serif;
+      z-index: 10; /* 시계가 3D 장면 위에 나타나도록 z-index 설정 */
+    }
     </style>
   </head>
   <body>
-    <canvas id="gl-canvas" width="1024" height="768"></canvas>
-
+    <!-- 시계 추가 -->
+    <div id="clock"></div>
+    
     <!-- 슬라이드 바 추가 -->
     <div id="slider-container">
       <label for="light-intensity" style="color: #ffffff"
-        >Day and Night:
+        >Light:
       </label>
       <input
         type="range"
@@ -63,5 +83,25 @@
         value="1"
       />
     </div>
+
+    <canvas id="gl-canvas" width="1024" height="1024">
+      Oops ... your browser doesn't support the HTML5 canvas element
+    </canvas>
+
+
+    <!-- <input type="range" id="colorSlider" min="0" max="100" value="0"> -->
+  <canvas id="gl-canvas"></canvas>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://threejs.org/examples/js/controls/TrackballControls.js"></script>
+  <!-- <script src="script.js"></script> -->
+
+    <!-- Three.js 라이브러리 -->
+    <script type="text/javascript" src="./js/three.min.js"></script>
+
+    <!-- TrackballControls 추가 -->
+    <script type="text/javascript" src="./js/trackballcontrols.js"></script>
+
+    <!-- globe.js 로드 -->
+    <script type="text/javascript" src="./globe.js"></script>
   </body>
 </html>
