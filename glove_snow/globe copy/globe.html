@@ -13,9 +13,27 @@
       top: 10px;
       left: 10px;
     }
+      canvas {
+        display: block;
+      }
+      /* 시계 스타일 */
+      #clock {
+        position: absolute;
+        top: 10px; /* 상단으로부터 10px */
+        left: 50%;
+        transform: translateX(-50%);
+        color: white;
+        font-size: 24px;
+        font-family: 'Arial', sans-serif;
+        z-index: 10; /* 시계가 3D 장면 위에 나타나도록 z-index 설정 */
+      }
+
     </style>
   </head>
   <body>
+    <!-- 시계 추가 -->
+    <div id="clock"></div>
+
     <canvas id="gl-canvas" width="1024" height="1024">
       Oops ... your browser doesn't support the HTML5 canvas element
     </canvas>
@@ -28,16 +46,12 @@
   <!-- <script src="script.js"></script> -->
 
     <!-- Three.js 라이브러리 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-    <!-- OBJLoader와 MTLLoader 추가 -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/MTLLoader.js"></script>
+    <script type="text/javascript" src="./js/three.min.js"></script>
 
     <!-- TrackballControls 추가 -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/TrackballControls.js"></script>
+    <script type="text/javascript" src="./js/trackballcontrols.js"></script>
 
     <!-- globe.js 로드 -->
-    <script src="globe.js"></script>
+    <script type="text/javascript" src="./globe.js"></script>
   </body>
 </html>
