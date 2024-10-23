@@ -3,20 +3,26 @@ window.onload = function init() {
   const canvas = document.getElementById("gl-canvas"); // HTML에서 'gl-canvas'라는 ID를 가진 <canvas> 요소를 가져옴
   const renderer = new THREE.WebGLRenderer({ canvas }); // WebGLRenderer를 생성하고 canvas 요소에 연결
   renderer.setSize(canvas.width, canvas.height); // 렌더러 크기를 canvas 크기로 설정
-
   // 배경 색을 처음에 하늘색으로 설정
   renderer.setClearColor(new THREE.Color(0x87CEEB)); // 하늘색
 
   // 감마 설정 (색상 표현을 개선하기 위해 감마 보정 사용)
   renderer.outputEncoding = THREE.sRGBEncoding;
 
-  // 구체 설정 (크기 및 세그먼트)
-  const radius = 0.5; // 구체의 반지름 설정 (구체의 크기)
-  const segments = 64; // 구체를 렌더링할 때 사용할 세그먼트 수 (세부 표현도를 높임)
-  const rotation = 6; // 구체의 초기 회전 각도 설정
-
   // 장면(Scene) 생성 (3D 오브젝트를 배치하는 공간)
   const scene = new THREE.Scene();
+
+  // 화면 크기에 맞춰 캔버스 크기 조정
+  function resizeCanvas() {
+    renderer.setSize(window.innerWidth, window.innerHeight); // 창 크기에 맞게 캔버스 크기 설정
+    camera.aspect = window.innerWidth / window.innerHeight; // 카메라의 종횡비 업데이트
+    camera.updateProjectionMatrix(); // 카메라의 변화 반영
+  }
+  renderer.setSize(window.innerWidth, window.innerHeight); // 초기 창 크기에 맞추어 캔버스 설정
+
+
+  /* --------------------------------------------------------------------------- */
+  /* camera */
 
   // 카메라(Camera) 설정 (3D 공간을 보는 시점 설정)
   const camera = new THREE.PerspectiveCamera(
@@ -26,6 +32,16 @@ window.onload = function init() {
     1000 // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
   );
   camera.position.z = 2; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
+
+  // 카메라 제어 설정 (TrackballControls를 사용하여 카메라를 마우스로 제어할 수 있도록 설정)
+  const controls = new THREE.TrackballControls(camera, canvas);
+  
+  /* --------------------------------------------------------------------------- */
+
+
+
+  /* --------------------------------------------------------------------------- */
+  /* Light */
 
   // 장면에 주변광(Ambient Light) 추가 (전체적으로 고르게 빛을 비춤)
   scene.add(new THREE.AmbientLight(0x333333)); // 약한 회색 빛으로 설정
@@ -40,11 +56,19 @@ window.onload = function init() {
   lightTarget.position.set(0, 0, 0); // 타겟을 원점(0, 0, 0)에 배치 (구체 중심)
   scene.add(lightTarget); // 장면에 타겟 추가
   light.target = lightTarget; // 빛이 타겟을 향하게 설정
+  
 
   // 태양의 회전 변수 (태양이 구체 주위를 공전하는 모션 설정)
   const orbitRadius = 3;  // 태양의 궤도 반지름 설정
   let angle = 0;  // 태양의 초기 회전 각도 (라디안 단위)
   const rotationSpeed = (2 * Math.PI) / 86400;  // 24시간을 기준으로 설정된 회전 속도
+
+  /* --------------------------------------------------------------------------- */
+
+
+
+  /* --------------------------------------------------------------------------- */
+  /* texture */
 
   // 텍스처 로더 생성 (3D 모델에 텍스처를 입히기 위한 로더)
   const loader = new THREE.TextureLoader();
@@ -72,48 +96,23 @@ window.onload = function init() {
   ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping; // 주변광 차단 맵 반복 설정
   ambientOcclusionMap.repeat.set(4, 4); // 4x4 반복
 
+  /* --------------------------------------------------------------------------- */
+
+
+
+  /* --------------------------------------------------------------------------- */
+  /* globe */
+  
+  // 구체 설정 (크기 및 세그먼트)
+  const radius = 0.5; // 구체의 반지름 설정 (구체의 크기)
+  const segments = 64; // 구체를 렌더링할 때 사용할 세그먼트 수 (세부 표현도를 높임)
+  const rotation = 6; // 구체의 초기 회전 각도 설정
+
+
   // 구체 생성 및 추가 (기본 구체 메쉬에 텍스처 적용)
   const sphere = createSphere(radius, segments); // 구체를 생성 (반지름과 세그먼트 수 지정)
   sphere.rotation.y = rotation; // 구체를 초기 회전 상태로 설정
   scene.add(sphere); // 구체를 장면에 추가
-
-  // 카메라 제어 설정 (TrackballControls를 사용하여 카메라를 마우스로 제어할 수 있도록 설정)
-  const controls = new THREE.TrackballControls(camera, canvas);
-
-  // 렌더 함수 (매 프레임마다 호출하여 장면을 렌더링)
-  function render() {
-    controls.update(); // 카메라 제어 업데이트
-
-    // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
-    angle += rotationSpeed; // 각도를 계속 증가시켜 회전시키기
-    const x = orbitRadius * Math.cos(angle);  // 태양의 X좌표 (코사인 함수 사용)
-    const y = orbitRadius * Math.sin(angle);  // 태양의 Y좌표 (사인 함수 사용)
-    const z = orbitRadius * Math.sin(angle);  // 태양의 Z좌표 (사인 함수 사용)
-    light.position.set(x, y, z);  // 태양(빛)의 새로운 위치 설정
-
-    // 빛의 강도 조절 (주석 처리된 코드로 낮/밤 주기 구현 가능)
-    const intensity = 1;  // 빛의 강도를 1로 고정
-    light.intensity = intensity; // 빛의 강도 적용
-
-    requestAnimationFrame(render); // 다음 프레임에서 렌더 함수를 재귀 호출
-    renderer.render(scene, camera); // 현재 프레임을 렌더링
-  }
-
-  // 시계 업데이트 함수
-  function updateClock() {
-    const clockElement = document.getElementById('clock');
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0'); // 두 자리로 표시
-    const minutes = String(now.getMinutes()).padStart(2, '0'); // 두 자리로 표시
-    const seconds = String(now.getSeconds()).padStart(2, '0'); // 두 자리로 표시
-    clockElement.textContent = `${hours}:${minutes}:${seconds}`; // 시계에 시간 표시
-  }
-
-  // 1초마다 시계를 업데이트
-  setInterval(updateClock, 1000);
-
-  // 페이지 로드 시 바로 시계 표시
-  updateClock();
 
   // 구체 생성 함수 (MeshStandardMaterial로 텍스처를 적용한 구체 생성)
   function createSphere(radius, segments) {
@@ -132,16 +131,139 @@ window.onload = function init() {
     );
   }
 
-  // 배경 색상 변경을 위한 슬라이더 제어
-  const colorSlider = document.getElementById("colorSlider");
-  colorSlider.addEventListener("input", (event) => {
-    const value = event.target.value / 100;
-    const skyColor = new THREE.Color(0x87CEEB); // 하늘색 (밝은 색)
-    const eveningColor = new THREE.Color(0x1C1C72); // 저녁 하늘색 (어두운 색)
-    const currentColor = skyColor.lerp(eveningColor, value); // 색상 보간
+  /* --------------------------------------------------------------------------- */
 
-    renderer.setClearColor(currentColor); // 배경 색상 변경
-  });
+
+
+  /* --------------------------------------------------------------------------- */
+  /* clock */
+
+  // 시계 업데이트 함수
+  function updateClock() {
+    const clockElement = document.getElementById('clock');
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0'); // 두 자리로 표시
+    const minutes = String(now.getMinutes()).padStart(2, '0'); // 두 자리로 표시
+    const seconds = String(now.getSeconds()).padStart(2, '0'); // 두 자리로 표시
+    clockElement.textContent = `${hours}:${minutes}:${seconds}`; // 시계에 시간 표시
+  }
+
+  // 1초마다 시계와 배경색을 업데이트
+  setInterval(() => {
+    updateClock();
+    updateBackgroundColor(); // 시간에 맞추어 배경색 업데이트
+  }, 1000);
+
+
+  // // 페이지 로드 시 바로 시계 표시
+  // updateClock();
+  
+  // 현재 시간을 초 단위로 변환하고, 24시간 기준으로 비율 계산
+  function getTimeBasedColorValue() {
+    const now = new Date();
+    const secondsInDay = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
+    return secondsInDay / 86400; // 86400초(24시간) 기준으로 비율 계산 (0 ~ 1)
+  }
+
+  /* --------------------------------------------------------------------------- */
+  
+
+
+  /* --------------------------------------------------------------------------- */
+  /* background */
+
+  // 배경 색상 업데이트 함수 (시간에 따라 배경색이 변화)
+  function updateBackgroundColor() {
+    const timeValue = getTimeBasedColorValue(); // 현재 시간 비율
+    const skyColor = new THREE.Color(0x87CEEB); // 밝은 하늘색
+    const eveningColor = new THREE.Color(0x1C1C72); // 어두운 저녁색
+    const currentColor = skyColor.lerp(eveningColor, timeValue); // 시간에 따른 색상 보간
+    renderer.setClearColor(currentColor); // 배경 색상 업데이트
+  }
+
+  /* --------------------------------------------------------------------------- */
+
+
+
+  /* --------------------------------------------------------------------------- */
+  /* slider */
+  
+  // // 배경 색상 변경을 위한 슬라이더 제어
+  // const colorSlider = document.getElementById("colorSlider");
+  // colorSlider.addEventListener("input", (event) => {
+  //   const value = event.target.value / 100;
+
+  //   // 배경 색상 업데이트
+  //   const skyColor = new THREE.Color(0x87CEEB); // 하늘색 (밝은 색)
+  //   const eveningColor = new THREE.Color(0x1C1C72); // 저녁 하늘색 (어두운 색)
+  //   const currentColor = skyColor.lerp(eveningColor, value); // 색상 보간
+  //   renderer.setClearColor(currentColor); // 배경 색상 변경
+
+  //   // // 슬라이더 값에 따라 시간을 업데이트
+  //   // updateClockBasedOnSlider(sliderValue);
+  // });
+
+  // // 슬라이더 값에 따른 시간을 표시하는 함수
+  // function updateClockBasedOnSlider(sliderValue) {
+  //   const totalSecondsInDay = 86400; // 하루는 86400초
+  //   const seconds = sliderValue * totalSecondsInDay; // 슬라이더 값에 따른 초 계산
+
+  //   const hours = Math.floor(seconds / 3600) % 24;
+  //   const minutes = Math.floor((seconds % 3600) / 60);
+  //   const secondsDisplay = Math.floor(seconds % 60);
+
+  //   const clockElement = document.getElementById('clock');
+  //   clockElement.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secondsDisplay).padStart(2, '0')}`;
+  // }
+  
+  // function setSliderToCurrentTime() {
+  //   const now = new Date();
+  //   const secondsInDay = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+  //   const sliderValue = (secondsInDay / 86400) * 100; // 하루 86400초에 대한 백분율로 슬라이더 값 설정
+  //   document.getElementById('colorSlider').value = sliderValue;
+  //   updateClockBasedOnSlider(sliderValue / 100);
+  // }
+
+  // 초기 렌더링 시 슬라이더 값 적용
+  // setSliderToCurrentTime(); // 초기값을 현재 시간으로 설정
+  // const initialSliderValue = colorSlider.value / 100;
+  // updateClockBasedOnSlider(initialSliderValue);
+
+  /* --------------------------------------------------------------------------- */
+
+
+  // 렌더 함수 (매 프레임마다 호출하여 장면을 렌더링)
+  function render() {
+    controls.update(); // 카메라 제어 업데이트
+
+    // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
+    angle += rotationSpeed; // 각도를 계속 증가시켜 회전시키기
+    const x = orbitRadius * Math.cos(angle);  // 태양의 X좌표 (코사인 함수 사용)
+    const y = orbitRadius * Math.sin(angle);  // 태양의 Y좌표 (사인 함수 사용)
+    const z = orbitRadius * Math.sin(angle);  // 태양의 Z좌표 (사인 함수 사용)
+    light.position.set(x, y, z);  // 태양(빛)의 새로운 위치 설정
+
+    // // 배경 색상 변경 (시간에 맞추어 슬라이더와 연동)
+    // const sliderValue = getTimeBasedSliderValue();
+    // const skyColor = new THREE.Color(0x87CEEB); // 하늘색 (밝은 색)
+    // const eveningColor = new THREE.Color(0x1C1C72); // 저녁 하늘색 (어두운 색)
+    // const currentColor = skyColor.lerp(eveningColor, sliderValue); // 색상 보간
+    // renderer.setClearColor(currentColor); // 배경 색상 변경
+
+    // 빛의 강도 조절 (주석 처리된 코드로 낮/밤 주기 구현 가능)
+    const intensity = 1;  // 빛의 강도를 1로 고정
+    light.intensity = intensity; // 빛의 강도 적용
+
+    controls.update;
+    updateBackgroundColor();
+
+    requestAnimationFrame(render); // 다음 프레임에서 렌더 함수를 재귀 호출
+    renderer.render(scene, camera); // 현재 프레임을 렌더링
+  }
+
+
+        // 창 크기가 변경될 때마다 resizeCanvas 함수 호출
+        window.addEventListener('resize', resizeCanvas);
 
   // 초기 렌더링 함수 호출 (첫 프레임을 렌더링하기 위해 호출)
   render();
