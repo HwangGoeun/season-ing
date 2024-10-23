@@ -3,17 +3,51 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Three.js Globe</title>
+    <title>Three.js Lighting Control</title>
+    <script type="text/javascript" src="js/three.min.js"></script>
+    <script type="text/javascript" src="js/TrackballControls.js"></script>
+    <script type="text/javascript" src="globe.js"></script>
     <style>
+      #slider-container {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 10;
+      }
+
+      input[type="range"] {
+        -webkit-appearance: none;
+        width: 200px;
+        height: 15px;
+        border-radius: 5px;
+        background: #666666; /* 슬라이드 바 배경 색상 */
+        outline: none;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #74a7fe; /* 슬라이드 바 손잡이 색상 */
+        cursor: pointer;
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #74a7fe; /* Firefox용 슬라이드 바 손잡이 색상 */
+        cursor: pointer;
+      }
+      
       body {
         margin: 0;
         overflow: hidden; /* 스크롤을 방지하기 위해 overflow hidden */
       }
-    #colorSlider {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-    }
     canvas {
       display: block;
     }
@@ -28,12 +62,27 @@
       font-family: 'Arial', sans-serif;
       z-index: 10; /* 시계가 3D 장면 위에 나타나도록 z-index 설정 */
     }
-
     </style>
   </head>
   <body>
     <!-- 시계 추가 -->
     <div id="clock"></div>
+    
+    <!-- 슬라이드 바 추가 -->
+    <div id="slider-container">
+      <label for="light-intensity" style="color: #ffffff"
+        >Light:
+      </label>
+      <input
+        type="range"
+        id="light-intensity"
+        name="light-intensity"
+        min="0"
+        max="1"
+        step="0.01"
+        value="1"
+      />
+    </div>
 
     <canvas id="gl-canvas" width="1024" height="1024">
       Oops ... your browser doesn't support the HTML5 canvas element

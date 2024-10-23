@@ -153,10 +153,6 @@ window.onload = function init() {
     updateClock();
     updateBackgroundColor(); // 시간에 맞추어 배경색 업데이트
   }, 1000);
-
-
-  // // 페이지 로드 시 바로 시계 표시
-  // updateClock();
   
   // 현재 시간을 초 단위로 변환하고, 24시간 기준으로 비율 계산
   function getTimeBasedColorValue() {
@@ -187,50 +183,21 @@ window.onload = function init() {
 
   /* --------------------------------------------------------------------------- */
   /* slider */
-  
-  // // 배경 색상 변경을 위한 슬라이더 제어
-  // const colorSlider = document.getElementById("colorSlider");
-  // colorSlider.addEventListener("input", (event) => {
-  //   const value = event.target.value / 100;
+ 
+  // 슬라이드 바로 광원 밝기 조절
+  const slider = document.getElementById("light-intensity");
+  slider.value = light.intensity; // 슬라이더 초기 값을 광원의 초기 강도와 동기화
 
-  //   // 배경 색상 업데이트
-  //   const skyColor = new THREE.Color(0x87CEEB); // 하늘색 (밝은 색)
-  //   const eveningColor = new THREE.Color(0x1C1C72); // 저녁 하늘색 (어두운 색)
-  //   const currentColor = skyColor.lerp(eveningColor, value); // 색상 보간
-  //   renderer.setClearColor(currentColor); // 배경 색상 변경
-
-  //   // // 슬라이더 값에 따라 시간을 업데이트
-  //   // updateClockBasedOnSlider(sliderValue);
-  // });
-
-  // // 슬라이더 값에 따른 시간을 표시하는 함수
-  // function updateClockBasedOnSlider(sliderValue) {
-  //   const totalSecondsInDay = 86400; // 하루는 86400초
-  //   const seconds = sliderValue * totalSecondsInDay; // 슬라이더 값에 따른 초 계산
-
-  //   const hours = Math.floor(seconds / 3600) % 24;
-  //   const minutes = Math.floor((seconds % 3600) / 60);
-  //   const secondsDisplay = Math.floor(seconds % 60);
-
-  //   const clockElement = document.getElementById('clock');
-  //   clockElement.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secondsDisplay).padStart(2, '0')}`;
-  // }
-  
-  // function setSliderToCurrentTime() {
-  //   const now = new Date();
-  //   const secondsInDay = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-  //   const sliderValue = (secondsInDay / 86400) * 100; // 하루 86400초에 대한 백분율로 슬라이더 값 설정
-  //   document.getElementById('colorSlider').value = sliderValue;
-  //   updateClockBasedOnSlider(sliderValue / 100);
-  // }
-
-  // 초기 렌더링 시 슬라이더 값 적용
-  // setSliderToCurrentTime(); // 초기값을 현재 시간으로 설정
-  // const initialSliderValue = colorSlider.value / 100;
-  // updateClockBasedOnSlider(initialSliderValue);
+  slider.addEventListener("input", function () {
+    light.intensity = parseFloat(slider.value); // 슬라이드 바 값을 광원의 밝기로 설정
+  });
 
   /* --------------------------------------------------------------------------- */
 
+
+
+  /* --------------------------------------------------------------------------- */
+  /* rendering*/
 
   // 렌더 함수 (매 프레임마다 호출하여 장면을 렌더링)
   function render() {
@@ -243,28 +210,17 @@ window.onload = function init() {
     const z = orbitRadius * Math.sin(angle);  // 태양의 Z좌표 (사인 함수 사용)
     light.position.set(x, y, z);  // 태양(빛)의 새로운 위치 설정
 
-    // // 배경 색상 변경 (시간에 맞추어 슬라이더와 연동)
-    // const sliderValue = getTimeBasedSliderValue();
-    // const skyColor = new THREE.Color(0x87CEEB); // 하늘색 (밝은 색)
-    // const eveningColor = new THREE.Color(0x1C1C72); // 저녁 하늘색 (어두운 색)
-    // const currentColor = skyColor.lerp(eveningColor, sliderValue); // 색상 보간
-    // renderer.setClearColor(currentColor); // 배경 색상 변경
-
-    // 빛의 강도 조절 (주석 처리된 코드로 낮/밤 주기 구현 가능)
-    const intensity = 1;  // 빛의 강도를 1로 고정
-    light.intensity = intensity; // 빛의 강도 적용
-
-    controls.update;
     updateBackgroundColor();
 
     requestAnimationFrame(render); // 다음 프레임에서 렌더 함수를 재귀 호출
     renderer.render(scene, camera); // 현재 프레임을 렌더링
   }
 
-
-        // 창 크기가 변경될 때마다 resizeCanvas 함수 호출
-        window.addEventListener('resize', resizeCanvas);
+  // 창 크기가 변경될 때마다 resizeCanvas 함수 호출
+  window.addEventListener('resize', resizeCanvas);
 
   // 초기 렌더링 함수 호출 (첫 프레임을 렌더링하기 위해 호출)
   render();
+
+  /* --------------------------------------------------------------------------- */
 };
