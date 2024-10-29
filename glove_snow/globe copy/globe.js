@@ -181,6 +181,35 @@ window.onload = function init() {
   /* --------------------------------------------------------------------------- */
 
   /* --------------------------------------------------------------------------- */
+  /* button */
+  // 버튼 클릭 시 카메라 위치 변경
+  document.getElementById("action-button").addEventListener("click", function () {
+    const distanceBelowCat = 0.3; // 고양이 아래에서 카메라 위치 설정
+    const distanceInFrontOfCat = 0.5; // 카메라와 고양이 사이의 거리 설정
+    
+    // 구체의 위치를 약간 아래로 조정하여 반절만 보이게 설정
+    sphere.position.set(0, -0.3, 0);
+    // 고양이의 위치를 구체의 위치에 맞추어 내림
+    cat.position.set(0, -0.05, 0);
+    // 구체의 크기를 줄여서 배경 역할로 설정
+    sphere.scale.set(0.5, 0.5, 0.5); // 구체의 크기를 절반으로 줄임
+    
+    
+    // 카메라를 고양이의 얼굴 앞쪽에서 바라보도록 위치 설정
+    camera.position.set(
+      cat.position.x,
+      cat.position.y + distanceBelowCat,
+      cat.position.z + distanceInFrontOfCat
+    );
+
+    // 카메라가 고양이의 얼굴을 바라보도록 설정
+    camera.lookAt(cat.position);
+
+    controls.update();
+  });
+  /* --------------------------------------------------------------------------- */
+
+  /* --------------------------------------------------------------------------- */
   // 고양이 GLTFLoader로 올린 이후에 구체 위에 올리기
   const gltf_loader = new THREE.GLTFLoader();
   gltf_loader.load(

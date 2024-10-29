@@ -62,6 +62,27 @@
         font-family: "Arial", sans-serif;
         z-index: 10; /* 시계가 3D 장면 위에 나타나도록 z-index 설정 */
       }
+
+      /* 버튼 컨테이너 스타일 */
+      #button-container {
+        position: absolute;
+        top: 70px; /* 슬라이더 아래 위치 */
+        left: 20px;
+        z-index: 10; /* 캔버스 위에 표시되도록 z-index 설정 */
+      }
+
+      /* 버튼 스타일 */
+      #action-button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      #action-button:hover {
+        background-color: #45a049; /* 호버 시 색상 변경 */
+      }
     </style>
   </head>
   <body>
@@ -80,6 +101,11 @@
         step="0.01"
         value="1"
       />
+    </div>
+
+    <!-- 버튼 추가 -->
+    <div id="button-container">
+      <button id="action-button">Face Cam</button>
     </div>
 
     <canvas id="gl-canvas" width="1024" height="1024">
