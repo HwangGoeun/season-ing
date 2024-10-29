@@ -182,6 +182,7 @@ window.onload = function init() {
 
   /* --------------------------------------------------------------------------- */
   // 고양이 GLTFLoader로 올린 이후에 구체 위에 올리기
+  let cat,mixer;
   const gltf_loader = new THREE.GLTFLoader();
   gltf_loader.load(
     "../../move_cat/toon_cat_free/scene.gltf",
@@ -189,6 +190,13 @@ window.onload = function init() {
       cat = gltf.scene.children[0];
       cat.scale.set(0.0008, 0.0008, 0.0008);
       cat.position.set(0, radius, 0);
+      
+      mixer = new THREE.AnimationMixer(cat);
+          if (gltf.animations.length > 0) {
+            const action = mixer.clipAction(gltf.animations[0]);
+            action.play();
+          }
+
       scene.add(gltf.scene);
       render();
     },
@@ -207,6 +215,9 @@ window.onload = function init() {
   function render() {
     controls.update(); // 카메라 제어 업데이트
 
+    // Rotate sphere along the X-axis
+    sphere.rotation.x -= 0.004; // Adjust rotation speed as needed
+
     // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
     angle += rotationSpeed; // 각도를 계속 증가시켜 회전시키기
     const x = orbitRadius * Math.cos(angle); // 태양의 X좌표 (코사인 함수 사용)
@@ -216,15 +227,41 @@ window.onload = function init() {
 
     updateBackgroundColor();
 
-    requestAnimationFrame(render); // 다음 프레임에서 렌더 함수를 재귀 호출
+    if (mixer) mixer.update(0.004);  // Adjust timing for animation
+    // Check for collision and keep cat on sphere
+    if (cat) {
+      keepCatOnSphere();
+    }
     renderer.render(scene, camera); // 현재 프레임을 렌더링
+    requestAnimationFrame(render); // 다음 프레임에서 렌더 함수를 재귀 호출
   }
 
   // 창 크기가 변경될 때마다 resizeCanvas 함수 호출
   window.addEventListener("resize", resizeCanvas);
 
+  // 고양이 collision detection 수행
+  // function keepCatOnSphere() {
+  //   const catBox = new THREE.Box3().setFromObject(cat);
+  //   const sphereBox = new THREE.Box3().setFromObject(sphere);
+
+  //   // Check for overlap by comparing bounding boxes
+  //   if (catBox.intersectsBox(sphereBox)) {
+  //     const catPosition = cat.position.clone().normalize().multiplyScalar(radius+0.1);
+  //     cat.position.copy(catPosition);
+  //   }
+  // }
+
+  function keepCatOnSphere() {
+    const sphereCenter = sphere.position; // Sphere center
+    const catDirection = cat.position.clone().sub(sphereCenter).normalize(); // Direction vector from sphere to cat
+    
+    // Adjust position so the cat stays on the surface of the sphere
+    const targetPosition = catDirection.multiplyScalar(radius+0.03); // Offset to keep the cat slightly above the surface
+    cat.position.copy(targetPosition);
+  }
+  
+
   // 초기 렌더링 함수 호출 (첫 프레임을 렌더링하기 위해 호출)
   render();
-
   /* --------------------------------------------------------------------------- */
 };
