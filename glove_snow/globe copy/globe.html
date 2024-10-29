@@ -1,115 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Three.js Scene</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three.js Lighting Control</title>
+    <script type="text/javascript" src="js/three.min.js"></script>
+    <script type="text/javascript" src="js/TrackballControls.js"></script>
+    <script type="text/javascript" src="globe.js"></script>
     <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-        }
-        canvas {
-            display: block; /* Prevent canvas from displaying inline */
-        }
+      #slider-container {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 10;
+      }
+
+      input[type="range"] {
+        -webkit-appearance: none;
+        width: 200px;
+        height: 15px;
+        border-radius: 5px;
+        background: #666666; /* 슬라이드 바 배경 색상 */
+        outline: none;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #74a7fe; /* 슬라이드 바 손잡이 색상 */
+        cursor: pointer;
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #74a7fe; /* Firefox용 슬라이드 바 손잡이 색상 */
+        cursor: pointer;
+      }
+
+      body {
+        margin: 0;
+        overflow: hidden; /* 스크롤을 방지하기 위해 overflow hidden */
+      }
+      canvas {
+        display: block;
+      }
+      /* 시계 스타일 */
+      #clock {
+        position: absolute;
+        top: 10px; /* 상단으로부터 10px */
+        left: 50%;
+        transform: translateX(-50%);
+        color: white;
+        font-size: 24px;
+        font-family: "Arial", sans-serif;
+        z-index: 10; /* 시계가 3D 장면 위에 나타나도록 z-index 설정 */
+      }
     </style>
-    <!-- Include Three.js and other necessary libraries -->
-    <script src="../ThreeJS-Code/GLTFmodel/js/three.min.js"></script>
-    <script src="../ThreeJS-Code/GLTFmodel/js/orbitcontrols.js"></script>
-    <script src="../ThreeJS-Code/GLTFmodel/js/GLTFLoader.js"></script>
-</head>
-<body>
+  </head>
+  <body>
+    <!-- 시계 추가 -->
+    <div id="clock"></div>
+
+    <!-- 슬라이드 바 추가 -->
+    <div id="slider-container">
+      <label for="light-intensity" style="color: #ffffff">Light: </label>
+      <input
+        type="range"
+        id="light-intensity"
+        name="light-intensity"
+        min="0"
+        max="1"
+        step="0.01"
+        value="1"
+      />
+    </div>
+
+    <canvas id="gl-canvas" width="1024" height="1024">
+      Oops ... your browser doesn't support the HTML5 canvas element
+    </canvas>
+
+    <!-- <input type="range" id="colorSlider" min="0" max="100" value="0"> -->
     <canvas id="gl-canvas"></canvas>
-    <script>
-        window.onload = function init() {
-            const canvas = document.getElementById("gl-canvas");
-            const renderer = new THREE.WebGLRenderer({ canvas });
-            renderer.setSize(window.innerWidth, window.innerHeight); // Use the full window size
-            renderer.outputEncoding = THREE.sRGBEncoding;
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://threejs.org/examples/js/controls/TrackballControls.js"></script>
+    <!-- <script src="script.js"></script> -->
 
-            // Scene and Camera setup
-            const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x404040);
+    <!-- Three.js 라이브러리 -->
+    <script type="text/javascript" src="./js/three.min.js"></script>
 
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(0, 150, 400); // 카메라 위치 조정
+    <!-- TrackballControls 추가 -->
+    <script type="text/javascript" src="./js/trackballcontrols.js"></script>
 
-            // Controls for the camera
-            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    <!-- globe.js 로드 -->
+    <script type="text/javascript" src="./globe.js"></script>
 
-            // Lighting
-            const ambientLight = new THREE.AmbientLight(0x404040, 5);
-            scene.add(ambientLight);
-
-            const light = new THREE.PointLight(0xc4c4c4, 1);
-            light.position.set(0, 300, 500); // 조명 위치 조정
-            scene.add(light);
-
-            // Texture Loader
-            const loader = new THREE.TextureLoader();
-            const baseColor = loader.load("../textures/Snow_004_COLOR.jpg");
-            const normalMap = loader.load("../textures/Snow_004_NORM.jpg");
-            const roughnessMap = loader.load("../textures/Snow_004_ROUGH.jpg");
-            const heightMap = loader.load("../textures/Snow_004_DISP.png");
-            const ambientOcclusionMap = loader.load("../textures/Snow_004_OCC.jpg");
-
-            // Create a sphere with textures
-            const sphere = createSphere(100, 64);
-            scene.add(sphere); // Add sphere to scene
-
-            function createSphere(radius, segments) {
-                return new THREE.Mesh(
-                    new THREE.SphereGeometry(radius, segments, segments),
-                    new THREE.MeshStandardMaterial({
-                        map: baseColor,
-                        normalMap: normalMap,
-                        roughnessMap: roughnessMap,
-                        displacementMap: heightMap,
-                        aoMap: ambientOcclusionMap,
-                        roughness: 3.0,
-                        metalness: 0.0,
-                        displacementScale: 0.03,
-                    })
-                );
-            }
-
-            // GLTFLoader for loading 3D model
-            const gltfLoader = new THREE.GLTFLoader();
-            let mixer;
-
-            gltfLoader.load('../toon_cat_free/scene.gltf', function (gltf) {
-                const model = gltf.scene;
-                model.scale.set(0.1, 0.1, 0.1); // Adjust the size of the cat model (if needed)
-
-                // Position the cat on the surface of the sphere
-                const sphereRadius = 100; // Radius of the sphere
-                model.position.set(0, sphereRadius, 0); // Adjust the height based on the sphere radius
-
-                scene.add(model);
-
-                if (gltf.animations && gltf.animations.length > 0) {
-                    mixer = new THREE.AnimationMixer(model);
-                    gltf.animations.forEach((clip) => {
-                        mixer.clipAction(clip).play();
-                    });
-                }
-            }, undefined, function (error) {
-                console.error('An error occurred while loading the model:', error);
-            });
-
-            // Rendering and animation loop
-            function animate() {
-                requestAnimationFrame(animate);
-
-                // Update animations if mixer exists
-                if (mixer) mixer.update(0.01);
-
-                controls.update();
-                renderer.render(scene, camera);
-            }
-
-            animate(); // Start the animation loop
-        }
-    </script>
-</body>
+    <!-- gltf loader 로드 -->
+    <script type="text/javascript" src="./js/GLTFLoader.js"></script>
+  </body>
 </html>
