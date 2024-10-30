@@ -23,17 +23,25 @@ window.onload = function init() {
   /* --------------------------------------------------------------------------- */
   /* camera */
 
+  const fov =  75;
+  const aspect = 2;
+  const near = 0.1;
+  const far = 6;
+  
   // 카메라(Camera) 설정 (3D 공간을 보는 시점 설정)
   const camera = new THREE.PerspectiveCamera(
-    45, // 시야각 (FOV) 45도 설정 (화각)
-    canvas.width / canvas.height, // 화면의 가로 세로 비율 설정 (종횡비)
-    0.01, // 카메라가 인식할 수 있는 가장 가까운 거리 (근접 클리핑 평면)
-    1000 // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
+    fov, // 시야각 (FOV) 45도 설정 (화각)
+    aspect, // 화면의 가로 세로 비율 설정 (종횡비)
+    near, // 카메라가 인식할 수 있는 가장 가까운 거리 (근접 클리핑 평면)
+    far // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
   );
-  camera.position.z = 2; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
+  camera.position.z = 4; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
+  camera.position.y = 9; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
+  camera.rotation.x -= 0.5;
+
 
   // 카메라 제어 설정 (TrackballControls를 사용하여 카메라를 마우스로 제어할 수 있도록 설정)
-  const controls = new THREE.TrackballControls(camera, canvas);
+  // const controls = new THREE.TrackballControls(camera, canvas);
 
   /* --------------------------------------------------------------------------- */
 
@@ -55,7 +63,7 @@ window.onload = function init() {
   light.target = lightTarget; // 빛이 타겟을 향하게 설정
 
   // 태양의 회전 변수 (태양이 구체 주위를 공전하는 모션 설정)
-  const orbitRadius = 3; // 태양의 궤도 반지름 설정
+  const orbitRadius = 10; // 태양의 궤도 반지름 설정
   let angle = 0; // 태양의 초기 회전 각도 (라디안 단위)
   const rotationSpeed = (2 * Math.PI) / 86400; // 24시간을 기준으로 설정된 회전 속도
 
@@ -96,59 +104,32 @@ window.onload = function init() {
   /* globe */
 
   // 구체 설정 (크기 및 세그먼트)
-  const radius = 0.5; // 구체의 반지름 설정 (구체의 크기)
+  const radius = 6; // 구체의 반지름 설정 (구체의 크기)
   const segments = 64; // 구체를 렌더링할 때 사용할 세그먼트 수 (세부 표현도를 높임)
   const rotation = 6; // 구체의 초기 회전 각도 설정
 
   // 구체 생성 및 추가 (기본 구체 메쉬에 텍스처 적용)
-  // const sphere = createSphere(radius, segments); // 구체를 생성 (반지름과 세그먼트 수 지정)
-  // sphere.rotation.y = rotation; // 구체를 초기 회전 상태로 설정
-  // // scene.add(sphere); // 구체를 장면에 추가
+  const sphere = createSphere(radius, segments); // 구체를 생성 (반지름과 세그먼트 수 지정)
+  sphere.rotation.y = rotation; // 구체를 초기 회전 상태로 설정
+  scene.add(sphere); // 구체를 장면에 추가
 
-  // // 구체 생성 함수 (MeshStandardMaterial로 텍스처를 적용한 구체 생성)
-  // function createSphere(radius, segments) {
-  //   return new THREE.Mesh(
-  //     new THREE.SphereGeometry(radius, segments, segments), // 구체 기하학 생성
-  //     new THREE.MeshStandardMaterial({
-  //       map: baseColor, // 기본 색상 텍스처
-  //       normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
-  //       roughnessMap: roughnessMap, // 거칠기 맵 적용
-  //       displacementMap: heightMap, // 높이 맵 적용 (표면의 높낮이 표현)
-  //       aoMap: ambientOcclusionMap, // 주변광 차단 맵 적용
-  //       roughness: 0.8, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
-  //       metalness: 0.0, // 금속성 제거 (0으로 설정하여 금속 느낌 없앰)
-  //       displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
-  //     })
-  //   );
-  // }
+  // 구체 생성 함수 (MeshStandardMaterial로 텍스처를 적용한 구체 생성)
+  function createSphere(radius, segments) {
+    return new THREE.Mesh(
+      new THREE.SphereGeometry(radius, segments, segments), // 구체 기하학 생성
+      new THREE.MeshStandardMaterial({
+        map: baseColor, // 기본 색상 텍스처
+        normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
+        roughnessMap: roughnessMap, // 거칠기 맵 적용
+        displacementMap: heightMap, // 높이 맵 적용 (표면의 높낮이 표현)
+        aoMap: ambientOcclusionMap, // 주변광 차단 맵 적용
+        roughness: 0.8, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
+        metalness: 0.0, // 금속성 제거 (0으로 설정하여 금속 느낌 없앰)
+        displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
+      })
+    );
+  }
 
-  
-  const radiusTop = radius;  
-  const radiusBottom = radius;  
-  const height = 16;  
-  const radialSegments = 256;  
-  const heightSegments = 2;  
-  const openEnded = true;  
-  const geometry = new THREE.CylinderGeometry(
-    radiusTop, radiusBottom, height,
-    radialSegments, heightSegments,
-    openEnded);
-
-  const material = new THREE.MeshStandardMaterial({
-    map: baseColor, // 기본 색상 텍스처
-    normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
-    roughnessMap: roughnessMap, // 거칠기 맵 적용
-    displacementMap: heightMap, // 높이 맵 적용 (표면의 높낮이 표현)
-    aoMap: ambientOcclusionMap, // 주변광 차단 맵 적용
-    roughness: 0.8, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
-    metalness: 0.0, // 금속성 제거 (0으로 설정하여 금속 느낌 없앰)
-    displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
-  })
-
-  const cylinder = new THREE.Mesh(geometry,material);
-  cylinder.rotation.z = Math.PI /2;
-  cylinder.position.set(0, -height / 4, 0);
-  scene.add(cylinder);
   /* --------------------------------------------------------------------------- */
 
   /* --------------------------------------------------------------------------- */
@@ -210,13 +191,15 @@ window.onload = function init() {
   /* --------------------------------------------------------------------------- */
   // 고양이 GLTFLoader로 올린 이후에 구체 위에 올리기
   let cat,mixer;
+  const catScale = 0.004;
   const gltf_loader = new THREE.GLTFLoader();
   gltf_loader.load(
     "../../move_cat/toon_cat_free/scene.gltf",
     function (gltf) {
       cat = gltf.scene.children[0];
-      cat.scale.set(0.0008, 0.0008, 0.0008);
-      cat.position.set(0, radius, 0);
+      cat.scale.set(catScale, catScale, catScale
+      );
+      cat.position.set(0, radius, 1);
       
       mixer = new THREE.AnimationMixer(cat);
           if (gltf.animations.length > 0) {
@@ -225,6 +208,7 @@ window.onload = function init() {
           }
 
       scene.add(gltf.scene);
+      render();
     },
     undefined,
     function (error) {
@@ -232,21 +216,19 @@ window.onload = function init() {
     }
   );
 
-
   /* --------------------------------------------------------------------------- */
 
   /* --------------------------------------------------------------------------- */
   /* rendering*/
 
-  const axesHelper = new THREE.AxesHelper( 5 );
-  scene.add( axesHelper );
   // 렌더 함수 (매 프레임마다 호출하여 장면을 렌더링)
   function render() {
-    controls.update(); // 카메라 제어 업데이트
+    // controls.update(); // 카메라 제어 업데이트
+    // camera.rotation.x -= 0.01;
+
 
     // Rotate sphere along the X-axis
-    // sphere.rotation.x -= 0.004; // Adjust rotation speed as needed
-    cylinder.rotation.x -= 0.001;
+    sphere.rotation.x -= 0.004; // Adjust rotation speed as needed
 
     // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
     angle += rotationSpeed; // 각도를 계속 증가시켜 회전시키기
@@ -261,7 +243,7 @@ window.onload = function init() {
     // Check for collision and keep cat on sphere
     if (cat) {
       keepCatOnSphere();
-    } 
+    }
     renderer.render(scene, camera); // 현재 프레임을 렌더링
     requestAnimationFrame(render); // 다음 프레임에서 렌더 함수를 재귀 호출
   }
@@ -270,12 +252,23 @@ window.onload = function init() {
   window.addEventListener("resize", resizeCanvas);
 
   // 고양이 collision detection 수행
+  // function keepCatOnSphere() {
+  //   const catBox = new THREE.Box3().setFromObject(cat);
+  //   const sphereBox = new THREE.Box3().setFromObject(sphere);
+
+  //   // Check for overlap by comparing bounding boxes
+  //   if (catBox.intersectsBox(sphereBox)) {
+  //     const catPosition = cat.position.clone().normalize().multiplyScalar(radius+0.1);
+  //     cat.position.copy(catPosition);
+  //   }
+  // }
+
   function keepCatOnSphere() {
-    const sphereCenter = cylinder.position; // Sphere center
+    const sphereCenter = sphere.position; // Sphere center
     const catDirection = cat.position.clone().sub(sphereCenter).normalize(); // Direction vector from sphere to cat
     
     // Adjust position so the cat stays on the surface of the sphere
-    const targetPosition = catDirection.multiplyScalar(radius+0.03 -height/4); // Offset to keep the cat slightly above the surface
+    const targetPosition = catDirection.multiplyScalar(radius+0.03); // Offset to keep the cat slightly above the surface
     cat.position.copy(targetPosition);
   }
   
