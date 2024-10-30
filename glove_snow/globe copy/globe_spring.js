@@ -23,17 +23,24 @@ window.onload = function init() {
   /* --------------------------------------------------------------------------- */
   /* camera */
 
+  const fov = 75;
+  const aspect = 2;
+  const near = 0.1;
+  const far = 100;
+
   // 카메라(Camera) 설정 (3D 공간을 보는 시점 설정)
   const camera = new THREE.PerspectiveCamera(
-    45, // 시야각 (FOV) 45도 설정 (화각)
-    canvas.width / canvas.height, // 화면의 가로 세로 비율 설정 (종횡비)
-    0.01, // 카메라가 인식할 수 있는 가장 가까운 거리 (근접 클리핑 평면)
-    1000 // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
+    fov, // 시야각 (FOV) 45도 설정 (화각)
+    aspect, // 화면의 가로 세로 비율 설정 (종횡비)
+    near, // 카메라가 인식할 수 있는 가장 가까운 거리 (근접 클리핑 평면)
+    far // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
   );
-  camera.position.z = 2; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
+  camera.position.z = 4; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
+  camera.position.y = 9; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
+  camera.rotation.x -= 0.5;
 
   // 카메라 제어 설정 (TrackballControls를 사용하여 카메라를 마우스로 제어할 수 있도록 설정)
-  const controls = new THREE.TrackballControls(camera, canvas);
+  // const controls = new THREE.TrackballControls(camera, canvas);
 
   /* --------------------------------------------------------------------------- */
 
@@ -55,7 +62,7 @@ window.onload = function init() {
   light.target = lightTarget; // 빛이 타겟을 향하게 설정
 
   // 태양의 회전 변수 (태양이 구체 주위를 공전하는 모션 설정)
-  const orbitRadius = 3; // 태양의 궤도 반지름 설정
+  const orbitRadius = 10; // 태양의 궤도 반지름 설정
   let angle = 0; // 태양의 초기 회전 각도 (라디안 단위)
   const rotationSpeed = (2 * Math.PI) / 86400; // 24시간을 기준으로 설정된 회전 속도
 
@@ -85,20 +92,20 @@ window.onload = function init() {
   ); // 주변광 차단 맵
 
   // 텍스처 반복 및 스케일 설정 (더 큰 구체에 텍스처를 여러 번 반복 적용)
-  baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
-  baseColor.repeat.set(4, 4);
+  baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping; // 텍스처를 반복시키도록 설정 (가로, 세로 방향)
+  baseColor.repeat.set(1, 1);
 
-  normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-  normalMap.repeat.set(4, 4);
+  normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping; // 노멀 맵의 반복 설정
+  normalMap.repeat.set(1, 1);
 
-  roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
-  roughnessMap.repeat.set(4, 4);
+  roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping; // 거칠기 맵의 반복 설정
+  roughnessMap.repeat.set(1, 1);
 
-  heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
-  heightMap.repeat.set(4, 4);
+  heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping; // 높이 맵의 반복 설정
+  heightMap.repeat.set(1, 1);
 
-  ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
-  ambientOcclusionMap.repeat.set(4, 4);
+  ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping; // 주변광 차단 맵 반복 설정
+  ambientOcclusionMap.repeat.set(1, 1);
 
   /* --------------------------------------------------------------------------- */
 
@@ -106,7 +113,7 @@ window.onload = function init() {
   /* globe */
 
   // 구체 설정 (크기 및 세그먼트)
-  const radius = 0.5; // 구체의 반지름 설정 (구체의 크기)
+  const radius = 6; // 구체의 반지름 설정 (구체의 크기)
   const segments = 64; // 구체를 렌더링할 때 사용할 세그먼트 수 (세부 표현도를 높임)
   const rotation = 6; // 구체의 초기 회전 각도 설정
 
@@ -153,12 +160,26 @@ window.onload = function init() {
     updateBackgroundColor(); // 시간에 맞추어 배경색 업데이트
   }, 1000);
 
-  // 현재 시간을 초 단위로 변환하고, 24시간 기준으로 비율 계산
+  // // 현재 시간을 초 단위로 변환하고, 24시간 기준으로 비율 계산
+  // function getTimeBasedColorValue() {
+  //   const now = new Date();
+  //   const secondsInDay =
+  //     now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+  //   return secondsInDay / 86400; // 86400초(24시간) 기준으로 비율 계산 (0 ~ 1)
+  // }
   function getTimeBasedColorValue() {
     const now = new Date();
     const secondsInDay =
       now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-    return secondsInDay / 86400; // 86400초(24시간) 기준으로 비율 계산 (0 ~ 1)
+
+    // 0 ~ 1 사이의 비율 계산
+    const normalizedTime = secondsInDay / 86400;
+
+    // 코사인 함수를 사용하여 0시에 어둡고 12시에 밝게 조정
+    // 코사인 곡선으로 -1 ~ 1 사이 값을 0 ~ 1로 매핑
+    const brightness = (Math.cos(2 * Math.PI * normalizedTime) + 1) / 2;
+
+    return brightness; // 0 (어두운 밤) ~ 1 (밝은 낮) 사이의 값
   }
 
   /* --------------------------------------------------------------------------- */
@@ -191,14 +212,43 @@ window.onload = function init() {
   /* --------------------------------------------------------------------------- */
 
   /* --------------------------------------------------------------------------- */
+
+  function changeSeason() {}
+  function seasonButton() {
+    document.getElementById("summer").onclick = function () {
+      summer();
+    };
+    document.getElementById("spring").onclick = function () {
+      spring();
+    };
+    document.getElementById("fall").onclick = function () {
+      fall();
+    };
+    document.getElementById("winter").onclick = function () {
+      winter();
+    };
+  }
+
+  /* --------------------------------------------------------------------------- */
+
+  /* --------------------------------------------------------------------------- */
   // 고양이 GLTFLoader로 올린 이후에 구체 위에 올리기
+  let cat, mixer;
+  const catScale = 0.004;
   const gltf_loader = new THREE.GLTFLoader();
   gltf_loader.load(
     "../../move_cat/toon_cat_free/scene.gltf",
     function (gltf) {
       cat = gltf.scene.children[0];
-      cat.scale.set(0.0008, 0.0008, 0.0008);
-      cat.position.set(0, radius, 0);
+      cat.scale.set(catScale, catScale, catScale);
+      cat.position.set(0, radius, 1);
+
+      mixer = new THREE.AnimationMixer(cat);
+      if (gltf.animations.length > 0) {
+        const action = mixer.clipAction(gltf.animations[0]);
+        action.play();
+      }
+
       scene.add(gltf.scene);
       render();
     },
@@ -215,7 +265,10 @@ window.onload = function init() {
 
   // 렌더 함수 (매 프레임마다 호출하여 장면을 렌더링)
   function render() {
-    controls.update(); // 카메라 제어 업데이트
+    // controls.update(); // 카메라 제어 업데이트
+
+    // Rotate sphere along the X-axis
+    sphere.rotation.x -= 0.002; // Adjust rotation speed as needed
 
     // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
     angle += rotationSpeed; // 각도를 계속 증가시켜 회전시키기
@@ -226,15 +279,29 @@ window.onload = function init() {
 
     updateBackgroundColor();
 
-    requestAnimationFrame(render); // 다음 프레임에서 렌더 함수를 재귀 호출
+    if (mixer) mixer.update(0.004); // Adjust timing for animation
+    // Check for collision and keep cat on sphere
+    if (cat) {
+      keepCatOnSphere();
+    }
     renderer.render(scene, camera); // 현재 프레임을 렌더링
+    requestAnimationFrame(render); // 다음 프레임에서 렌더 함수를 재귀 호출
   }
 
   // 창 크기가 변경될 때마다 resizeCanvas 함수 호출
   window.addEventListener("resize", resizeCanvas);
 
+  // 고양이 collision detection 수행
+  function keepCatOnSphere() {
+    const sphereCenter = sphere.position; // Sphere center
+    const catDirection = cat.position.clone().sub(sphereCenter).normalize(); // Direction vector from sphere to cat
+
+    // Adjust position so the cat stays on the surface of the sphere
+    const targetPosition = catDirection.multiplyScalar(radius + 0.03); // Offset to keep the cat slightly above the surface
+    cat.position.copy(targetPosition);
+  }
+
   // 초기 렌더링 함수 호출 (첫 프레임을 렌더링하기 위해 호출)
   render();
-
   /* --------------------------------------------------------------------------- */
 };
