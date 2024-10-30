@@ -1,4 +1,5 @@
-window.onload = function init() {
+window.onload = function init()
+ {
   // 웹 페이지가 로드되면 init 함수 실행
   const canvas = document.getElementById("gl-canvas"); // HTML에서 'gl-canvas'라는 ID를 가진 <canvas> 요소를 가져옴
   const renderer = new THREE.WebGLRenderer({ canvas }); // WebGLRenderer를 생성하고 canvas 요소에 연결
@@ -202,6 +203,31 @@ window.onload = function init() {
   });
 
   /* --------------------------------------------------------------------------- */
+
+  /* --------------------------------------------------------------------------- */
+
+function changeSeason(){
+  
+}
+function seasonButton(){
+  document.getElementById("summer").onclick = function () {
+    summer();
+};
+document.getElementById("spring").onclick = function () {
+   spring();
+};
+document.getElementById("fall").onclick = function () {
+  fall();
+};
+document.getElementById("winter").onclick = function () {
+  winter();
+};
+}
+
+
+
+
+   /* --------------------------------------------------------------------------- */
 
   /* --------------------------------------------------------------------------- */
   // 고양이 GLTFLoader로 올린 이후에 구체 위에 올리기
