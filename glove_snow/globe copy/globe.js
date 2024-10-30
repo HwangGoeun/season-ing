@@ -23,29 +23,17 @@ window.onload = function init() {
   /* --------------------------------------------------------------------------- */
   /* camera */
 
-  const fov = 65;
-  const aspect = 2;
-  const near = 0.1;
-  // const far = 20;
-  const far = 1000;
-  
   // 카메라(Camera) 설정 (3D 공간을 보는 시점 설정)
   const camera = new THREE.PerspectiveCamera(
-    fov, // 시야각 (FOV) 45도 설정 (화각)
-    aspect, // 화면의 가로 세로 비율 설정 (종횡비)
-    near, // 카메라가 인식할 수 있는 가장 가까운 거리 (근접 클리핑 평면)
-    far // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
+    45, // 시야각 (FOV) 45도 설정 (화각)
+    canvas.width / canvas.height, // 화면의 가로 세로 비율 설정 (종횡비)
+    0.01, // 카메라가 인식할 수 있는 가장 가까운 거리 (근접 클리핑 평면)
+    1000 // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
   );
-  camera.position.set(0,7,5); // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
-  // camera.rotation.x -= 0.5;
-
+  camera.position.z = 2; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
 
   // 카메라 제어 설정 (TrackballControls를 사용하여 카메라를 마우스로 제어할 수 있도록 설정)
   const controls = new THREE.TrackballControls(camera, canvas);
-  // controls.maxPolarAngle = Math.PI / 2; // 카메라가 수평선 아래로 내려가지 않도록 제한
-  // controls.minDistance = 15;  // 카메라의 최소 거리 제한
-  // controls.maxDistance = 40;  // 카메라의 최대 거리 제한
-
 
   /* --------------------------------------------------------------------------- */
 
@@ -67,7 +55,7 @@ window.onload = function init() {
   light.target = lightTarget; // 빛이 타겟을 향하게 설정
 
   // 태양의 회전 변수 (태양이 구체 주위를 공전하는 모션 설정)
-  const orbitRadius = 10; // 태양의 궤도 반지름 설정
+  const orbitRadius = 3; // 태양의 궤도 반지름 설정
   let angle = 0; // 태양의 초기 회전 각도 (라디안 단위)
   const rotationSpeed = (2 * Math.PI) / 86400; // 24시간을 기준으로 설정된 회전 속도
 
@@ -108,9 +96,9 @@ window.onload = function init() {
   /* globe */
 
   // 구체 설정 (크기 및 세그먼트)
-  const radius = 10; // 구체의 반지름 설정 (구체의 크기)
-  // const segments = 64; // 구체를 렌더링할 때 사용할 세그먼트 수 (세부 표현도를 높임)
-  // const rotation = 6; // 구체의 초기 회전 각도 설정
+  const radius = 0.5; // 구체의 반지름 설정 (구체의 크기)
+  const segments = 64; // 구체를 렌더링할 때 사용할 세그먼트 수 (세부 표현도를 높임)
+  const rotation = 6; // 구체의 초기 회전 각도 설정
 
   // 구체 생성 및 추가 (기본 구체 메쉬에 텍스처 적용)
   // const sphere = createSphere(radius, segments); // 구체를 생성 (반지름과 세그먼트 수 지정)
@@ -222,15 +210,13 @@ window.onload = function init() {
   /* --------------------------------------------------------------------------- */
   // 고양이 GLTFLoader로 올린 이후에 구체 위에 올리기
   let cat,mixer;
-  const catScale = 0.003;
   const gltf_loader = new THREE.GLTFLoader();
   gltf_loader.load(
     "../../move_cat/toon_cat_free/scene.gltf",
     function (gltf) {
       cat = gltf.scene.children[0];
-      cat.scale.set(catScale, catScale, catScale
-      );
-      cat.position.set(0, -height / 4, 0);
+      cat.scale.set(0.0008, 0.0008, 0.0008);
+      cat.position.set(0, radius, 0);
       
       mixer = new THREE.AnimationMixer(cat);
           if (gltf.animations.length > 0) {
@@ -257,8 +243,6 @@ window.onload = function init() {
   // 렌더 함수 (매 프레임마다 호출하여 장면을 렌더링)
   function render() {
     controls.update(); // 카메라 제어 업데이트
-    // camera.rotation.x -= 0.01;
-
 
     // Rotate sphere along the X-axis
     // sphere.rotation.x -= 0.004; // Adjust rotation speed as needed
