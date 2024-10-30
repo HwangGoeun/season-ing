@@ -41,7 +41,7 @@ window.onload = function init() {
 
 
   // 카메라 제어 설정 (TrackballControls를 사용하여 카메라를 마우스로 제어할 수 있도록 설정)
-  // const controls = new THREE.TrackballControls(camera, canvas);
+  const controls = new THREE.TrackballControls(camera, canvas);
 
   /* --------------------------------------------------------------------------- */
 
@@ -230,7 +230,6 @@ window.onload = function init() {
       console.error(error);
     }
   );
-
   /* --------------------------------------------------------------------------- */
 
   /* --------------------------------------------------------------------------- */
@@ -238,7 +237,7 @@ window.onload = function init() {
 
   // 렌더 함수 (매 프레임마다 호출하여 장면을 렌더링)
   function render() {
-    // controls.update(); // 카메라 제어 업데이트
+    controls.update(); // 카메라 제어 업데이트
 
     // Rotate sphere along the X-axis
     sphere.rotation.x -= 0.002; // Adjust rotation speed as needed

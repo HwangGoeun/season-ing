@@ -67,38 +67,53 @@ window.onload = function init() {
   // 텍스처 로더 생성 (3D 모델에 텍스처를 입히기 위한 로더)
   const loader = new THREE.TextureLoader();
 
-  // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
-  const baseColor = loader.load(
-    "./textures/Poliigon_GrassPatchyGround_4585_BaseColor.jpg"
-  ); // 기본 색상 텍스처
-  const normalMap = loader.load(
-    "./textures/Poliigon_GrassPatchyGround_4585_Normal.jpg"
-  ); // 노멀 맵
-  const roughnessMap = loader.load(
-    "./textures/Poliigon_GrassPatchyGround_4585_Roughness.jpg"
-  ); // 거칠기 맵
-  const heightMap = loader.load(
-    "./textures/Poliigon_GrassPatchyGround_4585_Displacement.tiff"
-  ); // 높이 맵
-  const ambientOcclusionMap = loader.load(
-    "./textures/Poliigon_GrassPatchyGround_4585_AmbientOcclusion.jpg"
-  ); // 주변광 차단 맵
+  // // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
+  // const baseColor = loader.load(
+  //   "glove_snow/globe copy/spring_ground/textures/high_resolution_photography_of_many__many_.jpegg"
+  // ); // 기본 색상 텍스처
+  // const normalMap = loader.load(
+  //   "./textures/Poliigon_GrassPatchyGround_4585_Normal.jpg"
+  // ); // 노멀 맵
+  // const roughnessMap = loader.load(
+  //   "./textures/Poliigon_GrassPatchyGround_4585_Roughness.jpg"
+  // ); // 거칠기 맵
+  // const heightMap = loader.load(
+  //   "./textures/Poliigon_GrassPatchyGround_4585_Displacement.tiff"
+  // ); // 높이 맵
+  // const ambientOcclusionMap = loader.load(
+  //   "./textures/Poliigon_GrassPatchyGround_4585_AmbientOcclusion.jpg"
+  // ); // 주변광 차단 맵
 
-  // 텍스처 반복 및 스케일 설정 (더 큰 구체에 텍스처를 여러 번 반복 적용)
+  // // 텍스처 반복 및 스케일 설정 (더 큰 구체에 텍스처를 여러 번 반복 적용)
+  // baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
+  // baseColor.repeat.set(4, 4);
+
+  // normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+  // normalMap.repeat.set(4, 4);
+
+  // roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+  // roughnessMap.repeat.set(4, 4);
+
+  // heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
+  // heightMap.repeat.set(4, 4);
+
+  // ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
+  // ambientOcclusionMap.repeat.set(4, 4);
+
+  const baseColor = loader.load("./spring_ground/textures/descargar_(1).png"); // 기본 색상 텍스처
+  const bumpMap = loader.load("./spring_ground/textures/brillo.png"); // 범프 맵
+  const colorOverlay = loader.load("./spring_ground/textures/high_resolution_photography_of_many__many_.jpeg"); // 색감 표현용
+
+  const repeat = 15
+  // 텍스처 반복 설정
   baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
-  baseColor.repeat.set(4, 4);
+  baseColor.repeat.set(repeat, repeat);
 
-  normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-  normalMap.repeat.set(4, 4);
+  bumpMap.wrapS = bumpMap.wrapT = THREE.RepeatWrapping;
+  bumpMap.repeat.set(repeat, repeat);
 
-  roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
-  roughnessMap.repeat.set(4, 4);
-
-  heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
-  heightMap.repeat.set(4, 4);
-
-  ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
-  ambientOcclusionMap.repeat.set(4, 4);
+  colorOverlay.wrapS = colorOverlay.wrapT = THREE.RepeatWrapping;
+  colorOverlay.repeat.set(repeat, repeat);
 
   /* --------------------------------------------------------------------------- */
 
@@ -120,14 +135,22 @@ window.onload = function init() {
     return new THREE.Mesh(
       new THREE.SphereGeometry(radius, segments, segments), // 구체 기하학 생성
       new THREE.MeshStandardMaterial({
-        map: baseColor, // 기본 색상 텍스처
-        normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
-        roughnessMap: roughnessMap, // 거칠기 맵 적용
-        displacementMap: heightMap, // 높이 맵 적용 (표면의 높낮이 표현)
-        aoMap: ambientOcclusionMap, // 주변광 차단 맵 적용
-        roughness: 0.8, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
-        metalness: 0.0, // 금속성 제거 (0으로 설정하여 금속 느낌 없앰)
-        displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
+        map: baseColor,               // 기본 텍스처
+        bumpMap: bumpMap,             // 범프 맵
+        bumpScale: 0.1,               // 범프 맵 깊이
+        emissiveMap: colorOverlay,    // 색감 표현 텍스처
+        emissive: new THREE.Color(0xFFFFFF), // 더 밝은 회색으로 설정
+        emissiveIntensity: 0.2,       // 강도를 0.2로 낮춰서 조절
+        metalness: 0.5,
+        roughness: 0.5,
+        // map: baseColor, // 기본 색상 텍스처
+        // normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
+        // roughnessMap: roughnessMap, // 거칠기 맵 적용
+        // displacementMap: heightMap, // 높이 맵 적용 (표면의 높낮이 표현)
+        // aoMap: ambientOcclusionMap, // 주변광 차단 맵 적용
+        // roughness: 0.8, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
+        // metalness: 0.0, // 금속성 제거 (0으로 설정하여 금속 느낌 없앰)
+        // displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
       })
     );
   }
