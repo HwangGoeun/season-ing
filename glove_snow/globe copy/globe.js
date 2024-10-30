@@ -151,13 +151,28 @@ window.onload = function init() {
     updateBackgroundColor(); // 시간에 맞추어 배경색 업데이트
   }, 1000);
 
-  // 현재 시간을 초 단위로 변환하고, 24시간 기준으로 비율 계산
+  // // 현재 시간을 초 단위로 변환하고, 24시간 기준으로 비율 계산
+  // function getTimeBasedColorValue() {
+  //   const now = new Date();
+  //   const secondsInDay =
+  //     now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+  //   return secondsInDay / 86400; // 86400초(24시간) 기준으로 비율 계산 (0 ~ 1)
+  // }
   function getTimeBasedColorValue() {
     const now = new Date();
     const secondsInDay =
       now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-    return secondsInDay / 86400; // 86400초(24시간) 기준으로 비율 계산 (0 ~ 1)
+    
+    // 0 ~ 1 사이의 비율 계산
+    const normalizedTime = secondsInDay / 86400;
+  
+    // 코사인 함수를 사용하여 0시에 어둡고 12시에 밝게 조정
+    // 코사인 곡선으로 -1 ~ 1 사이 값을 0 ~ 1로 매핑
+    const brightness = (Math.cos(2 * Math.PI * normalizedTime) + 1) / 2;
+  
+    return brightness; // 0 (어두운 밤) ~ 1 (밝은 낮) 사이의 값
   }
+  
 
   /* --------------------------------------------------------------------------- */
 
