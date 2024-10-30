@@ -42,9 +42,9 @@ window.onload = function init() {
 
   // 카메라 제어 설정 (TrackballControls를 사용하여 카메라를 마우스로 제어할 수 있도록 설정)
   const controls = new THREE.TrackballControls(camera, canvas);
-  controls.maxPolarAngle = Math.PI / 2; // 카메라가 수평선 아래로 내려가지 않도록 제한
-  controls.minDistance = 15;  // 카메라의 최소 거리 제한
-  controls.maxDistance = 40;  // 카메라의 최대 거리 제한
+  // controls.maxPolarAngle = Math.PI / 2; // 카메라가 수평선 아래로 내려가지 않도록 제한
+  // controls.minDistance = 15;  // 카메라의 최소 거리 제한
+  // controls.maxDistance = 40;  // 카메라의 최대 거리 제한
 
 
   /* --------------------------------------------------------------------------- */
@@ -239,13 +239,13 @@ window.onload = function init() {
           }
 
       scene.add(gltf.scene);
-      render();
     },
     undefined,
     function (error) {
       console.error(error);
     }
   );
+
 
   /* --------------------------------------------------------------------------- */
 
@@ -256,7 +256,7 @@ window.onload = function init() {
   scene.add( axesHelper );
   // 렌더 함수 (매 프레임마다 호출하여 장면을 렌더링)
   function render() {
-    // controls.update(); // 카메라 제어 업데이트
+    controls.update(); // 카메라 제어 업데이트
     // camera.rotation.x -= 0.01;
 
 
@@ -277,7 +277,7 @@ window.onload = function init() {
     // Check for collision and keep cat on sphere
     if (cat) {
       keepCatOnSphere();
-    }
+    } 
     renderer.render(scene, camera); // 현재 프레임을 렌더링
     requestAnimationFrame(render); // 다음 프레임에서 렌더 함수를 재귀 호출
   }
@@ -286,17 +286,6 @@ window.onload = function init() {
   window.addEventListener("resize", resizeCanvas);
 
   // 고양이 collision detection 수행
-  // function keepCatOnSphere() {
-  //   const catBox = new THREE.Box3().setFromObject(cat);
-  //   const sphereBox = new THREE.Box3().setFromObject(sphere);
-
-  //   // Check for overlap by comparing bounding boxes
-  //   if (catBox.intersectsBox(sphereBox)) {
-  //     const catPosition = cat.position.clone().normalize().multiplyScalar(radius+0.1);
-  //     cat.position.copy(catPosition);
-  //   }
-  // }
-
   function keepCatOnSphere() {
     const sphereCenter = cylinder.position; // Sphere center
     const catDirection = cat.position.clone().sub(sphereCenter).normalize(); // Direction vector from sphere to cat
