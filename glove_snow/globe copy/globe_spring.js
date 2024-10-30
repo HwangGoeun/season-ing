@@ -67,14 +67,38 @@ window.onload = function init() {
   // 텍스처 로더 생성 (3D 모델에 텍스처를 입히기 위한 로더)
   const loader = new THREE.TextureLoader();
 
-  const baseColor = loader.load("./textures/GroundWoodChips001_COL_4K.jpg"); // 기본 색상 텍스처
+  // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
+  const baseColor = loader.load(
+    "./textures/Poliigon_GrassPatchyGround_4585_BaseColor.jpg"
+  ); // 기본 색상 텍스처
+  const normalMap = loader.load(
+    "./textures/Poliigon_GrassPatchyGround_4585_Normal.jpg"
+  ); // 노멀 맵
   const roughnessMap = loader.load(
-    "./textures/GroundWoodChips001_GLOSS_4K.jpg"
+    "./textures/Poliigon_GrassPatchyGround_4585_Roughness.jpg"
   ); // 거칠기 맵
-  const heightMap = loader.load("./textures/GroundWoodChips001_DISP_4K.jpg"); // 높이 맵
+  const heightMap = loader.load(
+    "./textures/Poliigon_GrassPatchyGround_4585_Displacement.tiff"
+  ); // 높이 맵
   const ambientOcclusionMap = loader.load(
-    "./textures/GroundWoodChips001_AO_4K.jpg"
+    "./textures/Poliigon_GrassPatchyGround_4585_AmbientOcclusion.jpg"
   ); // 주변광 차단 맵
+
+  // 텍스처 반복 및 스케일 설정 (더 큰 구체에 텍스처를 여러 번 반복 적용)
+  baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
+  baseColor.repeat.set(4, 4);
+
+  normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+  normalMap.repeat.set(4, 4);
+
+  roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+  roughnessMap.repeat.set(4, 4);
+
+  heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
+  heightMap.repeat.set(4, 4);
+
+  ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
+  ambientOcclusionMap.repeat.set(4, 4);
 
   /* --------------------------------------------------------------------------- */
 
@@ -97,13 +121,13 @@ window.onload = function init() {
       new THREE.SphereGeometry(radius, segments, segments), // 구체 기하학 생성
       new THREE.MeshStandardMaterial({
         map: baseColor, // 기본 색상 텍스처
+        normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
         roughnessMap: roughnessMap, // 거칠기 맵 적용
         displacementMap: heightMap, // 높이 맵 적용 (표면의 높낮이 표현)
         aoMap: ambientOcclusionMap, // 주변광 차단 맵 적용
-        roughness: 0.9, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
+        roughness: 0.8, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
         metalness: 0.0, // 금속성 제거 (0으로 설정하여 금속 느낌 없앰)
-        displacementScale: 0.02, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
-        displacementBias: -0.05,
+        displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
       })
     );
   }
