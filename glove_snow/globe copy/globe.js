@@ -26,7 +26,7 @@ window.onload = function init() {
   const fov =  75;
   const aspect = 2;
   const near = 0.1;
-  const far = 6;
+  const far = 100;
   
   // 카메라(Camera) 설정 (3D 공간을 보는 시점 설정)
   const camera = new THREE.PerspectiveCamera(
@@ -224,11 +224,9 @@ window.onload = function init() {
   // 렌더 함수 (매 프레임마다 호출하여 장면을 렌더링)
   function render() {
     // controls.update(); // 카메라 제어 업데이트
-    // camera.rotation.x -= 0.01;
-
 
     // Rotate sphere along the X-axis
-    sphere.rotation.x -= 0.004; // Adjust rotation speed as needed
+    sphere.rotation.x -= 0.002; // Adjust rotation speed as needed
 
     // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
     angle += rotationSpeed; // 각도를 계속 증가시켜 회전시키기
@@ -252,17 +250,6 @@ window.onload = function init() {
   window.addEventListener("resize", resizeCanvas);
 
   // 고양이 collision detection 수행
-  // function keepCatOnSphere() {
-  //   const catBox = new THREE.Box3().setFromObject(cat);
-  //   const sphereBox = new THREE.Box3().setFromObject(sphere);
-
-  //   // Check for overlap by comparing bounding boxes
-  //   if (catBox.intersectsBox(sphereBox)) {
-  //     const catPosition = cat.position.clone().normalize().multiplyScalar(radius+0.1);
-  //     cat.position.copy(catPosition);
-  //   }
-  // }
-
   function keepCatOnSphere() {
     const sphereCenter = sphere.position; // Sphere center
     const catDirection = cat.position.clone().sub(sphereCenter).normalize(); // Direction vector from sphere to cat
