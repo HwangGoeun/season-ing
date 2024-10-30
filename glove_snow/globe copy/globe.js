@@ -23,7 +23,7 @@ window.onload = function init() {
   /* --------------------------------------------------------------------------- */
   /* camera */
 
-  const fov =  75;
+  const fov = 65;
   const aspect = 2;
   const near = 0.1;
   // const far = 20;
@@ -36,7 +36,7 @@ window.onload = function init() {
     near, // 카메라가 인식할 수 있는 가장 가까운 거리 (근접 클리핑 평면)
     far // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
   );
-  camera.position.set(0,5,8); // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
+  camera.position.set(0,7,5); // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
   // camera.rotation.x -= 0.5;
 
 
@@ -138,7 +138,7 @@ window.onload = function init() {
   const radiusTop = radius;  
   const radiusBottom = radius;  
   const height = 16;  
-  const radialSegments = 40;  
+  const radialSegments = 256;  
   const heightSegments = 2;  
   const openEnded = true;  
   const geometry = new THREE.CylinderGeometry(
@@ -222,7 +222,7 @@ window.onload = function init() {
   /* --------------------------------------------------------------------------- */
   // 고양이 GLTFLoader로 올린 이후에 구체 위에 올리기
   let cat,mixer;
-  const catScale = 0.004;
+  const catScale = 0.003;
   const gltf_loader = new THREE.GLTFLoader();
   gltf_loader.load(
     "../../move_cat/toon_cat_free/scene.gltf",
@@ -230,7 +230,7 @@ window.onload = function init() {
       cat = gltf.scene.children[0];
       cat.scale.set(catScale, catScale, catScale
       );
-      cat.position.set(0, radius, 0);
+      cat.position.set(0, -height / 4, 0);
       
       mixer = new THREE.AnimationMixer(cat);
           if (gltf.animations.length > 0) {
@@ -262,7 +262,7 @@ window.onload = function init() {
 
     // Rotate sphere along the X-axis
     // sphere.rotation.x -= 0.004; // Adjust rotation speed as needed
-    cylinder.rotation.x += 0.001;
+    cylinder.rotation.x -= 0.001;
 
     // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
     angle += rotationSpeed; // 각도를 계속 증가시켜 회전시키기
@@ -275,9 +275,9 @@ window.onload = function init() {
 
     if (mixer) mixer.update(0.004);  // Adjust timing for animation
     // Check for collision and keep cat on sphere
-    // if (cat) {
-    //   keepCatOnSphere();
-    // }
+    if (cat) {
+      keepCatOnSphere();
+    }
     renderer.render(scene, camera); // 현재 프레임을 렌더링
     requestAnimationFrame(render); // 다음 프레임에서 렌더 함수를 재귀 호출
   }
@@ -297,14 +297,14 @@ window.onload = function init() {
   //   }
   // }
 
-  // function keepCatOnSphere() {
-  //   const sphereCenter = cylinder.position; // Sphere center
-  //   const catDirection = cat.position.clone().sub(sphereCenter).normalize(); // Direction vector from sphere to cat
+  function keepCatOnSphere() {
+    const sphereCenter = cylinder.position; // Sphere center
+    const catDirection = cat.position.clone().sub(sphereCenter).normalize(); // Direction vector from sphere to cat
     
-  //   // Adjust position so the cat stays on the surface of the sphere
-  //   const targetPosition = catDirection.multiplyScalar(radius+0.03); // Offset to keep the cat slightly above the surface
-  //   cat.position.copy(targetPosition);
-  // }
+    // Adjust position so the cat stays on the surface of the sphere
+    const targetPosition = catDirection.multiplyScalar(radius+0.03 -height/4); // Offset to keep the cat slightly above the surface
+    cat.position.copy(targetPosition);
+  }
   
 
   // 초기 렌더링 함수 호출 (첫 프레임을 렌더링하기 위해 호출)
