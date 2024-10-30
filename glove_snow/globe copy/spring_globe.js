@@ -22,15 +22,21 @@ window.onload = function init() {
 
   /* --------------------------------------------------------------------------- */
   /* camera */
+  const fov =  75;
+  const aspect = 2;
+  const near = 0.1;
+  const far = 100;
 
   // 카메라(Camera) 설정 (3D 공간을 보는 시점 설정)
   const camera = new THREE.PerspectiveCamera(
-    45, // 시야각 (FOV) 45도 설정 (화각)
-    canvas.width / canvas.height, // 화면의 가로 세로 비율 설정 (종횡비)
-    0.01, // 카메라가 인식할 수 있는 가장 가까운 거리 (근접 클리핑 평면)
-    1000 // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
+    fov, // 시야각 (FOV) 45도 설정 (화각)
+    aspect, // 화면의 가로 세로 비율 설정 (종횡비)
+    near, // 카메라가 인식할 수 있는 가장 가까운 거리 (근접 클리핑 평면)
+    far // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
   );
-  camera.position.z = 2; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
+  camera.position.z = 4; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
+  camera.position.y = 9; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
+  camera.rotation.x -= 0.5;
 
   // 카메라 제어 설정 (TrackballControls를 사용하여 카메라를 마우스로 제어할 수 있도록 설정)
   const controls = new THREE.TrackballControls(camera, canvas);
@@ -67,39 +73,6 @@ window.onload = function init() {
   // 텍스처 로더 생성 (3D 모델에 텍스처를 입히기 위한 로더)
   const loader = new THREE.TextureLoader();
 
-  // // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
-  // const baseColor = loader.load(
-  //   "glove_snow/globe copy/spring_ground/textures/high_resolution_photography_of_many__many_.jpegg"
-  // ); // 기본 색상 텍스처
-  // const normalMap = loader.load(
-  //   "./textures/Poliigon_GrassPatchyGround_4585_Normal.jpg"
-  // ); // 노멀 맵
-  // const roughnessMap = loader.load(
-  //   "./textures/Poliigon_GrassPatchyGround_4585_Roughness.jpg"
-  // ); // 거칠기 맵
-  // const heightMap = loader.load(
-  //   "./textures/Poliigon_GrassPatchyGround_4585_Displacement.tiff"
-  // ); // 높이 맵
-  // const ambientOcclusionMap = loader.load(
-  //   "./textures/Poliigon_GrassPatchyGround_4585_AmbientOcclusion.jpg"
-  // ); // 주변광 차단 맵
-
-  // // 텍스처 반복 및 스케일 설정 (더 큰 구체에 텍스처를 여러 번 반복 적용)
-  // baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
-  // baseColor.repeat.set(4, 4);
-
-  // normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-  // normalMap.repeat.set(4, 4);
-
-  // roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
-  // roughnessMap.repeat.set(4, 4);
-
-  // heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
-  // heightMap.repeat.set(4, 4);
-
-  // ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
-  // ambientOcclusionMap.repeat.set(4, 4);
-
   const baseColor = loader.load("./spring_ground/textures/descargar_(1).png"); // 기본 색상 텍스처
   const bumpMap = loader.load("./spring_ground/textures/brillo.png"); // 범프 맵
   const colorOverlay = loader.load("./spring_ground/textures/high_resolution_photography_of_many__many_.jpeg"); // 색감 표현용
@@ -121,7 +94,7 @@ window.onload = function init() {
   /* globe */
 
   // 구체 설정 (크기 및 세그먼트)
-  const radius = 0.5; // 구체의 반지름 설정 (구체의 크기)
+  const radius = 6; // 구체의 반지름 설정 (구체의 크기)
   const segments = 64; // 구체를 렌더링할 때 사용할 세그먼트 수 (세부 표현도를 높임)
   const rotation = 6; // 구체의 초기 회전 각도 설정
 
@@ -143,14 +116,6 @@ window.onload = function init() {
         emissiveIntensity: 0.2,       // 강도를 0.2로 낮춰서 조절
         metalness: 0.5,
         roughness: 0.5,
-        // map: baseColor, // 기본 색상 텍스처
-        // normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
-        // roughnessMap: roughnessMap, // 거칠기 맵 적용
-        // displacementMap: heightMap, // 높이 맵 적용 (표면의 높낮이 표현)
-        // aoMap: ambientOcclusionMap, // 주변광 차단 맵 적용
-        // roughness: 0.8, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
-        // metalness: 0.0, // 금속성 제거 (0으로 설정하여 금속 느낌 없앰)
-        // displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
       })
     );
   }
@@ -218,12 +183,22 @@ window.onload = function init() {
   const gltf_loader = new THREE.GLTFLoader();
 
   // 고양이 GLTFLoader로 올린 이후에 구체 위에 올리기
+  let cat,mixer;
+  const catScale = 0.004;
   gltf_loader.load(
     "../../move_cat/toon_cat_free/scene.gltf",
     function (gltf) {
       cat = gltf.scene.children[0];
-      cat.scale.set(0.0008, 0.0008, 0.0008);
-      cat.position.set(0, radius, 0);
+      cat.scale.set(catScale, catScale, catScale
+      );
+      cat.position.set(0, radius, 1);
+      
+      mixer = new THREE.AnimationMixer(cat);
+          if (gltf.animations.length > 0) {
+            const action = mixer.clipAction(gltf.animations[0]);
+            action.play();
+          }
+
       scene.add(gltf.scene);
       render();
     },

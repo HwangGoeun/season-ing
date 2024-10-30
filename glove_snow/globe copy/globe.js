@@ -210,18 +210,18 @@ function changeSeason(){
   
 }
 function seasonButton(){
+  document.getElementById("spring").onclick = function () {
+     spring();
+  };
   document.getElementById("summer").onclick = function () {
     summer();
-};
-document.getElementById("spring").onclick = function () {
-   spring();
-};
-document.getElementById("fall").onclick = function () {
-  fall();
-};
-document.getElementById("winter").onclick = function () {
-  winter();
-};
+  };
+  document.getElementById("fall").onclick = function () {
+    fall();
+  };
+  document.getElementById("winter").onclick = function () {
+    winter();
+  };
 }
 
 
