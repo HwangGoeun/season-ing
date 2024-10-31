@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Three.js Lighting Control</title>
+    <title>Main</title>
     <script type="text/javascript" src="js/three.min.js"></script>
     <script type="text/javascript" src="js/TrackballControls.js"></script>
     <script type="text/javascript" src="globe.js"></script>
@@ -61,6 +61,27 @@
         font-size: 24px;
         font-family: "Arial", sans-serif;
         z-index: 10; /* 시계가 3D 장면 위에 나타나도록 z-index 설정 */
+      }
+
+      /* 버튼 컨테이너 스타일 */
+      #button-container {
+        position: absolute;
+        top: 70px; /* 슬라이더 아래 위치 */
+        left: 20px;
+        z-index: 10; /* 캔버스 위에 표시되도록 z-index 설정 */
+      }
+      
+      /* 버튼 스타일 */
+      #action-button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      #action-button:hover {
+        background-color: #45a049; /* 호버 시 색상 변경 */
       }
     </style>
   </head>
@@ -132,11 +153,11 @@
     </style>
 
     <!-- 계절 버튼 -->
-    <button type="summer">Summer</button>
     <button type="spring">Spring</button>
+    <button type="summer">Summer</button>
     <button type="fall">Fall</button>
     <button type="winter">Winter</button>
-</div>
+  </div>
 
     <canvas id="gl-canvas" width="1024" height="1024">
       Oops ... your browser doesn't support the HTML5 canvas element
