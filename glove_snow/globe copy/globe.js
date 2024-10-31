@@ -26,7 +26,7 @@ window.onload = function init() {
   const fov = 75;
   const aspect = 2;
   const near = 0.1;
-  const far = 100;
+  const far = 1000;
 
   // 카메라(Camera) 설정 (3D 공간을 보는 시점 설정)
   const camera = new THREE.PerspectiveCamera(
@@ -35,12 +35,13 @@ window.onload = function init() {
     near, // 카메라가 인식할 수 있는 가장 가까운 거리 (근접 클리핑 평면)
     far // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
   );
-  camera.position.z = 4; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
-  camera.position.y = 9; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
-  camera.rotation.x -= 0.5;
+  camera.position.z = 2; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
+  // camera.position.y = 9; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
+  // camera.rotation.x -= 0.5;
 
   // 카메라 제어 설정 (TrackballControls를 사용하여 카메라를 마우스로 제어할 수 있도록 설정)
   // const controls = new THREE.TrackballControls(camera, canvas);
+  controls = new THREE.OrbitControls(camera);
 
   /* --------------------------------------------------------------------------- */
 
@@ -102,32 +103,167 @@ window.onload = function init() {
   /* --------------------------------------------------------------------------- */
   /* globe */
 
-  // 구체 설정 (크기 및 세그먼트)
-  const radius = 6; // 구체의 반지름 설정 (구체의 크기)
-  const segments = 64; // 구체를 렌더링할 때 사용할 세그먼트 수 (세부 표현도를 높임)
+  // // 구체 설정 (크기 및 세그먼트)
+  const radius = 4; // 구체의 반지름 설정 (구체의 크기)
+  const segments = 24; // 구체를 렌더링할 때 사용할 세그먼트 수 (세부 표현도를 높임)
   const rotation = 6; // 구체의 초기 회전 각도 설정
 
-  // 구체 생성 및 추가 (기본 구체 메쉬에 텍스처 적용)
-  const sphere = createSphere(radius, segments); // 구체를 생성 (반지름과 세그먼트 수 지정)
-  sphere.rotation.y = rotation; // 구체를 초기 회전 상태로 설정
-  scene.add(sphere); // 구체를 장면에 추가
+  // // 구체 생성 및 추가 (기본 구체 메쉬에 텍스처 적용)
+  // const sphere = createSphere(radius, segments); // 구체를 생성 (반지름과 세그먼트 수 지정)
+  // sphere.rotation.y = rotation; // 구체를 초기 회전 상태로 설정
+  // scene.add(sphere); // 구체를 장면에 추가
 
-  // 구체 생성 함수 (MeshStandardMaterial로 텍스처를 적용한 구체 생성)
-  function createSphere(radius, segments) {
-    return new THREE.Mesh(
-      new THREE.SphereGeometry(radius, segments, segments), // 구체 기하학 생성
-      new THREE.MeshStandardMaterial({
-        map: baseColor, // 기본 색상 텍스처
-        normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
-        roughnessMap: roughnessMap, // 거칠기 맵 적용
-        displacementMap: heightMap, // 높이 맵 적용 (표면의 높낮이 표현)
-        aoMap: ambientOcclusionMap, // 주변광 차단 맵 적용
-        roughness: 0.8, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
-        metalness: 0.0, // 금속성 제거 (0으로 설정하여 금속 느낌 없앰)
-        displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
-      })
-    );
+  // // 구체 생성 함수 (MeshStandardMaterial로 텍스처를 적용한 구체 생성)
+  // function createSphere(radius, segments) {
+  //   return new THREE.Mesh(
+  //     new THREE.SphereGeometry(radius, segments, segments), // 구체 기하학 생성
+  //     new THREE.MeshStandardMaterial({
+  //       map: baseColor, // 기본 색상 텍스처
+  //       normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
+  //       roughnessMap: roughnessMap, // 거칠기 맵 적용
+  //       displacementMap: heightMap, // 높이 맵 적용 (표면의 높낮이 표현)
+  //       aoMap: ambientOcclusionMap, // 주변광 차단 맵 적용
+  //       roughness: 0.8, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
+  //       metalness: 0.0, // 금속성 제거 (0으로 설정하여 금속 느낌 없앰)
+  //       displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
+  //     })
+  //   );
+  // }
+  // Create sphere and add to scene.
+  // var geometry = new THREE.SphereGeometry(radius, segments, segments);
+  // var material = new THREE.MeshStandardMaterial({
+  //   map: baseColor, // 기본 색상 텍스처
+  //   normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
+  //   roughnessMap: roughnessMap, // 거칠기 맵 적용
+  //   displacementMap: heightMap, // 높이 맵 적용 (표면의 높낮이 표현)
+  //   aoMap: ambientOcclusionMap, // 주변광 차단 맵 적용
+  //   roughness: 0.8, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
+  //   metalness: 0.0, // 금속성 제거 (0으로 설정하여 금속 느낌 없앰)
+  //   displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
+  // });
+  // const sphere = new THREE.Mesh(geometry, material);
+  // scene.add(sphere);
+
+  // var planeGeometry = new THREE.PlaneGeometry(0.5, 0.5);
+  // var planeMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+
+  // var lookDirection = new THREE.Vector3();
+  // var target = new THREE.Vector3();
+
+  // const position = geometry.attributes.position;
+  // for (i = 0; i < position.count; i++) {
+  //   if (Math.random() * 10 > 2.9956) {
+  //     var planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
+
+  //     // planeMesh.position.set( geometry.vertices[i].x, geometry.vertices[i].y, geometry.vertices[i].z );
+  //     // // Set the position of the planeMesh based on position attribute values
+  //     const x = position.getX(i);
+  //     const y = position.getY(i);
+  //     const z = position.getZ(i);
+
+  //     planeMesh.position.set(x, y, z);
+
+  //     lookDirection.subVectors(planeMesh.position, sphere.position).normalize();
+  //     target.copy(planeMesh.position).add(lookDirection);
+  //     planeMesh.lookAt(target);
+
+  //     scene.add(planeMesh);
+  //   }
+  // }
+
+  var Tree = function () {
+    //modèle 3d
+    this.mesh = new THREE.Object3D();
+    this.mesh.name = "tree";
+
+    // tronc
+    var geomTronc = new THREE.BoxGeometry(0.02, 0.02, 0.02);
+    var matTronc = new THREE.MeshBasicMaterial({
+      color: "white",
+      wireframe: true,
+    });
+    var tronc = new THREE.Mesh(geomTronc, matTronc);
+    tronc.position.set(0, 0, 0);
+    tronc.rotation.x = -Math.PI * 0.5;
+    tronc.castShadow = true;
+    tronc.receiveShadow = true;
+    this.mesh.add(tronc);
+
+    // arbre
+    var geomArbre = new THREE.BoxGeometry(0.1, 0.01, 0.1);
+    var matArbre = new THREE.MeshBasicMaterial({
+      color: "brown",
+      wireframe: true,
+    });
+    var arbre = new THREE.Mesh(geomArbre, matArbre);
+    arbre.position.set(0, 0.03, 0);
+    tronc.add(arbre);
+  };
+
+  var sphere = new THREE.Mesh(
+    new THREE.SphereGeometry(radius, 32, 24),
+    new THREE.MeshStandardMaterial({
+      map: baseColor, // 기본 색상 텍스처
+      normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
+      roughnessMap: roughnessMap, // 거칠기 맵 적용
+      displacementMap: heightMap, // 높이 맵 적용 (표면의 높낮이 표현)
+      aoMap: ambientOcclusionMap, // 주변광 차단 맵 적용
+      roughness: 0.8, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
+      metalness: 0.0, // 금속성 제거 (0으로 설정하여 금속 느낌 없앰)
+      displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
+    })
+  );
+  scene.add(sphere);
+
+  function createTree() {
+    tree = [];
+    for (var i = 0; i < 2 * Math.PI; i += Math.PI / 36) {
+      tree[i] = new Tree();
+      let phi = Math.PI / 3;
+      let theta = i;
+      // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+      tree[i].mesh.position.setFromSphericalCoordsYZ(radius + 0.03, phi, theta);
+      tree[i].mesh.lookAt(sphere.position);
+      //don't works
+      //tree[i].mesh.rotation.x=-Math.PI/2
+
+      //scene.add(tree[i].mesh);
+      sphere.add(tree[i].mesh);
+    }
+
+    for (var i = 0; i < 2 * Math.PI; i += Math.PI / 36) {
+      tree[i] = new Tree();
+      let phi = Math.PI - Math.PI / 3;
+      let theta = i;
+      // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+      tree[i].mesh.position.setFromSphericalCoordsYZ(radius + 0.03, phi, theta);
+      tree[i].mesh.lookAt(sphere.position);
+      //don't works
+      //tree[i].mesh.rotation.x=-Math.PI/2
+
+      //scene.add(tree[i].mesh);
+      sphere.add(tree[i].mesh);
+    }
   }
+
+  //at the center of the sphere to illustrate what the object looks like
+  var singletree;
+  singleTree = new Tree();
+  scene.add(singleTree.mesh);
+
+  var box = new THREE.Mesh(
+    new THREE.BoxGeometry(0.2, 0.2, 0.2),
+    new THREE.MeshBasicMaterial({ color: "red", wireframe: true })
+  );
+  box.position.setFromSphericalCoords(
+    radius + 0.1,
+    THREE.Math.degToRad(23),
+    THREE.Math.degToRad(23)
+  );
+  box.lookAt(sphere.position);
+  scene.add(box);
+
+  createTree();
 
   /* --------------------------------------------------------------------------- */
 
