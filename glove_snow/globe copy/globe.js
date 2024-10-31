@@ -140,19 +140,19 @@ function loadModels(scene, sphere) {
   );
 
   // 집 모델 로드
-  gltfLoader.load(
+  /*gltfLoader.load(
     "../../move_cat/birdhouse_low_poly_gltf/scene.gltf",
     function (gltf) {
-      const dog = gltf.scene.children[0];
-      dog.scale.set(0.2, 0.2, 0.2);
-      dog.position.set(2, sphere.geometry.parameters.radius, -1);
+      const house = gltf.scene.children[0];
+      house.scale.set(0.2, 0.2, 0.2);
+      house.position.set(2, sphere.geometry.parameters.radius, -1);
       scene.add(gltf.scene);
     },
     undefined,
     function (error) {
       console.error(error);
     }
-  );
+  );*/
 }
 
 // 애니메이션 업데이트
