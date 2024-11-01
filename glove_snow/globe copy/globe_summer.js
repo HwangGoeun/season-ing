@@ -29,44 +29,31 @@ window.onload = function init() {
   const far = 100;
 
   // 카메라(Camera) 설정 (3D 공간을 보는 시점 설정)
-  const camera = new THREE.PerspectiveCamera(
-    fov, // 시야각 (FOV) 45도 설정 (화각)
-    aspect, // 화면의 가로 세로 비율 설정 (종횡비)
-    near, // 카메라가 인식할 수 있는 가장 가까운 거리 (근접 클리핑 평면)
-    far // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
-  );
-  camera.position.z = 4; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
-  camera.position.y = 9; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
+  const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+  camera.position.z = 4;
+  camera.position.y = 9;
   camera.rotation.x -= 0.5;
-
-  // 카메라 제어 설정 (TrackballControls를 사용하여 카메라를 마우스로 제어할 수 있도록 설정)
-  // const controls = new THREE.TrackballControls(camera, canvas);
-
-  /* --------------------------------------------------------------------------- */
 
   /* --------------------------------------------------------------------------- */
   /* Light */
 
-  // 장면에 주변광(Ambient Light) 추가 (전체적으로 고르게 빛을 비춤)
-  scene.add(new THREE.AmbientLight(0x333333)); // 약한 회색 빛으로 설정
+  // 장면에 주변광(Ambient Light) 추가
+  scene.add(new THREE.AmbientLight(0x333333));
 
-  // 방향광(Directional Light) 설정 (특정 방향으로 빛을 쏘는 조명)
-  const light = new THREE.DirectionalLight(0xffffff, 0.1); // 하얀색 빛에 강도는 0.1로 설정
-  light.position.set(-1, 0, 0); // 빛이 -X축 방향에서 비추도록 위치 설정
-  scene.add(light); // 장면에 빛 추가
+  // 방향광(Directional Light) 설정
+  const light = new THREE.DirectionalLight(0xffffff, 0.1);
+  light.position.set(-1, 0, 0);
+  scene.add(light);
 
-  // 빛의 타겟을 설정 (빛이 구체를 향하게 설정)
-  const lightTarget = new THREE.Object3D(); // 빈 객체를 생성 (빛의 목표를 설정하기 위해)
-  lightTarget.position.set(0, 0, 0); // 타겟을 원점(0, 0, 0)에 배치 (구체 중심)
-  scene.add(lightTarget); // 장면에 타겟 추가
-  light.target = lightTarget; // 빛이 타겟을 향하게 설정
+  // 빛의 타겟 설정
+  const lightTarget = new THREE.Object3D();
+  lightTarget.position.set(0, 0, 0);
+  scene.add(lightTarget);
+  light.target = lightTarget;
 
-  // 태양의 회전 변수 (태양이 구체 주위를 공전하는 모션 설정)
-  const orbitRadius = 10; // 태양의 궤도 반지름 설정
-  let angle = 0; // 태양의 초기 회전 각도 (라디안 단위)
-  const rotationSpeed = (2 * Math.PI) / 86400; // 24시간을 기준으로 설정된 회전 속도
-
-  /* --------------------------------------------------------------------------- */
+  const orbitRadius = 10;
+  let angle = 0;
+  const rotationSpeed = (2 * Math.PI) / 86400;
 
   /* --------------------------------------------------------------------------- */
   /* texture */
@@ -100,131 +87,82 @@ window.onload = function init() {
   ambientOcclusionMap.repeat.set(1, 1);
 
   /* --------------------------------------------------------------------------- */
-
-  /* --------------------------------------------------------------------------- */
   /* globe */
 
-  // 구체 설정 (크기 및 세그먼트)
-  const radius = 6; // 구체의 반지름 설정 (구체의 크기)
-  const segments = 64; // 구체를 렌더링할 때 사용할 세그먼트 수 (세부 표현도를 높임)
-  const rotation = 6; // 구체의 초기 회전 각도 설정
+  const radius = 6;
+  const segments = 64;
+  const rotation = 6;
 
-  // 구체 생성 및 추가 (기본 구체 메쉬에 텍스처 적용)
-  const sphere = createSphere(radius, segments); // 구체를 생성 (반지름과 세그먼트 수 지정)
-  sphere.rotation.y = rotation; // 구체를 초기 회전 상태로 설정
-  scene.add(sphere); // 구체를 장면에 추가
+  const sphere = createSphere(radius, segments);
+  sphere.rotation.y = rotation;
+  scene.add(sphere);
 
-  // 구체 생성 함수 (MeshStandardMaterial로 텍스처를 적용한 구체 생성)
   function createSphere(radius, segments) {
     return new THREE.Mesh(
-      new THREE.SphereGeometry(radius, segments, segments), // 구체 기하학 생성
+      new THREE.SphereGeometry(radius, segments, segments),
       new THREE.MeshStandardMaterial({
-        map: baseColor, // 기본 색상 텍스처
-        normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
-        roughnessMap: roughnessMap, // 거칠기 맵 적용
-        displacementMap: heightMap, // 높이 맵 적용 (표면의 높낮이 표현)
-        aoMap: ambientOcclusionMap, // 주변광 차단 맵 적용
-        roughness: 0.8, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
-        metalness: 0.0, // 금속성 제거 (0으로 설정하여 금속 느낌 없앰)
-        displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
+        map: baseColor,
+        normalMap: normalMap,
+        roughnessMap: roughnessMap,
+        displacementMap: heightMap,
+        aoMap: ambientOcclusionMap,
+        roughness: 0.8,
+        metalness: 0.0,
+        displacementScale: 0.03,
       })
     );
   }
 
   /* --------------------------------------------------------------------------- */
-
-  /* --------------------------------------------------------------------------- */
   /* clock */
 
-  // 시계 업데이트 함수
   function updateClock() {
     const clockElement = document.getElementById("clock");
     const now = new Date();
-    const hours = String(now.getHours()).padStart(2, "0"); // 두 자리로 표시
-    const minutes = String(now.getMinutes()).padStart(2, "0"); // 두 자리로 표시
-    const seconds = String(now.getSeconds()).padStart(2, "0"); // 두 자리로 표시
-    clockElement.textContent = `${hours}:${minutes}:${seconds}`; // 시계에 시간 표시
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+    clockElement.textContent = `${hours}:${minutes}:${seconds}`;
   }
 
-  // 1초마다 시계와 배경색을 업데이트
   setInterval(() => {
     updateClock();
-    updateBackgroundColor(); // 시간에 맞추어 배경색 업데이트
+    updateBackgroundColor();
   }, 1000);
 
-  // // 현재 시간을 초 단위로 변환하고, 24시간 기준으로 비율 계산
-  // function getTimeBasedColorValue() {
-  //   const now = new Date();
-  //   const secondsInDay =
-  //     now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-  //   return secondsInDay / 86400; // 86400초(24시간) 기준으로 비율 계산 (0 ~ 1)
-  // }
   function getTimeBasedColorValue() {
     const now = new Date();
     const secondsInDay =
       now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-
-    // 0 ~ 1 사이의 비율 계산
     const normalizedTime = secondsInDay / 86400;
-
-    // 코사인 함수를 사용하여 0시에 어둡고 12시에 밝게 조정
-    // 코사인 곡선으로 -1 ~ 1 사이 값을 0 ~ 1로 매핑
     const brightness = (Math.cos(2 * Math.PI * normalizedTime) + 1) / 2;
-
-    return brightness; // 0 (어두운 밤) ~ 1 (밝은 낮) 사이의 값
+    return brightness;
   }
-
-  /* --------------------------------------------------------------------------- */
 
   /* --------------------------------------------------------------------------- */
   /* background */
 
-  // 배경 색상 업데이트 함수 (시간에 따라 배경색이 변화)
   function updateBackgroundColor() {
-    const timeValue = getTimeBasedColorValue(); // 현재 시간 비율
-    const skyColor = new THREE.Color(0x87ceeb); // 밝은 하늘색
-    const eveningColor = new THREE.Color(0x1c1c72); // 어두운 저녁색
-    const currentColor = skyColor.lerp(eveningColor, timeValue); // 시간에 따른 색상 보간
-    renderer.setClearColor(currentColor); // 배경 색상 업데이트
+    const timeValue = getTimeBasedColorValue();
+    const skyColor = new THREE.Color(0x87ceeb);
+    const eveningColor = new THREE.Color(0x1c1c72);
+    const currentColor = skyColor.lerp(eveningColor, timeValue);
+    renderer.setClearColor(currentColor);
   }
-
-  /* --------------------------------------------------------------------------- */
 
   /* --------------------------------------------------------------------------- */
   /* slider */
 
-  // 슬라이드 바로 광원 밝기 조절
   const slider = document.getElementById("light-intensity");
-  slider.value = light.intensity; // 슬라이더 초기 값을 광원의 초기 강도와 동기화
+  slider.value = light.intensity;
 
   slider.addEventListener("input", function () {
-    light.intensity = parseFloat(slider.value); // 슬라이드 바 값을 광원의 밝기로 설정
+    light.intensity = parseFloat(slider.value);
   });
 
   /* --------------------------------------------------------------------------- */
+  /* Cat Model */
 
-  /* --------------------------------------------------------------------------- */
-
-  function changeSeason() {}
-  function seasonButton() {
-    document.getElementById("summer").onclick = function () {
-      summer();
-    };
-    document.getElementById("spring").onclick = function () {
-      spring();
-    };
-    document.getElementById("fall").onclick = function () {
-      fall();
-    };
-    document.getElementById("winter").onclick = function () {
-      winter();
-    };
-  }
-
-  /* --------------------------------------------------------------------------- */
-
-  /* --------------------------------------------------------------------------- */
-  // 고양이 GLTFLoader로 올린 이후에 구체 위에 올리기
   let cat, mixer;
   const catScale = 0.004;
   const gltf_loader = new THREE.GLTFLoader();
@@ -242,58 +180,103 @@ window.onload = function init() {
       }
 
       scene.add(gltf.scene);
-      render();
     },
     undefined,
     function (error) {
-      console.error(error);
+      console.error("Error loading cat model:", error);
     }
   );
 
   /* --------------------------------------------------------------------------- */
+  /* New Object */
+  // Set the angles for positioning object
+  const theta = Math.PI / 4; // Angle from the Y-axis (45 degrees here)
+  const phi = Math.PI / 3; // Rotation around the Y-axis (60 degrees here)
+
+  // Calculate the position on the sphere's surface using spherical coordinates
+  const x = radius * Math.sin(theta) * Math.cos(phi);
+  const y = radius * Math.cos(theta);
+  const z = radius * Math.sin(theta) * Math.sin(phi);
 
   /* --------------------------------------------------------------------------- */
-  /* rendering*/
+  /* New Object (Umbrella) */
 
-  // 렌더 함수 (매 프레임마다 호출하여 장면을 렌더링)
+  let newObject;
+
+  const newModelPath = "../../umbrella/scene.gltf";
+  const normalMapTexturePath =
+    "../../umbrella/textures/Material.001_normal.png";
+  const baseColorTexturePath =
+    "../../umbrella/textures/Material.001_baseColor.png";
+  const newTextureLoader = new THREE.TextureLoader();
+  const newNormalMap = newTextureLoader.load(normalMapTexturePath);
+  const newBaseColor = newTextureLoader.load(baseColorTexturePath);
+
+  const newLoader = new THREE.GLTFLoader();
+  newLoader.load(
+    newModelPath,
+    function (gltf) {
+      newObject = gltf.scene;
+
+      newObject.traverse((child) => {
+        if (child.isMesh) {
+          child.material = new THREE.MeshStandardMaterial({
+            map: newBaseColor,
+            normalMap: newNormalMap,
+            roughness: 0.5,
+            metalness: 0.1,
+          });
+          child.material.map.wrapS = child.material.map.wrapT =
+            THREE.RepeatWrapping;
+          child.material.normalMap.wrapS = child.material.normalMap.wrapT =
+            THREE.RepeatWrapping;
+        }
+      });
+
+      // Position newObject on the surface of the sphere
+      newObject.position.set(x, y, z);
+      newObject.scale.set(1, 1, 1);
+
+      // Add newObject as a child of sphere
+      sphere.add(newObject);
+    },
+    undefined,
+    function (error) {
+      console.error("Error loading new model:", error);
+    }
+  );
+
+  /* ---------------------------
+
+  /* --------------------------------------------------------------------------- */
+  /* rendering */
+
   function render() {
-    // controls.update(); // 카메라 제어 업데이트
-
-    // Rotate sphere along the X-axis
-    sphere.rotation.x -= 0.002; // Adjust rotation speed as needed
-
-    // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
-    angle += rotationSpeed; // 각도를 계속 증가시켜 회전시키기
-    const x = orbitRadius * Math.cos(angle); // 태양의 X좌표 (코사인 함수 사용)
-    const y = orbitRadius * Math.sin(angle); // 태양의 Y좌표 (사인 함수 사용)
-    const z = orbitRadius * Math.sin(angle); // 태양의 Z좌표 (사인 함수 사용)
-    light.position.set(x, y, z); // 태양(빛)의 새로운 위치 설정
+    sphere.rotation.x -= 0.01;
+    angle += rotationSpeed;
+    const x = orbitRadius * Math.cos(angle);
+    const y = orbitRadius * Math.sin(angle);
+    const z = orbitRadius * Math.sin(angle);
+    light.position.set(x, y, z);
 
     updateBackgroundColor();
 
-    if (mixer) mixer.update(0.004); // Adjust timing for animation
-    // Check for collision and keep cat on sphere
-    if (cat) {
-      keepCatOnSphere();
-    }
-    renderer.render(scene, camera); // 현재 프레임을 렌더링
-    requestAnimationFrame(render); // 다음 프레임에서 렌더 함수를 재귀 호출
+    if (mixer) mixer.update(0.005); // Update cat animation if mixer is available
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
   }
 
-  // 창 크기가 변경될 때마다 resizeCanvas 함수 호출
   window.addEventListener("resize", resizeCanvas);
 
-  // 고양이 collision detection 수행
+  // Ensure the cat remains on the sphere's surface
   function keepCatOnSphere() {
-    const sphereCenter = sphere.position; // Sphere center
-    const catDirection = cat.position.clone().sub(sphereCenter).normalize(); // Direction vector from sphere to cat
-
-    // Adjust position so the cat stays on the surface of the sphere
-    const targetPosition = catDirection.multiplyScalar(radius + 0.03); // Offset to keep the cat slightly above the surface
-    cat.position.copy(targetPosition);
+    if (cat) {
+      const sphereCenter = sphere.position;
+      const catDirection = cat.position.clone().sub(sphereCenter).normalize();
+      const targetPosition = catDirection.multiplyScalar(radius + 0.03);
+      cat.position.copy(targetPosition);
+    }
   }
 
-  // 초기 렌더링 함수 호출 (첫 프레임을 렌더링하기 위해 호출)
   render();
-  /* --------------------------------------------------------------------------- */
 };
