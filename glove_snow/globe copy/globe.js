@@ -35,8 +35,8 @@ window.onload = function init() {
     near, // 카메라가 인식할 수 있는 가장 가까운 거리 (근접 클리핑 평면)
     far // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
   );
-  camera.position.z = 2; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
-  // camera.position.y = 9; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
+  camera.position.z = 10; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
+  // camera.position.y = 5; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
   // camera.rotation.x -= 0.5;
 
   // 카메라 제어 설정 (TrackballControls를 사용하여 카메라를 마우스로 제어할 수 있도록 설정)
@@ -171,6 +171,7 @@ window.onload = function init() {
   //   }
   // }
 
+  // 빨간 점 찍는 부분 필요 읽을 필요 X
   var Tree = function () {
     //modèle 3d
     this.mesh = new THREE.Object3D();
@@ -201,7 +202,7 @@ window.onload = function init() {
   };
 
   var sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(radius, 32, 24),
+    new THREE.SphereGeometry(radius, segments, segments),
     new THREE.MeshStandardMaterial({
       map: baseColor, // 기본 색상 텍스처
       normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
@@ -367,7 +368,10 @@ window.onload = function init() {
     function (gltf) {
       cat = gltf.scene.children[0];
       cat.scale.set(catScale, catScale, catScale);
-      cat.position.set(0, radius, 1);
+      // cat.position.set(0, radius, 1);
+      cat.position.setFromSphericalCoords(radius + 0.03, Math.PI / 4, 0);
+      cat.rotation.x += Math.PI / 4;
+      // cat.rotation.y += Math.PI / 6;
 
       mixer = new THREE.AnimationMixer(cat);
       if (gltf.animations.length > 0) {
@@ -376,6 +380,30 @@ window.onload = function init() {
       }
 
       scene.add(gltf.scene);
+      render();
+    },
+    undefined,
+    function (error) {
+      console.error(error);
+    }
+  );
+
+  // 나무
+  gltf_loader.load(
+    "./models/giant_low_poly_tree/scene.gltf",
+    function (gltf) {
+      const model = gltf.scene;
+      model.scale.set(0.2, 0.2, 0.2);
+      // model.position.set(0, radius, 1);
+      model.position.setFromSphericalCoordsYZ(
+        radius - 0.1,
+        Math.PI / 3,
+        Math.PI / 3
+      );
+      model.rotation.x += Math.PI / 3;
+      model.rotation.z -= Math.PI / 3;
+
+      sphere.add(model);
       render();
     },
     undefined,
