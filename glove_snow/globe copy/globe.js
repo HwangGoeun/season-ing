@@ -220,10 +220,13 @@ window.onload = function init() {
   );
   scene.add(sphere);
 
+  let modelName = "./models/small_tree/prune_tree_1.gltf";
+  console.log("model name:", modelName);
+
   function createTree() {
     let models;
     gltf_loader.load(
-      "./models/small_tree/prune_tree_1.gltf",
+      modelName,
       function (gltf) {
         const model = gltf.scene;
         model.scale.set(0.2, 0.2, 0.2);
@@ -243,51 +246,6 @@ window.onload = function init() {
         console.error(error);
       }
     );
-    // for (var i = 0, l = 20; i < l; i++) {
-    //   const objCopy = models.clone();
-    //   const phi = Math.acos(-1 + (2 * i) / l);
-    //   const theta = Math.sqrt(l * Math.PI) * phi;
-    //   // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
-    //   objCopy.position.setFromSphericalCoords(radius, phi, theta);
-    //   vector.copy(objCopy.position).multiplyScalar(2);
-    //   sphere.add(objCopy);
-    // }
-
-    // tree = [];
-
-    // for (var i = 0; i < 2 * Math.PI; i += Math.PI / 36) {
-    //   tree[i] = new Tree();
-    //   let phi = Math.PI - Math.PI / 3;
-    //   let theta = i;
-    //   // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
-    //   tree[i].mesh.position.setFromSphericalCoordsYZ(radius + 0.03, phi, theta);
-    //   tree[i].mesh.lookAt(sphere.position);
-    //   //don't works
-    //   //tree[i].mesh.rotation.x=-Math.PI/2
-
-    //   //scene.add(tree[i].mesh);
-    //   sphere.add(tree[i].mesh);
-    // }
-
-    // for (var i = 0; i < 100; i++) {
-    //   const objCopy = models.clone();
-    //   // const phi = (Math.random() * Math.PI) / 2;
-    //   // const theta = Math.random() * Math.PI * 2;
-    //   const phi = (Math.random() * Math.PI) / 2;
-    //   const theta = randomInRange();
-    //   // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
-    //   objCopy.position.setFromSphericalCoords(radius + 0.5, phi, theta);
-    //   // const perpendicularVector = new THREE.Vector3()
-    //   //   .copy(objCopy.position)
-    //   //   .cross(vector);
-    //   if (theta >= Math.PI / 2 && theta <= (Math.PI * 3) / 2)
-    //     objCopy.rotation.x -= phi;
-    //   else objCopy.rotation.x += phi;
-    //   // objCopy.rotation.y += theta;
-    //   if (theta >= 0 && theta <= Math.PI) objCopy.rotation.z -= phi;
-    //   // else objCopy.rotation.z += phi;
-    //   sphere.add(objCopy);
-    // }
   }
 
   //at the center of the sphere to illustrate what the object looks like
@@ -371,21 +329,18 @@ window.onload = function init() {
 
   /* --------------------------------------------------------------------------- */
 
-  function changeSeason() {}
-  function seasonButton() {
-    document.getElementById("spring").onclick = function () {
-      spring();
-    };
-    document.getElementById("summer").onclick = function () {
-      summer();
-    };
-    document.getElementById("fall").onclick = function () {
-      fall();
-    };
-    document.getElementById("winter").onclick = function () {
-      winter();
-    };
-  }
+  document.getElementById("spring").onclick = function () {
+    spring();
+  };
+  document.getElementById("summer").onclick = function () {
+    summer();
+  };
+  document.getElementById("fall").onclick = function () {
+    fall();
+  };
+  document.getElementById("winter").onclick = function () {
+    winter();
+  };
 
   /* --------------------------------------------------------------------------- */
 
@@ -419,29 +374,213 @@ window.onload = function init() {
     }
   );
 
-  // 나무
-  gltf_loader.load(
-    "./models/small_tree/long_tree_1.gltf",
-    function (gltf) {
-      const model = gltf.scene;
-      model.scale.set(0.5, 0.5, 0.5);
-      // model.position.set(0, radius, 1);
-      // model.position.setFromSphericalCoords(radius, Math.PI / 6, Math.PI / 4);
-      model.position.set(3, 3, 3);
-      // model.rotation.x += Math.PI / 4;
-      // model.rotation.y += Math.PI / 2;
-      // model.rotation.z -= Math.PI / 6;
-      model.lookAt(sphere.position);
-      sphere.add(model);
-      render();
-    },
-    undefined,
-    function (error) {
-      console.error(error);
-    }
-  );
-
   /* --------------------------------------------------------------------------- */
+
+  function spring() {
+    console.log("spring button pushed");
+
+    // 새로운 나무 모델 경로로 업데이트
+    modelName = "./models/small_tree/bush_1.gltf";
+
+    // 기존 나무들을 삭제
+    while (sphere.children.length > 0) {
+      sphere.remove(sphere.children[0]);
+    }
+
+    // 새 모델을 사용해 나무를 다시 생성
+    createTree();
+
+    // 새로운 텍스처 파일 로드
+    const baseColor = loader.load("./textures/Poliigon_GrassPatchyGround_4585_BaseColor.jpg"); // 기본 색상 텍스처
+    const normalMap = loader.load("./textures/Poliigon_GrassPatchyGround_4585_Normal.jpg"); // 노멀 맵
+    const roughnessMap = loader.load("./textures/Poliigon_GrassPatchyGround_4585_Roughness.jpg"); // 거칠기 맵
+    const heightMap = loader.load("./textures/Poliigon_GrassPatchyGround_4585_Displacement.tiff"); // 높이 맵
+    const ambientOcclusionMap = loader.load("./textures/Poliigon_GrassPatchyGround_4585_AmbientOcclusion.jpg"); // 주변광 차단 맵
+
+    // 텍스처 반복 및 스케일 설정
+    baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
+    baseColor.repeat.set(1, 1);
+
+    normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+    normalMap.repeat.set(1, 1);
+
+    roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+    roughnessMap.repeat.set(1, 1);
+
+    heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
+    heightMap.repeat.set(1, 1);
+
+    ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
+    ambientOcclusionMap.repeat.set(1, 1);
+
+    // 구의 재질 텍스처 업데이트
+    sphere.material.map = baseColor;
+    sphere.material.normalMap = normalMap;
+    sphere.material.roughnessMap = roughnessMap;
+    sphere.material.displacementMap = heightMap;
+    sphere.material.aoMap = ambientOcclusionMap;
+
+    // 텍스처 업데이트 반영
+    sphere.material.needsUpdate = true;
+  }
+
+  /* ----- */
+
+  function summer() {
+    console.log("button push");
+
+    // 새로운 나무 모델 경로로 업데이트
+    modelName = "./models/small_tree/small_tree_1.gltf";
+
+    // 기존 나무들을 삭제
+    while (sphere.children.length > 0) {
+      sphere.remove(sphere.children[0]);
+    }
+
+    // 새 모델을 사용해 나무를 다시 생성
+    createTree();
+
+    // 새로운 텍스처 파일 로드
+    const baseColor = loader.load("./textures/Grass001_4K-PNG_Color.png");
+    const normalMap = loader.load("./textures/Grass001_4K-PNG_NormalDX.png");
+    const roughnessMap = loader.load("./textures/Grass001_4K-PNG_Roughness.png");
+    const heightMap = loader.load("./textures/Grass001_4K-PNG_Displacement.png");
+    const ambientOcclusionMap = loader.load("./textures/Grass001_4K-PNG_AmbientOcclusion.png");
+
+    // 텍스처 반복 및 스케일 설정
+    baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
+    baseColor.repeat.set(1, 1);
+
+    normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+    normalMap.repeat.set(1, 1);
+
+    roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+    roughnessMap.repeat.set(1, 1);
+
+    heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
+    heightMap.repeat.set(1, 1);
+
+    ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
+    ambientOcclusionMap.repeat.set(1, 1);
+
+    // 구의 재질 텍스처 업데이트
+    sphere.material.map = baseColor;
+    sphere.material.normalMap = normalMap;
+    sphere.material.roughnessMap = roughnessMap;
+    sphere.material.displacementMap = heightMap;
+    sphere.material.aoMap = ambientOcclusionMap;
+
+    // 텍스처 업데이트 반영
+    sphere.material.needsUpdate = true;
+  }
+
+  /* ----- */
+
+  // fall
+  function fall() {
+    console.log("fall button pushed");
+
+    // 새로운 나무 모델 경로로 업데이트
+    modelName = "./models/small_tree/pretty_big_tree_3.gltf";
+
+    // 기존 나무들을 삭제
+    while (sphere.children.length > 0) {
+      sphere.remove(sphere.children[0]);
+    }
+
+    // 새 모델을 사용해 나무를 다시 생성
+    createTree();
+
+    // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
+    const baseColor = loader.load("./textures/GroundWoodChips001_NRM_4K.jpg"); // 기본 색상 텍스처
+    const normalMap = loader.load("./textures/GroundWoodChips001_COL_4K.jpg"); // 노멀 맵 (표면의 작은 굴곡 표현)
+    const roughnessMap = loader.load("./textures/GroundWoodChips001_GLOSS_4K.jpg"); // 거칠기 맵 (표면의 거칠기 표현)
+    const heightMap = loader.load("./textures/GroundWoodChips001_DISP_4K.jpg"); // 높이 맵 (높낮이 변화를 표현)
+    const ambientOcclusionMap = loader.load("./textures/GroundWoodChips001_AO_4K.jpg"); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
+
+    // 텍스처 반복 및 스케일 설정
+    baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
+    baseColor.repeat.set(1, 1);
+
+    normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+    normalMap.repeat.set(1, 1);
+
+    roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+    roughnessMap.repeat.set(1, 1);
+
+    heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
+    heightMap.repeat.set(1, 1);
+
+    ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
+    ambientOcclusionMap.repeat.set(1, 1);
+
+    // 구의 재질 텍스처 업데이트
+    sphere.material.map = baseColor;
+    sphere.material.normalMap = normalMap;
+    sphere.material.roughnessMap = roughnessMap;
+    sphere.material.displacementMap = heightMap;
+    sphere.material.aoMap = ambientOcclusionMap;
+
+    // 텍스처 업데이트 반영
+    sphere.material.needsUpdate = true;
+  }
+
+  /* ----- */
+
+  // winter
+  function winter() {
+    console.log("button push");
+
+    // 새로운 나무 모델 경로로 업데이트
+    modelName = "./models/small_tree/prune_tree_1.gltf";
+
+    // 기존 나무들을 삭제
+    while (sphere.children.length > 0) {
+      sphere.remove(sphere.children[0]);
+    }
+
+    // 새 모델을 사용해 나무를 다시 생성
+    createTree();
+
+    // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
+    const baseColor = loader.load("./textures/Snow_004_COLOR.jpg"); // 기본 색상 텍스처
+    const normalMap = loader.load("./textures/Snow_004_NORM.jpg"); // 노멀 맵 (표면의 작은 굴곡 표현)
+    const roughnessMap = loader.load("./textures/Snow_004_ROUGH.jpg"); // 거칠기 맵 (표면의 거칠기 표현)
+    const heightMap = loader.load("./textures/Snow_004_DISP.png"); // 높이 맵 (높낮이 변화를 표현)
+    const ambientOcclusionMap = loader.load("./textures/Snow_004_OCC.jpg"); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
+
+    // 텍스처 반복 및 스케일 설정
+    baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
+    baseColor.repeat.set(1, 1);
+
+    normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+    normalMap.repeat.set(1, 1);
+
+    roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+    roughnessMap.repeat.set(1, 1);
+
+    heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
+    heightMap.repeat.set(1, 1);
+
+    ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
+    ambientOcclusionMap.repeat.set(1, 1);
+
+    // 구의 재질 텍스처 업데이트
+    sphere.material.map = baseColor;
+    sphere.material.normalMap = normalMap;
+    sphere.material.roughnessMap = roughnessMap;
+    sphere.material.displacementMap = heightMap;
+    sphere.material.aoMap = ambientOcclusionMap;
+
+    // 텍스처 업데이트 반영
+    sphere.material.needsUpdate = true;
+  }
+
+
+
+
+
+
 
   /* --------------------------------------------------------------------------- */
   /* rendering*/
@@ -451,7 +590,7 @@ window.onload = function init() {
     // controls.update(); // 카메라 제어 업데이트
 
     // Rotate sphere along the X-axis
-    // sphere.rotation.x -= 0.002; // Adjust rotation speed as needed
+    sphere.rotation.x -= 0.002; // Adjust rotation speed as needed
 
     // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
     angle += rotationSpeed; // 각도를 계속 증가시켜 회전시키기
