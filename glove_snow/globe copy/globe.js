@@ -38,10 +38,8 @@ window.onload = function init() {
     near, // 카메라가 인식할 수 있는 가장 가까운 거리 (근접 클리핑 평면)
     far // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
   );
-  camera.position.set(0, 10, 20); // 카메라를 약간 위로 올려서 바닥을 내려다보게 설정
-  // camera.position.z = 20; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
-  // camera.position.y = 8; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
-  // camera.rotation.x -= 0.5;
+  // camera.position.set(0, 6, 3); // 카메라를 약간 위로 올려서 바닥을 내려다보게 설정
+  camera.position.z = 20; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
 
   // 카메라 제어 설정 (TrackballControls를 사용하여 카메라를 마우스로 제어할 수 있도록 설정)
   // const controls = new THREE.TrackballControls(camera, canvas);
@@ -108,8 +106,8 @@ window.onload = function init() {
   /* globe */
 
   // // 구체 설정 (크기 및 세그먼트)
-  const radius = 12; // 구체의 반지름 설정 (구체의 크기)
-  const segments = 24; // 구체를 렌더링할 때 사용할 세그먼트 수 (세부 표현도를 높임)
+  const radius = 6; // 구체의 반지름 설정 (구체의 크기)
+  const segments = 256; // 구체를 렌더링할 때 사용할 세그먼트 수 (세부 표현도를 높임)
   const rotation = 6; // 구체의 초기 회전 각도 설정
 
   // // 구체 생성 및 추가 (기본 구체 메쉬에 텍스처 적용)
@@ -220,75 +218,76 @@ window.onload = function init() {
   );
   scene.add(sphere);
 
-  function createTree() {
-    let models;
-    gltf_loader.load(
-      "./models/small_tree/prune_tree_1.gltf",
-      function (gltf) {
-        const model = gltf.scene;
-        model.scale.set(0.2, 0.2, 0.2);
-        models = model.clone();
-        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
-          const objCopy = models.clone();
-          let phi = Math.PI - Math.PI / 3;
-          let theta = i;
-          // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
-          objCopy.position.setFromSphericalCoordsYZ(radius + 0.5, phi, theta);
-          objCopy.rotation.x += i;
-          sphere.add(objCopy);
-        }
-      },
-      undefined,
-      function (error) {
-        console.error(error);
-      }
-    );
-    // for (var i = 0, l = 20; i < l; i++) {
-    //   const objCopy = models.clone();
-    //   const phi = Math.acos(-1 + (2 * i) / l);
-    //   const theta = Math.sqrt(l * Math.PI) * phi;
-    //   // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
-    //   objCopy.position.setFromSphericalCoords(radius, phi, theta);
-    //   vector.copy(objCopy.position).multiplyScalar(2);
-    //   sphere.add(objCopy);
-    // }
+  // function createTree() {
+  //   let models;
+  //   gltf_loader.load(
+  //     "./models/small_tree/prune_tree_1.gltf",
+  //     function (gltf) {
+  //       const model = gltf.scene;
+  //       model.scale.set(0.2, 0.2, 0.2);
+  //       models = model.clone();
+  //       for (var i = 0; i < 2 * Math.PI; i += Math.PI / 12) {
+  //         const objCopy = models.clone();
+  //         let phi = Math.PI / 4;
+  //         let theta = Math.PI / 4;
+  //         // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+  //         objCopy.position.setFromSphericalCoords(radius + 0.5, phi, theta);
+  //         objCopy.rotation.x += theta;
+  //         // objCopy.rotation.z -= phi;
+  //         sphere.add(objCopy);
+  //       }
+  //     },
+  //     undefined,
+  //     function (error) {
+  //       console.error(error);
+  //     }
+  //   );
+  // for (var i = 0, l = 20; i < l; i++) {
+  //   const objCopy = models.clone();
+  //   const phi = Math.acos(-1 + (2 * i) / l);
+  //   const theta = Math.sqrt(l * Math.PI) * phi;
+  //   // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+  //   objCopy.position.setFromSphericalCoords(radius, phi, theta);
+  //   vector.copy(objCopy.position).multiplyScalar(2);
+  //   sphere.add(objCopy);
+  // }
 
-    // tree = [];
+  // tree = [];
 
-    // for (var i = 0; i < 2 * Math.PI; i += Math.PI / 36) {
-    //   tree[i] = new Tree();
-    //   let phi = Math.PI - Math.PI / 3;
-    //   let theta = i;
-    //   // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
-    //   tree[i].mesh.position.setFromSphericalCoordsYZ(radius + 0.03, phi, theta);
-    //   tree[i].mesh.lookAt(sphere.position);
-    //   //don't works
-    //   //tree[i].mesh.rotation.x=-Math.PI/2
+  // for (var i = 0; i < 2 * Math.PI; i += Math.PI / 36) {
+  //   tree[i] = new Tree();
+  //   let phi = Math.PI - Math.PI / 3;
+  //   let theta = i;
+  //   // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+  //   tree[i].mesh.position.setFromSphericalCoordsYZ(radius + 0.03, phi, theta);
+  //   tree[i].mesh.lookAt(sphere.position);
+  //   //don't works
+  //   //tree[i].mesh.rotation.x=-Math.PI/2
 
-    //   //scene.add(tree[i].mesh);
-    //   sphere.add(tree[i].mesh);
-    // }
+  //   //scene.add(tree[i].mesh);
+  //   sphere.add(tree[i].mesh);
+  // }
 
-    // for (var i = 0; i < 100; i++) {
-    //   const objCopy = models.clone();
-    //   // const phi = (Math.random() * Math.PI) / 2;
-    //   // const theta = Math.random() * Math.PI * 2;
-    //   const phi = (Math.random() * Math.PI) / 2;
-    //   const theta = randomInRange();
-    //   // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
-    //   objCopy.position.setFromSphericalCoords(radius + 0.5, phi, theta);
-    //   // const perpendicularVector = new THREE.Vector3()
-    //   //   .copy(objCopy.position)
-    //   //   .cross(vector);
-    //   if (theta >= Math.PI / 2 && theta <= (Math.PI * 3) / 2)
-    //     objCopy.rotation.x -= phi;
-    //   else objCopy.rotation.x += phi;
-    //   // objCopy.rotation.y += theta;
-    //   if (theta >= 0 && theta <= Math.PI) objCopy.rotation.z -= phi;
-    //   // else objCopy.rotation.z += phi;
-    //   sphere.add(objCopy);
-    // }
-  }
+  // for (var i = 0; i < 100; i++) {
+  //   const objCopy = models.clone();
+  //   // const phi = (Math.random() * Math.PI) / 2;
+  //   // const theta = Math.random() * Math.PI * 2;
+  //   const phi = (Math.random() * Math.PI) / 2;
+  //   const theta = randomInRange();
+  //   // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+  //   objCopy.position.setFromSphericalCoords(radius + 0.5, phi, theta);
+  //   // const perpendicularVector = new THREE.Vector3()
+  //   //   .copy(objCopy.position)
+  //   //   .cross(vector);
+  //   if (theta >= Math.PI / 2 && theta <= (Math.PI * 3) / 2)
+  //     objCopy.rotation.x -= phi;
+  //   else objCopy.rotation.x += phi;
+  //   // objCopy.rotation.y += theta;
+  //   if (theta >= 0 && theta <= Math.PI) objCopy.rotation.z -= phi;
+  //   // else objCopy.rotation.z += phi;
+  //   sphere.add(objCopy);
+  // }
+  // }
 
   //at the center of the sphere to illustrate what the object looks like
   // var singletree;
@@ -392,7 +391,7 @@ window.onload = function init() {
   /* --------------------------------------------------------------------------- */
   // 고양이 GLTFLoader로 올린 이후에 구체 위에 올리기
   let cat, mixer;
-  const catScale = 0.004;
+  const catScale = 0.0006;
   const gltf_loader = new THREE.GLTFLoader();
   gltf_loader.load(
     "../../move_cat/toon_cat_free/scene.gltf",
@@ -400,9 +399,9 @@ window.onload = function init() {
       cat = gltf.scene.children[0];
       cat.scale.set(catScale, catScale, catScale);
       // cat.position.set(0, radius, 1);
-      cat.position.setFromSphericalCoords(radius + 0.03, Math.PI / 4, 0);
-      cat.rotation.x += Math.PI / 4;
-      // cat.rotation.y += Math.PI / 6;
+      cat.position.setFromSphericalCoords(radius + 0.03, Math.PI / 10, 0);
+      cat.rotation.z += Math.PI;
+      // cat.rotation.z += Math.PI;
 
       mixer = new THREE.AnimationMixer(cat);
       if (gltf.animations.length > 0) {
@@ -419,21 +418,111 @@ window.onload = function init() {
     }
   );
 
-  // 나무
+  /* --------------------------------------------------------------------------- */
+  // 3단 수풀
   gltf_loader.load(
-    "./models/small_tree/long_tree_1.gltf",
+    "./models/small_tree/bush_2.gltf",
     function (gltf) {
+      // 고양이 기준 바로 왼쪽 수풀 3개
       const model = gltf.scene;
-      model.scale.set(0.5, 0.5, 0.5);
-      // model.position.set(0, radius, 1);
-      // model.position.setFromSphericalCoords(radius, Math.PI / 6, Math.PI / 4);
-      model.position.set(3, 3, 3);
-      // model.rotation.x += Math.PI / 4;
-      // model.rotation.y += Math.PI / 2;
-      // model.rotation.z -= Math.PI / 6;
-      model.lookAt(sphere.position);
+      model.scale.set(0.12, 0.12, 0.12);
+      model.position.setFromSphericalCoords(
+        radius - 0.14,
+        Math.PI / 16,
+        Math.PI / 2
+      );
+      model.rotation.z -= Math.PI / 12;
       sphere.add(model);
-      render();
+
+      const objCopy_0 = model.clone();
+      objCopy_0.position.setFromSphericalCoords(
+        radius + 0.1,
+        Math.PI / 12,
+        Math.PI / 2
+      );
+      sphere.add(objCopy_0);
+      const objCopy_1 = model.clone();
+      objCopy_1.position.setFromSphericalCoords(
+        radius + 0.4,
+        Math.PI / 9.5,
+        Math.PI / 2
+      );
+      sphere.add(objCopy_1);
+
+      // 만들어진 기본 수풀에서 z축으로 앞으로 이동
+      const nex_objCopy = model.clone();
+      nex_objCopy.position.z += 1.5;
+      nex_objCopy.position.y -= 0.2;
+      nex_objCopy.rotation.x += Math.PI / 12;
+      sphere.add(nex_objCopy);
+
+      const nex_objCopy_0 = objCopy_0.clone();
+      nex_objCopy_0.position.z += 1.5;
+      nex_objCopy_0.position.y -= 0.2;
+      nex_objCopy_0.rotation.x += Math.PI / 12;
+      sphere.add(nex_objCopy_0);
+
+      const nex_objCopy_1 = objCopy_1.clone();
+      nex_objCopy_1.position.z += 1.5;
+      nex_objCopy_1.position.y -= 0.2;
+      nex_objCopy_1.rotation.x += Math.PI / 12;
+      sphere.add(nex_objCopy_1);
+    },
+    undefined,
+    function (error) {
+      console.error(error);
+    }
+  );
+  /* --------------------------------------------------------------------------- */
+  /* --------------------------------------------------------------------------- */
+  // 모여있는 나무들
+  gltf_loader.load(
+    "./models/small_tree/pretty_big_tree_4.gltf",
+    function (gltf) {
+      // 수풀 옆 왼쪽 나무 1
+      const model = gltf.scene;
+      model.scale.set(0.12, 0.12, 0.12);
+      model.position.setFromSphericalCoords(
+        radius - 0.7,
+        Math.PI / 16,
+        Math.PI / 2
+      );
+      model.rotation.x += Math.PI / 4.5;
+      model.rotation.y -= Math.PI / 2;
+      model.position.z += 3;
+      model.position.x += 0.5;
+      sphere.add(model);
+
+      // 수풀 옆 왼쪽 나무 2
+      const nex_objCopy_0 = model.clone();
+      nex_objCopy_0.position.setFromSphericalCoords(
+        radius,
+        Math.PI / 16,
+        Math.PI / 2
+      );
+      nex_objCopy_0.position.z += 5;
+      nex_objCopy_0.position.y -= 3;
+      nex_objCopy_0.position.x += 0.5;
+      nex_objCopy_0.rotation.x = Math.PI / 3;
+      sphere.add(nex_objCopy_0);
+
+      // 오른쪽 나무 1
+      const objCopy_0 = model.clone();
+      objCopy_0.position.setFromSphericalCoords(
+        radius - 0.3,
+        Math.PI * 2 - Math.PI / 16,
+        Math.PI / 2
+      );
+      objCopy_0.position.z += 2.0;
+      objCopy_0.position.x -= 0.5;
+      sphere.add(objCopy_0);
+
+      const nex_objCopy_1 = objCopy_0.clone();
+      nex_objCopy_1.position.z += 2;
+      nex_objCopy_1.position.y -= 1.5;
+      nex_objCopy_1.rotation.x += Math.PI / 8;
+      nex_objCopy_1.position.x -= 0.4;
+      sphere.add(nex_objCopy_1);
     },
     undefined,
     function (error) {
@@ -444,14 +533,16 @@ window.onload = function init() {
   /* --------------------------------------------------------------------------- */
 
   /* --------------------------------------------------------------------------- */
+
+  /* --------------------------------------------------------------------------- */
   /* rendering*/
 
   // 렌더 함수 (매 프레임마다 호출하여 장면을 렌더링)
   function render() {
-    // controls.update(); // 카메라 제어 업데이트
+    controls.update(); // 카메라 제어 업데이트
 
     // Rotate sphere along the X-axis
-    // sphere.rotation.x -= 0.002; // Adjust rotation speed as needed
+    // sphere.rotation.x += 0.002; // Adjust rotation speed as needed
 
     // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
     angle += rotationSpeed; // 각도를 계속 증가시켜 회전시키기
@@ -484,8 +575,12 @@ window.onload = function init() {
     cat.position.copy(targetPosition);
   }
 
+  // controls.addEventListener("change", function (event) {
+  //   console.log(controls.object.position);
+  // });
+
   // 초기 렌더링 함수 호출 (첫 프레임을 렌더링하기 위해 호출)
   render();
-  createTree();
+  // createTree();
   /* --------------------------------------------------------------------------- */
 };
