@@ -182,6 +182,7 @@ function loadModels(scene, sphere) {
   );
 }
 
+
 // Animation update
 function updateAnimation(sphere, light) {
   sphere.rotation.x -= 0.002;
