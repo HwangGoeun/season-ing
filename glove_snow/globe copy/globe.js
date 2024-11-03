@@ -1,4 +1,6 @@
-let mixer; // Global animation mixer
+let catMixer; // 고양이 애니메이션 믹서
+let rainMixer; // 비 애니메이션 믹서
+let controls; // TrackballControls
 
 // Initialization function
 function init() {
@@ -10,7 +12,7 @@ function init() {
   renderer.setClearColor(new THREE.Color(0x87ceeb));
   // 감마 설정 (색상 표현을 개선하기 위해 감마 보정 사용)
   renderer.outputEncoding = THREE.sRGBEncoding;
-// 장면(Scene) 생성 (3D 오브젝트를 배치하는 공간)
+  // 장면(Scene) 생성 (3D 오브젝트를 배치하는 공간)
   const scene = new THREE.Scene();
   const camera = createCamera();
   const light = createLights(scene);
@@ -20,33 +22,40 @@ function init() {
 
   setupClock();
   setupSlider(light);
-  loadModels(scene, sphere);
+  loadCats(scene, sphere);
+  loadRain(scene, sphere);
+
+  // TrackballControls 초기화
+  //controls = new THREE.TrackballControls(camera, canvas);
 
   setInterval(() => {
     updateClock();
     updateBackgroundColor(renderer); // Pass renderer to update background color
   }, 1000);
-
   function animate() {
+    //controls.update(); // TrackballControls 업데이트
     updateAnimation(sphere, light);
-    if (mixer) mixer.update(0.01);
+
+    // 각각의 애니메이션 믹서가 존재할 때만 업데이트
+    if (catMixer) catMixer.update(0.01);
+    if (rainMixer) rainMixer.update(0.01);
+
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
   }
-
   window.addEventListener("resize", () => resizeCanvas(renderer, camera));
   animate();
 }
 
 // Camera creation
 function createCamera() {
-  const fov = 75;
-  const aspect = 2;
+  const fov = 70;
+  const aspect = 1;
   const near = 0.1;
   const far = 100;
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-  camera.position.z = 3;
-  camera.position.y = 6.8;
+  camera.position.z = 5;
+  camera.position.y = 7.5;
   camera.rotation.x -= 0.5;
   return camera;
 }
@@ -157,10 +166,8 @@ function updateBackgroundColor(renderer) {
   renderer.setClearColor(currentColor);
 }
 
-// Model loading
-function loadModels(scene, sphere) {
+function loadCats(scene, sphere) {
   const gltfLoader = new THREE.GLTFLoader();
-
   gltfLoader.load(
     "../../move_cat/toon_cat_free/scene.gltf",
     function (gltf) {
@@ -169,9 +176,9 @@ function loadModels(scene, sphere) {
       cat.position.set(0, sphere.geometry.parameters.radius, 1);
       scene.add(gltf.scene);
 
-      mixer = new THREE.AnimationMixer(cat);
+      catMixer = new THREE.AnimationMixer(cat); // 고양이 애니메이션 믹서 설정
       if (gltf.animations.length > 0) {
-        const action = mixer.clipAction(gltf.animations[0]);
+        const action = catMixer.clipAction(gltf.animations[0]);
         action.play();
       }
     },
@@ -182,7 +189,30 @@ function loadModels(scene, sphere) {
   );
 }
 
+// 비 모델 로드 함수
+function loadRain(scene, sphere) {
+  const gltfLoader = new THREE.GLTFLoader();
+  gltfLoader.load(
+    "../../move_cat/rain1/scene.gltf",
+    function (gltf) {
+      const rain = gltf.scene;
+      rain.scale.set(0.015, 0.01, 0.01);
+      rain.position.set(0, sphere.geometry.parameters.radius-4 , -1);
+      rain.rotation.y = Math.PI / 2; // 비 모델을 왼쪽으로 90도 회전
+      scene.add(rain);
 
+      rainMixer = new THREE.AnimationMixer(rain); // 비 애니메이션 믹서 설정
+      if (gltf.animations.length > 0) {
+        const action = rainMixer.clipAction(gltf.animations[0]);
+        action.play();
+      }
+    },
+    undefined,
+    function (error) {
+      console.error(error);
+    }
+  );
+}
 // Animation update
 function updateAnimation(sphere, light) {
   sphere.rotation.x -= 0.002;
@@ -198,22 +228,5 @@ function resizeCanvas(renderer, camera) {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 }
-
-function changeSeason() {}
-  function seasonButton() {
-    document.getElementById("spring").onclick = function () {
-      spring();
-    };
-    document.getElementById("summer").onclick = function () {
-      summer();
-    };
-    document.getElementById("fall").onclick = function () {
-      fall();
-    };
-    document.getElementById("winter").onclick = function () {
-      winter();
-    };
-  }
-
 
 window.onload = init;
