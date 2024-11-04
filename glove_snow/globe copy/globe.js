@@ -9,6 +9,10 @@ window.onload = function init() {
   // 감마 설정 (색상 표현을 개선하기 위해 감마 보정 사용)
   renderer.outputEncoding = THREE.sRGBEncoding;
 
+  // Enable shadows in the renderer
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
   // 장면(Scene) 생성 (3D 오브젝트를 배치하는 공간)
   const scene = new THREE.Scene();
 
@@ -65,6 +69,18 @@ window.onload = function init() {
   lightTarget.position.set(0, 0, 0); // 타겟을 원점(0, 0, 0)에 배치 (구체 중심)
   scene.add(lightTarget); // 장면에 타겟 추가
   light.target = lightTarget; // 빛이 타겟을 향하게 설정
+  light.castShadow = true;
+
+  light.shadow.mapSize.width = 2048;
+  light.shadow.mapSize.height = 2048;
+  light.shadow.camera.near = 0.5;
+  light.shadow.camera.far = 50;
+  light.shadow.camera.left = -20;
+  light.shadow.camera.right = 20;
+  light.shadow.camera.top = 20;
+  light.shadow.camera.bottom = -20;
+  
+  scene.add(light);
 
   // 태양의 회전 변수 (태양이 구체 주위를 공전하는 모션 설정)
   const orbitRadius = 10; // 태양의 궤도 반지름 설정
@@ -218,6 +234,7 @@ window.onload = function init() {
       displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
     })
   );
+  sphere.receiveShadow = true;
   scene.add(sphere);
 
   let modelName = "./models/small_tree/prune_tree_1.gltf";
@@ -230,6 +247,15 @@ window.onload = function init() {
       function (gltf) {
         const model = gltf.scene;
         model.scale.set(0.2, 0.2, 0.2);
+
+        // shadow
+        model.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true; // Trees cast shadows
+            child.receiveShadow = true; // Trees receive shadows
+          }
+        });
+
         models = model.clone();
         for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
           const objCopy = models.clone();
@@ -325,6 +351,17 @@ window.onload = function init() {
     light.intensity = parseFloat(slider.value); // 슬라이드 바 값을 광원의 밝기로 설정
   });
 
+  // Disable controls while interacting with the slider
+  slider.addEventListener("mousedown", () => (controls.enabled = false));
+  slider.addEventListener("mouseup", () => (controls.enabled = true));
+  slider.addEventListener("touchstart", () => (controls.enabled = false));
+  slider.addEventListener("touchend", () => (controls.enabled = true));
+
+  // Update light intensity based on slider value
+  slider.addEventListener("input", function () {
+    light.intensity = parseFloat(slider.value);
+  });
+
   /* --------------------------------------------------------------------------- */
 
   /* --------------------------------------------------------------------------- */
@@ -354,6 +391,15 @@ window.onload = function init() {
     function (gltf) {
       cat = gltf.scene.children[0];
       cat.scale.set(catScale, catScale, catScale);
+
+      // shadow
+      cat.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true; // Trees cast shadows
+          child.receiveShadow = true; // Trees receive shadows
+        }
+      });
+
       // cat.position.set(0, radius, 1);
       cat.position.setFromSphericalCoords(radius + 0.03, Math.PI / 4, 0);
       cat.rotation.x += Math.PI / 4;
@@ -492,8 +538,8 @@ window.onload = function init() {
     createTree();
 
     // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
-    const baseColor = loader.load("./textures/GroundWoodChips001_NRM_4K.jpg"); // 기본 색상 텍스처
-    const normalMap = loader.load("./textures/GroundWoodChips001_COL_4K.jpg"); // 노멀 맵 (표면의 작은 굴곡 표현)
+    const baseColor = loader.load("./textures/GroundWoodChips001_COL_4K.jpg"); // 기본 색상 텍스처
+    const normalMap = loader.load("./textures/GroundWoodChips001_NRM_4K.jpg"); // 노멀 맵 (표면의 작은 굴곡 표현)
     const roughnessMap = loader.load("./textures/GroundWoodChips001_GLOSS_4K.jpg"); // 거칠기 맵 (표면의 거칠기 표현)
     const heightMap = loader.load("./textures/GroundWoodChips001_DISP_4K.jpg"); // 높이 맵 (높낮이 변화를 표현)
     const ambientOcclusionMap = loader.load("./textures/GroundWoodChips001_AO_4K.jpg"); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
@@ -551,7 +597,7 @@ window.onload = function init() {
 
     // 텍스처 반복 및 스케일 설정
     baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
-    baseColor.repeat.set(1, 1);
+    baseColor.repeat.set(4, 4);
 
     normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
     normalMap.repeat.set(1, 1);
