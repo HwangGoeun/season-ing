@@ -531,6 +531,38 @@ window.onload = function init() {
   );
 
   /* --------------------------------------------------------------------------- */
+  /* --------------------------------------------------------------------------- */
+  // 수풀과 벤치
+  gltf_loader.load(
+    "./models/small_tree/chair_2.gltf",
+    function (gltf) {
+      // 수풀 옆 왼쪽 나무 1
+      const model = gltf.scene;
+      model.scale.set(0.12, 0.12, 0.12);
+      model.position.setFromSphericalCoords(radius, Math.PI / 2, Math.PI / 16);
+      model.rotation.x += Math.PI / 2;
+      model.rotation.y -= Math.PI / 2;
+      model.position.z += 0.2;
+      // model.position.x += 0.5;
+      sphere.add(model);
+
+      // 수풀 옆 왼쪽 나무 2
+      const nex_objCopy_0 = model.clone();
+      nex_objCopy_0.position.setFromSphericalCoords(
+        radius,
+        Math.PI / 1.85,
+        Math.PI / 16
+      );
+      nex_objCopy_0.position.z += 0.2;
+      nex_objCopy_0.rotation.x += Math.PI / 18;
+      sphere.add(nex_objCopy_0);
+    },
+    undefined,
+    function (error) {
+      console.error(error);
+    }
+  );
+  /* --------------------------------------------------------------------------- */
 
   /* --------------------------------------------------------------------------- */
 
