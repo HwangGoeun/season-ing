@@ -84,8 +84,18 @@ window.onload = function init() {
 
   // 태양의 회전 변수 (태양이 구체 주위를 공전하는 모션 설정)
   const orbitRadius = 10; // 태양의 궤도 반지름 설정
-  let angle = 0; // 태양의 초기 회전 각도 (라디안 단위)
-  const rotationSpeed = (2 * Math.PI) / 86400; // 24시간을 기준으로 설정된 회전 속도
+
+  // function updateLightPosition() {
+// }
+
+  // // 현재 시간을 기준으로 초기 각도 설정
+  // const now = new Date();
+  // const utcHours = now.getUTCHours(); // UTC 기준의 시간 가져오기
+  // const kstHours = (utcHours + 9) % 24; // UTC 시간에 9시간을 더해 한국 시간으로 변환
+  // const secondsInDay = kstHours * 3600 + now.getMinutes() * 60 + now.getSeconds();
+  // let angle = (2 * Math.PI * secondsInDay) / 86400; // 하루 86400초 기준으로 현재 각도를 설정
+  
+  // const rotationSpeed = (2 * Math.PI) / 86400; // 24시간을 기준으로 설정된 회전 속도
 
   /* --------------------------------------------------------------------------- */
 
@@ -125,7 +135,7 @@ window.onload = function init() {
 
   // // 구체 설정 (크기 및 세그먼트)
   const radius = 12; // 구체의 반지름 설정 (구체의 크기)
-  const segments = 24; // 구체를 렌더링할 때 사용할 세그먼트 수 (세부 표현도를 높임)
+  const segments = 64; // 구체를 렌더링할 때 사용할 세그먼트 수 (세부 표현도를 높임)
   const rotation = 6; // 구체의 초기 회전 각도 설정
 
   // // 구체 생성 및 추가 (기본 구체 메쉬에 텍스처 적용)
@@ -259,7 +269,17 @@ window.onload = function init() {
         models = model.clone();
         for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
           const objCopy = models.clone();
-          let phi = Math.PI - Math.PI / 3;
+          let phi = Math.PI - Math.PI / 3 - 0.1;
+          let theta = i;
+          // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+          objCopy.position.setFromSphericalCoordsYZ(radius + 0.5, phi, theta);
+          objCopy.rotation.x += i;
+          sphere.add(objCopy);
+        }
+
+        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
+          const objCopy = models.clone();
+          let phi = Math.PI / 3 - 0.1;
           let theta = i;
           // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
           objCopy.position.setFromSphericalCoordsYZ(radius + 0.5, phi, theta);
@@ -302,13 +322,6 @@ window.onload = function init() {
     updateBackgroundColor(); // 시간에 맞추어 배경색 업데이트
   }, 1000);
 
-  // // 현재 시간을 초 단위로 변환하고, 24시간 기준으로 비율 계산
-  // function getTimeBasedColorValue() {
-  //   const now = new Date();
-  //   const secondsInDay =
-  //     now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-  //   return secondsInDay / 86400; // 86400초(24시간) 기준으로 비율 계산 (0 ~ 1)
-  // }
   function getTimeBasedColorValue() {
     const now = new Date();
     const secondsInDay =
@@ -425,7 +438,7 @@ window.onload = function init() {
     console.log("spring button pushed");
 
     // 새로운 나무 모델 경로로 업데이트
-    modelName = "./models/small_tree/bush_1.gltf";
+    modelName = "./models/small_tree/bush_2.gltf";
 
     // 기존 나무들을 삭제
     while (sphere.children.length > 0) {
@@ -537,15 +550,15 @@ window.onload = function init() {
     createTree();
 
     // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
-    const baseColor = loader.load("./textures/GroundWoodChips001_COL_4K.jpg"); // 기본 색상 텍스처
-    const normalMap = loader.load("./textures/GroundWoodChips001_NRM_4K.jpg"); // 노멀 맵 (표면의 작은 굴곡 표현)
-    const roughnessMap = loader.load("./textures/GroundWoodChips001_GLOSS_4K.jpg"); // 거칠기 맵 (표면의 거칠기 표현)
-    const heightMap = loader.load("./textures/GroundWoodChips001_DISP_4K.jpg"); // 높이 맵 (높낮이 변화를 표현)
-    const ambientOcclusionMap = loader.load("./textures/GroundWoodChips001_AO_4K.jpg"); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
+    const baseColor = loader.load("./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_BaseColor.jpg"); // 기본 색상 텍스처
+    const normalMap = loader.load("./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Normal.jpg"); // 노멀 맵 (표면의 작은 굴곡 표현)
+    const roughnessMap = loader.load("./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Roughness.jpg"); // 거칠기 맵 (표면의 거칠기 표현)
+    const heightMap = loader.load("./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Bump.jpg"); // 높이 맵 (높낮이 변화를 표현)
+    const ambientOcclusionMap = loader.load("./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_AO.jpg"); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
 
     // 텍스처 반복 및 스케일 설정
     baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
-    baseColor.repeat.set(1, 1);
+    baseColor.repeat.set(10, 10);
 
     normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
     normalMap.repeat.set(1, 1);
@@ -630,19 +643,40 @@ window.onload = function init() {
   /* --------------------------------------------------------------------------- */
   /* rendering*/
 
+  // // 하루를 24시간으로 쪼개어 광원이 구를 한 바퀴 돌도록 설정
+  // const rotationSpeed = (2 * Math.PI) / 86400; // 하루 86400초 기준, 한 바퀴 회전하도록 설정
+  // let angle = 0; // 초기 각도
+
   // 렌더 함수 (매 프레임마다 호출하여 장면을 렌더링)
   function render() {
     controls.update(); // 카메라 제어 업데이트
 
-    // Rotate sphere along the X-axis
+    // // Rotate sphere along the X-axis
     sphere.rotation.x -= 0.002; // Adjust rotation speed as needed
 
-    // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
-    angle += rotationSpeed; // 각도를 계속 증가시켜 회전시키기
-    const x = orbitRadius * Math.cos(angle); // 태양의 X좌표 (코사인 함수 사용)
-    const y = orbitRadius * Math.sin(angle); // 태양의 Y좌표 (사인 함수 사용)
-    const z = orbitRadius * Math.sin(angle); // 태양의 Z좌표 (사인 함수 사용)
-    light.position.set(x, y, z); // 태양(빛)의 새로운 위치 설정
+    // // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
+    // const x = orbitRadius * Math.cos(angle); // 태양의 X좌표 (코사인 함수 사용)
+    // // const y = orbitRadius * Math.sin(angle); // 태양의 Y좌표 (사인 함수 사용)
+    // const z = orbitRadius * Math.sin(angle); // 태양의 Z좌표 (사인 함수 사용)
+    // light.position.set(x, 5, z); // 태양(빛)의 새로운 위치 설정
+
+    // angle += rotationSpeed; // 각도를 계속 증가시켜 회전시키기
+
+    // updateLightPosition();
+
+    const now = new Date();
+    const utcHours = now.getUTCHours();
+    const kstHours = (utcHours + 9) % 24; // UTC를 한국 시간으로 변환
+    // const kstHours = 19; // 한국 시간으로 오전 9시를 설정
+
+    // 각도를 0시부터 24시 기준으로 180도로 매핑 (왼쪽 90도에서 오른쪽 90도로 이동하도록 설정)
+    const angle = ((kstHours / 24) * Math.PI) - Math.PI;
+
+    // 광원의 위치 설정 (XZ 평면에서만 회전)
+    const x = orbitRadius * Math.cos(angle); // 왼쪽 90도에서 오른쪽 90도까지
+    const z = orbitRadius * Math.sin(angle); // 고양이의 반대쪽으로 이동
+    light.position.set(x, 0, -z); // 광원의 새로운 위치 설정
+    light.lookAt(sphere.position); // 광원이 고양이 쪽을 향하게 설정
 
     updateBackgroundColor();
 
@@ -651,6 +685,8 @@ window.onload = function init() {
     if (cat) {
       keepCatOnSphere();
     }
+
+    // 그 외 렌더링 관련 코드
     renderer.render(scene, camera); // 현재 프레임을 렌더링
     requestAnimationFrame(render); // 다음 프레임에서 렌더 함수를 재귀 호출
   }
