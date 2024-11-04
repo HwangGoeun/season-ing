@@ -1,3 +1,5 @@
+rotate = true;
+
 window.onload = function init() {
   // 웹 페이지가 로드되면 init 함수 실행
   const canvas = document.getElementById("gl-canvas"); // HTML에서 'gl-canvas'라는 ID를 가진 <canvas> 요소를 가져옴
@@ -269,7 +271,7 @@ window.onload = function init() {
         models = model.clone();
         for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
           const objCopy = models.clone();
-          let phi = Math.PI - Math.PI / 3 - 0.1;
+          let phi = (Math.PI - Math.PI / 3) - 0.35;
           let theta = i;
           // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
           objCopy.position.setFromSphericalCoordsYZ(radius + 0.5, phi, theta);
@@ -279,7 +281,7 @@ window.onload = function init() {
 
         for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
           const objCopy = models.clone();
-          let phi = Math.PI / 3 - 0.1;
+          let phi = Math.PI / 3 + 0.35;
           let theta = i;
           // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
           objCopy.position.setFromSphericalCoordsYZ(radius + 0.5, phi, theta);
@@ -293,13 +295,6 @@ window.onload = function init() {
       }
     );
   }
-
-  //at the center of the sphere to illustrate what the object looks like
-  // var singletree;
-  // singleTree = new Tree();
-  // scene.add(singleTree.mesh);
-
-  // createTree();
 
   /* --------------------------------------------------------------------------- */
 
@@ -432,6 +427,9 @@ window.onload = function init() {
       console.error(error);
     }
   );
+
+  
+
   /* --------------------------------------------------------------------------- */
 
   function spring() {
@@ -480,6 +478,29 @@ window.onload = function init() {
 
     // 텍스처 업데이트 반영
     sphere.material.needsUpdate = true;
+
+    
+  placeObject(
+    filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf", 
+    scaleX = 2, scaleY = 2, scaleZ = 2,
+    posRadius = radius,
+    posPhi = Math.PI / 4 - 0.5,
+    posTheta = Math.PI / 4,
+  );
+  placeObject(
+    filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf", 
+    scaleX = 2, scaleY = 2, scaleZ = 2,
+    posRadius = radius,
+    posPhi = Math.PI / 4,
+    posTheta = Math.PI / 4,
+  );
+  placeObject(
+    filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf", 
+    scaleX = 2, scaleY = 2, scaleZ = 2,
+    posRadius = radius,
+    posPhi = Math.PI / 4 + 0.5,
+    posTheta = Math.PI / 4,
+  );
   }
 
   /* ----- */
@@ -636,6 +657,39 @@ window.onload = function init() {
 
 
 
+  function placeObject(
+    filePath,
+    scaleX = 0, scaleY = 0, scaleZ = 0,
+    posRadius = radius,   // 구의 반경
+    posPhi = 0,         // 세로 각도
+    posTheta = 0,     // 가로 각도
+    rotX = 0, rotY =Math.PI, rotZ = 0,
+    ) {
+      
+    const gltf_loader = new THREE.GLTFLoader();
+    gltf_loader.load(
+      filePath,
+      function (gltf) {
+        obj = gltf.scene.children[0];
+        obj.scale.set(scaleX, scaleY, scaleZ);
+        obj.position.setFromSphericalCoords(posRadius, posPhi, posTheta);
+  
+        sphere.add(obj);
+        //obj.up.set(1, 0, 0); // 필요에 따라 다른 축을 설정합니다.
+        obj.lookAt(sphere.position);
+
+        obj.rotation.x += rotX;
+        obj.rotation.y += rotY;
+        obj.rotation.z += rotZ;
+        render();
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+  };
+
 
 
 
@@ -652,7 +706,9 @@ window.onload = function init() {
     controls.update(); // 카메라 제어 업데이트
 
     // // Rotate sphere along the X-axis
-    sphere.rotation.x -= 0.002; // Adjust rotation speed as needed
+    if (rotate) {
+      sphere.rotation.x -= 0.001; // Adjust rotation speed as needed
+    }
 
     // // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
     // const x = orbitRadius * Math.cos(angle); // 태양의 X좌표 (코사인 함수 사용)
