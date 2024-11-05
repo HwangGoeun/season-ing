@@ -601,12 +601,13 @@ window.onload = function init() {
     console.log("button push");
 
     // 새로운 나무 모델 경로로 업데이트
-    modelName = "./models/small_tree/prune_tree_1.gltf";
+    modelName = "./models/snowTree/scene.gltf";
 
     // 기존 나무들을 삭제
     while (sphere.children.length > 0) {
       sphere.remove(sphere.children[0]);
     }
+
 
     // 새 모델을 사용해 나무를 다시 생성
     createTree();
