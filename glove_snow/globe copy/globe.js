@@ -42,10 +42,11 @@ window.onload = function init() {
     near, // 카메라가 인식할 수 있는 가장 가까운 거리 (근접 클리핑 평면)
     far // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
   );
-  camera.position.set(0, 6, 3);
+  // camera.position.set(0, 6, 3);
+  camera.position.z += 20;
 
   // 카메라 제어 설정 (TrackballControls를 사용하여 카메라를 마우스로 제어할 수 있도록 설정)
-  //controls = new THREE.OrbitControls(camera);
+  controls = new THREE.OrbitControls(camera);
 
   /* --------------------------------------------------------------------------- */
 
@@ -275,6 +276,62 @@ window.onload = function init() {
     );
   }
 
+  function createFallTree() {
+    // 모여있는 나무들
+  gltf_loader.load(
+    "./models/small_tree/pretty_big_tree_3.gltf",
+    function (gltf) {
+      // 수풀 옆 왼쪽 나무 1
+      const model = gltf.scene;
+      model.scale.set(0.12, 0.12, 0.12);
+      model.position.setFromSphericalCoords(radius, Math.PI / 16, Math.PI / 2);
+      model.rotation.x += Math.PI / 6;
+      model.rotation.y -= Math.PI / 2;
+      model.position.z += 3;
+      model.position.x += 0.5;
+      sphere.add(model);
+
+      // 수풀 옆 왼쪽 나무 2
+      const nex_objCopy_0 = model.clone();
+      nex_objCopy_0.position.setFromSphericalCoords(
+        radius + 0.2,
+        Math.PI / 16,
+        Math.PI / 2
+      );
+      nex_objCopy_0.position.z += 5;
+      nex_objCopy_0.position.y -= 2;
+      nex_objCopy_0.position.x += 0.5;
+      sphere.add(nex_objCopy_0);
+
+      // 오른쪽 나무 1
+      const objCopy_0 = model.clone();
+      objCopy_0.position.setFromSphericalCoords(
+        radius,
+        Math.PI * 2 - Math.PI / 16,
+        Math.PI / 2
+      );
+      objCopy_0.position.z += 4.5;
+      objCopy_0.position.y -= 1.0;
+      objCopy_0.position.x -= 0.5;
+      sphere.add(objCopy_0);
+
+      const nex_objCopy_1 = objCopy_0.clone();
+      nex_objCopy_1.position.z += 1.5;
+      nex_objCopy_1.position.y -= 2.5;
+      nex_objCopy_1.rotation.x += Math.PI / 8;
+      nex_objCopy_1.position.x -= 0.4;
+      sphere.add(nex_objCopy_1);
+    },
+    undefined,
+    function (error) {
+      console.error(error);
+    }
+  );
+
+  }
+  
+  function createBush() {
+  }
   //at the center of the sphere to illustrate what the object looks like
   // var singletree;
   // singleTree = new Tree();
@@ -547,8 +604,11 @@ window.onload = function init() {
     }
 
     // 새 모델을 사용해 나무를 다시 생성
-    createTree();
+    // createTree();
     createFence();
+    createFallTree();
+    createBench();
+    createBush();
     // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
     const baseColor = loader.load(
       "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_BaseColor.jpg"
@@ -711,10 +771,10 @@ window.onload = function init() {
 
   // 렌더 함수 (매 프레임마다 호출하여 장면을 렌더링)
   function render() {
-    //controls.update(); // 카메라 제어 업데이트
+    controls.update(); // 카메라 제어 업데이트
 
     // // Rotate sphere along the X-axis
-    sphere.rotation.x -= 0.002; // Adjust rotation speed as needed
+    // sphere.rotation.x -= 0.002; // Adjust rotation speed as needed
 
     // // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
     // const x = orbitRadius * Math.cos(angle); // 태양의 X좌표 (코사인 함수 사용)
