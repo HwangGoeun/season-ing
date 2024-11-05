@@ -44,14 +44,10 @@ window.onload = function init() {
     near, // 카메라가 인식할 수 있는 가장 가까운 거리 (근접 클리핑 평면)
     far // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
   );
-  camera.position.set(0, 10, 20); // 카메라를 약간 위로 올려서 바닥을 내려다보게 설정
-  // camera.position.z = 20; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
-  // camera.position.y = 8; // 카메라를 Z축 방향으로 뒤로 이동 (2 단위)
-  // camera.rotation.x -= 0.5;
+  camera.position.set(0, 6, 3);
 
   // 카메라 제어 설정 (TrackballControls를 사용하여 카메라를 마우스로 제어할 수 있도록 설정)
-  // const controls = new THREE.TrackballControls(camera, canvas);
-  controls = new THREE.OrbitControls(camera);
+  //controls = new THREE.OrbitControls(camera);
 
   /* --------------------------------------------------------------------------- */
 
@@ -81,27 +77,12 @@ window.onload = function init() {
   light.shadow.camera.right = 20;
   light.shadow.camera.top = 20;
   light.shadow.camera.bottom = -20;
-  
+
   scene.add(light);
 
   // 태양의 회전 변수 (태양이 구체 주위를 공전하는 모션 설정)
   const orbitRadius = 10; // 태양의 궤도 반지름 설정
 
-  // function updateLightPosition() {
-// }
-
-  // // 현재 시간을 기준으로 초기 각도 설정
-  // const now = new Date();
-  // const utcHours = now.getUTCHours(); // UTC 기준의 시간 가져오기
-  // const kstHours = (utcHours + 9) % 24; // UTC 시간에 9시간을 더해 한국 시간으로 변환
-  // const secondsInDay = kstHours * 3600 + now.getMinutes() * 60 + now.getSeconds();
-  // let angle = (2 * Math.PI * secondsInDay) / 86400; // 하루 86400초 기준으로 현재 각도를 설정
-  
-  // const rotationSpeed = (2 * Math.PI) / 86400; // 24시간을 기준으로 설정된 회전 속도
-
-  /* --------------------------------------------------------------------------- */
-
-  /* --------------------------------------------------------------------------- */
   /* texture */
 
   // 텍스처 로더 생성 (3D 모델에 텍스처를 입히기 위한 로더)
@@ -136,102 +117,9 @@ window.onload = function init() {
   /* globe */
 
   // // 구체 설정 (크기 및 세그먼트)
-  const radius = 12; // 구체의 반지름 설정 (구체의 크기)
-  const segments = 64; // 구체를 렌더링할 때 사용할 세그먼트 수 (세부 표현도를 높임)
+  const radius = 6; // 구체의 반지름 설정 (구체의 크기)
+  const segments = 256; // 구체를 렌더링할 때 사용할 세그먼트 수 (세부 표현도를 높임)
   const rotation = 6; // 구체의 초기 회전 각도 설정
-
-  // // 구체 생성 및 추가 (기본 구체 메쉬에 텍스처 적용)
-  // const sphere = createSphere(radius, segments); // 구체를 생성 (반지름과 세그먼트 수 지정)
-  // sphere.rotation.y = rotation; // 구체를 초기 회전 상태로 설정
-  // scene.add(sphere); // 구체를 장면에 추가
-
-  // // 구체 생성 함수 (MeshStandardMaterial로 텍스처를 적용한 구체 생성)
-  // function createSphere(radius, segments) {
-  //   return new THREE.Mesh(
-  //     new THREE.SphereGeometry(radius, segments, segments), // 구체 기하학 생성
-  //     new THREE.MeshStandardMaterial({
-  //       map: baseColor, // 기본 색상 텍스처
-  //       normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
-  //       roughnessMap: roughnessMap, // 거칠기 맵 적용
-  //       displacementMap: heightMap, // 높이 맵 적용 (표면의 높낮이 표현)
-  //       aoMap: ambientOcclusionMap, // 주변광 차단 맵 적용
-  //       roughness: 0.8, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
-  //       metalness: 0.0, // 금속성 제거 (0으로 설정하여 금속 느낌 없앰)
-  //       displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
-  //     })
-  //   );
-  // }
-  // Create sphere and add to scene.
-  // var geometry = new THREE.SphereGeometry(radius, segments, segments);
-  // var material = new THREE.MeshStandardMaterial({
-  //   map: baseColor, // 기본 색상 텍스처
-  //   normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
-  //   roughnessMap: roughnessMap, // 거칠기 맵 적용
-  //   displacementMap: heightMap, // 높이 맵 적용 (표면의 높낮이 표현)
-  //   aoMap: ambientOcclusionMap, // 주변광 차단 맵 적용
-  //   roughness: 0.8, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
-  //   metalness: 0.0, // 금속성 제거 (0으로 설정하여 금속 느낌 없앰)
-  //   displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
-  // });
-  // const sphere = new THREE.Mesh(geometry, material);
-  // scene.add(sphere);
-
-  // var planeGeometry = new THREE.PlaneGeometry(0.5, 0.5);
-  // var planeMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-
-  // var lookDirection = new THREE.Vector3();
-  // var target = new THREE.Vector3();
-
-  // const position = geometry.attributes.position;
-  // for (i = 0; i < position.count; i++) {
-  //   if (Math.random() * 10 > 2.9956) {
-  //     var planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
-
-  //     // planeMesh.position.set( geometry.vertices[i].x, geometry.vertices[i].y, geometry.vertices[i].z );
-  //     // // Set the position of the planeMesh based on position attribute values
-  //     const x = position.getX(i);
-  //     const y = position.getY(i);
-  //     const z = position.getZ(i);
-
-  //     planeMesh.position.set(x, y, z);
-
-  //     lookDirection.subVectors(planeMesh.position, sphere.position).normalize();
-  //     target.copy(planeMesh.position).add(lookDirection);
-  //     planeMesh.lookAt(target);
-
-  //     scene.add(planeMesh);
-  //   }
-  // }
-
-  // 빨간 점 찍는 부분 필요 읽을 필요 X
-  var Tree = function () {
-    //modèle 3d
-    this.mesh = new THREE.Object3D();
-    this.mesh.name = "tree";
-
-    // tronc
-    var geomTronc = new THREE.BoxGeometry(0.02, 0.02, 0.02);
-    var matTronc = new THREE.MeshBasicMaterial({
-      color: "white",
-      wireframe: true,
-    });
-    var tronc = new THREE.Mesh(geomTronc, matTronc);
-    tronc.position.set(0, 0, 0);
-    tronc.rotation.x = -Math.PI * 0.5;
-    tronc.castShadow = true;
-    tronc.receiveShadow = true;
-    this.mesh.add(tronc);
-
-    // arbre
-    var geomArbre = new THREE.BoxGeometry(0.1, 0.01, 0.1);
-    var matArbre = new THREE.MeshBasicMaterial({
-      color: "brown",
-      wireframe: true,
-    });
-    var arbre = new THREE.Mesh(geomArbre, matArbre);
-    arbre.position.set(0, 0.03, 0);
-    tronc.add(arbre);
-  };
 
   const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(radius, segments, segments),
@@ -281,7 +169,7 @@ window.onload = function init() {
 
         for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
           const objCopy = models.clone();
-          let phi = Math.PI / 3 + 0.35;
+          let phi = Math.PI / 3 + 0.1;
           let theta = i;
           // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
           objCopy.position.setFromSphericalCoordsYZ(radius + 0.5, phi, theta);
@@ -295,6 +183,106 @@ window.onload = function init() {
       }
     );
   }
+
+  function createFence() {
+    gltf_loader.load(
+      "./models/small_tree/fence_center.gltf",
+      function (gltf) {
+        const model = gltf.scene;
+        model.scale.set(0.05, 0.05, 0.05);
+        model.rotation.y += Math.PI / 2;
+        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 60) {
+          const objCopy = model.clone();
+          let phi = Math.PI / 2.1;
+          let theta = i;
+          // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+          objCopy.position.setFromSphericalCoordsYZ(radius + 0.1, phi, theta);
+          objCopy.rotation.x += i;
+          sphere.add(objCopy);
+        }
+
+        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 60) {
+          const objCopy = model.clone();
+          let phi = Math.PI - Math.PI / 2.1;
+          let theta = i;
+          // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+          objCopy.position.setFromSphericalCoordsYZ(radius + 0.1, phi, theta);
+          objCopy.rotation.x += i;
+          sphere.add(objCopy);
+        }
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+  }
+
+  function createBench() {
+    // 벤치
+    gltf_loader.load(
+      "./models/small_tree/chair_2.gltf",
+      function (gltf) {
+        // 오른쪽 나무 바로 옆 벤치 1
+        const model = gltf.scene;
+        model.scale.set(0.2, 0.2, 0.2);
+        model.position.setFromSphericalCoords(
+          radius,
+          Math.PI / 2,
+          Math.PI / 16
+        );
+        model.rotation.x += Math.PI / 2;
+        model.rotation.y -= Math.PI / 2;
+        model.position.z += 0.2;
+        sphere.add(model);
+
+        // 벤치1 옆 벤치
+        const nex_objCopy_0 = model.clone();
+        nex_objCopy_0.position.setFromSphericalCoords(
+          radius,
+          Math.PI / 1.7,
+          Math.PI / 16
+        );
+        nex_objCopy_0.position.z += 0.2;
+        nex_objCopy_0.rotation.x += Math.PI / 18;
+        sphere.add(nex_objCopy_0);
+
+        // 왼쪽 벤치 1
+        const nex_objCopy_1 = model.clone();
+        nex_objCopy_1.position.setFromSphericalCoords(
+          radius,
+          Math.PI / 2,
+          Math.PI * 2 - Math.PI / 16
+        );
+        nex_objCopy_1.rotation.y -= Math.PI;
+        nex_objCopy_1.position.z += 0.2;
+        sphere.add(nex_objCopy_1);
+
+        // 왼쪽 벤치 1 옆 벤치
+        const nex_objCopy_2 = model.clone();
+        nex_objCopy_2.position.setFromSphericalCoords(
+          radius,
+          Math.PI / 1.7,
+          Math.PI * 2 - Math.PI / 16
+        );
+        nex_objCopy_2.position.z += 0.2;
+        nex_objCopy_2.rotation.y -= Math.PI;
+        nex_objCopy_2.rotation.x += Math.PI / 18;
+        sphere.add(nex_objCopy_2);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+  }
+
+  //at the center of the sphere to illustrate what the object looks like
+  // var singletree;
+  // singleTree = new Tree();
+  // scene.add(singleTree.mesh);
+
+  // createTree();
 
   /* --------------------------------------------------------------------------- */
 
@@ -392,7 +380,7 @@ window.onload = function init() {
   /* --------------------------------------------------------------------------- */
   // 고양이 GLTFLoader로 올린 이후에 구체 위에 올리기
   let cat, mixer;
-  const catScale = 0.004;
+  const catScale = 0.0009;
   const gltf_loader = new THREE.GLTFLoader();
   gltf_loader.load(
     "../../move_cat/toon_cat_free/scene.gltf",
@@ -409,8 +397,8 @@ window.onload = function init() {
       });
 
       // cat.position.set(0, radius, 1);
-      cat.position.setFromSphericalCoords(radius + 0.03, Math.PI / 4, 0);
-      cat.rotation.x += Math.PI / 4;
+      cat.position.setFromSphericalCoords(radius + 0.03, Math.PI / 10, 0);
+      //cat.rotation.z += Math.PI;
       // cat.rotation.y += Math.PI / 6;
 
       mixer = new THREE.AnimationMixer(cat);
@@ -445,13 +433,23 @@ window.onload = function init() {
 
     // 새 모델을 사용해 나무를 다시 생성
     createTree();
-
+    createFence();
     // 새로운 텍스처 파일 로드
-    const baseColor = loader.load("./textures/Poliigon_GrassPatchyGround_4585_BaseColor.jpg"); // 기본 색상 텍스처
-    const normalMap = loader.load("./textures/Poliigon_GrassPatchyGround_4585_Normal.jpg"); // 노멀 맵
-    const roughnessMap = loader.load("./textures/Poliigon_GrassPatchyGround_4585_Roughness.jpg"); // 거칠기 맵
-    const heightMap = loader.load("./textures/Poliigon_GrassPatchyGround_4585_Displacement.tiff"); // 높이 맵
-    const ambientOcclusionMap = loader.load("./textures/Poliigon_GrassPatchyGround_4585_AmbientOcclusion.jpg"); // 주변광 차단 맵
+    const baseColor = loader.load(
+      "./textures/Poliigon_GrassPatchyGround_4585_BaseColor.jpg"
+    ); // 기본 색상 텍스처
+    const normalMap = loader.load(
+      "./textures/Poliigon_GrassPatchyGround_4585_Normal.jpg"
+    ); // 노멀 맵
+    const roughnessMap = loader.load(
+      "./textures/Poliigon_GrassPatchyGround_4585_Roughness.jpg"
+    ); // 거칠기 맵
+    const heightMap = loader.load(
+      "./textures/Poliigon_GrassPatchyGround_4585_Displacement.tiff"
+    ); // 높이 맵
+    const ambientOcclusionMap = loader.load(
+      "./textures/Poliigon_GrassPatchyGround_4585_AmbientOcclusion.jpg"
+    ); // 주변광 차단 맵
 
     // 텍스처 반복 및 스케일 설정
     baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
@@ -466,7 +464,8 @@ window.onload = function init() {
     heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
     heightMap.repeat.set(1, 1);
 
-    ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
+    ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
+      THREE.RepeatWrapping;
     ambientOcclusionMap.repeat.set(1, 1);
 
     // 구의 재질 텍스처 업데이트
@@ -518,13 +517,20 @@ window.onload = function init() {
 
     // 새 모델을 사용해 나무를 다시 생성
     createTree();
-
+    createFence();
+    createBench();
     // 새로운 텍스처 파일 로드
     const baseColor = loader.load("./textures/Grass001_4K-PNG_Color.png");
     const normalMap = loader.load("./textures/Grass001_4K-PNG_NormalDX.png");
-    const roughnessMap = loader.load("./textures/Grass001_4K-PNG_Roughness.png");
-    const heightMap = loader.load("./textures/Grass001_4K-PNG_Displacement.png");
-    const ambientOcclusionMap = loader.load("./textures/Grass001_4K-PNG_AmbientOcclusion.png");
+    const roughnessMap = loader.load(
+      "./textures/Grass001_4K-PNG_Roughness.png"
+    );
+    const heightMap = loader.load(
+      "./textures/Grass001_4K-PNG_Displacement.png"
+    );
+    const ambientOcclusionMap = loader.load(
+      "./textures/Grass001_4K-PNG_AmbientOcclusion.png"
+    );
 
     // 텍스처 반복 및 스케일 설정
     baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
@@ -539,7 +545,8 @@ window.onload = function init() {
     heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
     heightMap.repeat.set(1, 1);
 
-    ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
+    ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
+      THREE.RepeatWrapping;
     ambientOcclusionMap.repeat.set(1, 1);
 
     // 구의 재질 텍스처 업데이트
@@ -569,13 +576,23 @@ window.onload = function init() {
 
     // 새 모델을 사용해 나무를 다시 생성
     createTree();
-
+    createFence();
     // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
-    const baseColor = loader.load("./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_BaseColor.jpg"); // 기본 색상 텍스처
-    const normalMap = loader.load("./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Normal.jpg"); // 노멀 맵 (표면의 작은 굴곡 표현)
-    const roughnessMap = loader.load("./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Roughness.jpg"); // 거칠기 맵 (표면의 거칠기 표현)
-    const heightMap = loader.load("./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Bump.jpg"); // 높이 맵 (높낮이 변화를 표현)
-    const ambientOcclusionMap = loader.load("./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_AO.jpg"); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
+    const baseColor = loader.load(
+      "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_BaseColor.jpg"
+    ); // 기본 색상 텍스처
+    const normalMap = loader.load(
+      "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Normal.jpg"
+    ); // 노멀 맵 (표면의 작은 굴곡 표현)
+    const roughnessMap = loader.load(
+      "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Roughness.jpg"
+    ); // 거칠기 맵 (표면의 거칠기 표현)
+    const heightMap = loader.load(
+      "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Bump.jpg"
+    ); // 높이 맵 (높낮이 변화를 표현)
+    const ambientOcclusionMap = loader.load(
+      "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_AO.jpg"
+    ); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
 
     // 텍스처 반복 및 스케일 설정
     baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
@@ -590,7 +607,8 @@ window.onload = function init() {
     heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
     heightMap.repeat.set(1, 1);
 
-    ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
+    ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
+      THREE.RepeatWrapping;
     ambientOcclusionMap.repeat.set(1, 1);
 
     // 구의 재질 텍스처 업데이트
@@ -620,6 +638,7 @@ window.onload = function init() {
 
     // 새 모델을 사용해 나무를 다시 생성
     createTree();
+    createFence();
 
     // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
     const baseColor = loader.load("./textures/Snow_004_COLOR.jpg"); // 기본 색상 텍스처
@@ -641,7 +660,8 @@ window.onload = function init() {
     heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
     heightMap.repeat.set(1, 1);
 
-    ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
+    ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
+      THREE.RepeatWrapping;
     ambientOcclusionMap.repeat.set(1, 1);
 
     // 구의 재질 텍스처 업데이트
@@ -653,46 +673,62 @@ window.onload = function init() {
 
     // 텍스처 업데이트 반영
     sphere.material.needsUpdate = true;
-  }
 
-
-
-  function placeObject(
-    filePath,
-    scaleX = 0, scaleY = 0, scaleZ = 0,
-    posRadius = radius,   // 구의 반경
-    posPhi = 0,         // 세로 각도
-    posTheta = 0,     // 가로 각도
-    rotX = 0, rotY =Math.PI, rotZ = 0,
-    ) {
-      
-    const gltf_loader = new THREE.GLTFLoader();
+    // 3단 수풀
     gltf_loader.load(
-      filePath,
+      "./models/small_tree/bush_2.gltf",
       function (gltf) {
-        obj = gltf.scene.children[0];
-        obj.scale.set(scaleX, scaleY, scaleZ);
-        obj.position.setFromSphericalCoords(posRadius, posPhi, posTheta);
-  
-        sphere.add(obj);
-        //obj.up.set(1, 0, 0); // 필요에 따라 다른 축을 설정합니다.
-        obj.lookAt(sphere.position);
+        // 고양이 기준 바로 왼쪽 수풀 3개
+        const model = gltf.scene;
+        model.scale.set(0.12, 0.12, 0.12);
+        model.position.setFromSphericalCoords(
+          radius - 0.14,
+          Math.PI / 16,
+          Math.PI / 2
+        );
+        model.rotation.z -= Math.PI / 12;
+        sphere.add(model);
 
-        obj.rotation.x += rotX;
-        obj.rotation.y += rotY;
-        obj.rotation.z += rotZ;
-        render();
+        const objCopy_0 = model.clone();
+        objCopy_0.position.setFromSphericalCoords(
+          radius + 0.1,
+          Math.PI / 12,
+          Math.PI / 2
+        );
+        sphere.add(objCopy_0);
+        const objCopy_1 = model.clone();
+        objCopy_1.position.setFromSphericalCoords(
+          radius + 0.4,
+          Math.PI / 9.5,
+          Math.PI / 2
+        );
+        sphere.add(objCopy_1);
+
+        // 만들어진 기본 수풀에서 z축으로 앞으로 이동
+        const nex_objCopy = model.clone();
+        nex_objCopy.position.z += 1.5;
+        nex_objCopy.position.y -= 0.2;
+        nex_objCopy.rotation.x += Math.PI / 12;
+        sphere.add(nex_objCopy);
+
+        const nex_objCopy_0 = objCopy_0.clone();
+        nex_objCopy_0.position.z += 1.5;
+        nex_objCopy_0.position.y -= 0.2;
+        nex_objCopy_0.rotation.x += Math.PI / 12;
+        sphere.add(nex_objCopy_0);
+
+        const nex_objCopy_1 = objCopy_1.clone();
+        nex_objCopy_1.position.z += 1.5;
+        nex_objCopy_1.position.y -= 0.2;
+        nex_objCopy_1.rotation.x += Math.PI / 12;
+        sphere.add(nex_objCopy_1);
       },
       undefined,
       function (error) {
         console.error(error);
       }
     );
-  };
-
-
-
-
+  }
 
   /* --------------------------------------------------------------------------- */
   /* rendering*/
@@ -703,7 +739,7 @@ window.onload = function init() {
 
   // 렌더 함수 (매 프레임마다 호출하여 장면을 렌더링)
   function render() {
-    controls.update(); // 카메라 제어 업데이트
+    //controls.update(); // 카메라 제어 업데이트
 
     // // Rotate sphere along the X-axis
     if (rotate) {
@@ -726,7 +762,7 @@ window.onload = function init() {
     // const kstHours = 19; // 한국 시간으로 오전 9시를 설정
 
     // 각도를 0시부터 24시 기준으로 180도로 매핑 (왼쪽 90도에서 오른쪽 90도로 이동하도록 설정)
-    const angle = ((kstHours / 24) * Math.PI) - Math.PI;
+    const angle = (kstHours / 24) * Math.PI - Math.PI;
 
     // 광원의 위치 설정 (XZ 평면에서만 회전)
     const x = orbitRadius * Math.cos(angle); // 왼쪽 90도에서 오른쪽 90도까지
