@@ -1,20 +1,25 @@
-let rotate = 0;
-let viewAll = 1;
+let rotate = 1;
+let viewAll = 0;
 let renderer, scene, camera, light, sphere, cat, mixer;
 const radius = 6;       // Sphere radius
 const orbitRadius = 10; // Orbit radius for light
+// tree
 let treeModelName = "./models/spring/low-_poly_cherry_blossom_tree_3d_models/scene.gltf";    // 나무 오브젝트 경로
+// globe texture
 let baseColorPath = "./textures/Poliigon_GrassPatchyGround_4585_BaseColor.jpg";                  // 기본 색상 텍스처
 let normalMapPath = "./textures/Poliigon_GrassPatchyGround_4585_Normal.jpg";                     // 노멀 맵
 let roughnessMapPath = "./textures/Poliigon_GrassPatchyGround_4585_Roughness.jpg";               // 거칠기 맵
 let heightMapPath = "./textures/Poliigon_GrassPatchyGround_4585_Displacement.tiff";              // 높이 맵
 let ambientOcclusionMapPath = "./textures/Poliigon_GrassPatchyGround_4585_AmbientOcclusion.jpg"; // 주변광 차단 맵
+// meteors
+let meteors = [];
+let meteorShowerActive = false;
 
 // Initialize the Three.js scene
 function init() {
     const canvas = document.getElementById("gl-canvas");  // HTML에서 'gl-canvas'라는 ID를 가진 <canvas> 요소를 가져옴
     renderer = new THREE.WebGLRenderer({ canvas });       // WebGLRenderer를 생성하고 canvas 요소에 연결
-    renderer.setSize(canvas.width, canvas.height);        // 렌더러 크기를 canvas 크기로 설정
+    renderer.setSize(window.innerWidth, window.innerHeight);        // 렌더러 크기를 canvas 크기로 설정
     renderer.setClearColor(new THREE.Color(0x87ceeb));    // 배경 색을 처음에 하늘색으로 설정
     renderer.outputEncoding = THREE.sRGBEncoding;         // 감마 설정 (색상 표현을 개선하기 위해 감마 보정 사용)
     // Enable shadows in the renderer
@@ -158,6 +163,13 @@ function updateClock() {
     const minutes = String(now.getMinutes()).padStart(2, "0");
     const seconds = String(now.getSeconds()).padStart(2, "0");
     clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+
+    // Activate meteor shower at 9 PM
+    if (hours >= 21 && !meteorShowerActive) {
+        meteorShowerActive = true;
+        // createMeteorShower();
+        createStarField();
+    }
 }
 
 // Update background color based on time
@@ -266,6 +278,75 @@ function createTree(scaleValue = 0.2) {
     );
 }
 
+function createMeteorShower() {
+    // Define the number of meteors you want
+    const meteorCount = 20;
+
+    // Create meteors
+    for (let i = 0; i < meteorCount; i++) {
+        const geometry = new THREE.SphereGeometry(0.1, 8, 8); // Small glowing particles
+        const material = new THREE.MeshBasicMaterial({ color: 0xffff99, emissive: 0xffff99 }); // Glow effect
+
+        const meteor = new THREE.Mesh(geometry, material);
+        
+        // Random position above the scene
+        meteor.position.set(
+            (Math.random() - 0.5) * 20, // Random x position
+            Math.random() * 10 + 5,     // Random y position above the sphere
+            (Math.random() - 0.5) * 20  // Random z position
+        );
+
+        // Add meteor to the scene and meteors array for tracking
+        scene.add(meteor);
+        meteors.push(meteor);
+    }
+}
+
+function animateMeteorShower() {
+    // Move each meteor downward
+    meteors.forEach(meteor => {
+        meteor.position.y -= 0.01; // Speed of falling
+
+        // Reset position if it goes below a certain level
+        if (meteor.position.y < 0) {
+            meteor.position.y = Math.random() * 10 + 5; // Reset to high position
+            meteor.position.x = (Math.random() - 0.5) * 20; // Reset random x position
+            meteor.position.z = (Math.random() - 0.5) * 20; // Reset random z position
+        }
+
+        // // Optionally adjust opacity for fading effect
+        // meteor.material.opacity = Math.random();
+        // meteor.material.transparent = true;
+    });
+}
+
+function createStarField() {
+    // Define the number of stars
+    const starCount = 100;
+
+    // Create stars
+    for (let i = 0; i < starCount; i++) {
+        const geometry = new THREE.SphereGeometry(0.05, 8, 8); // Small glowing spheres for stars
+        const material = new THREE.MeshBasicMaterial({ color: 0xffffcc, emissive: 0xffffcc }); // Soft glow
+
+        const star = new THREE.Mesh(geometry, material);
+
+        // Place stars at random positions around the sphere
+        const distance = radius + Math.random() * 5 + 5; // Position stars further from the sphere
+        const theta = Math.random() * 2 * Math.PI;       // Random angle in the horizontal plane
+        const phi = Math.random() * Math.PI;             // Random angle in the vertical plane
+
+        // Convert spherical coordinates to Cartesian coordinates for positioning
+        star.position.x = distance * Math.sin(phi) * Math.cos(theta);
+        star.position.y = distance * Math.cos(phi);
+        star.position.z = distance * Math.sin(phi) * Math.sin(theta);
+
+        // Add star to the scene and stars array for tracking
+        scene.add(star);
+        meteors.push(star);
+    }
+}
+
 // Render function for the scene
 function render() {
     if (viewAll && controls) {
@@ -278,6 +359,15 @@ function render() {
 
     if (mixer) mixer.update(0.004);
     if (cat) keepCatOnSphere();
+
+    // Animate meteor shower if active
+    if (meteorShowerActive) {
+        // animateMeteorShower();
+        meteors.forEach(star => {
+            star.material.opacity = 0.8 + Math.random() * 0.2; // Flicker between 0.8 and 1.0 opacity
+            star.material.transparent = true;
+        });
+    }
 
     renderer.render(scene, camera);
     requestAnimationFrame(render);
