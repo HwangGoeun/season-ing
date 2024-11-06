@@ -43,7 +43,7 @@ window.onload = function init() {
     far // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
   );
   // camera.position.set(0, 6, 3);
-  camera.position.z += 20;
+  camera.position.z = 20;
 
   // 카메라 제어 설정 (TrackballControls를 사용하여 카메라를 마우스로 제어할 수 있도록 설정)
   controls = new THREE.OrbitControls(camera);
@@ -716,11 +716,179 @@ window.onload = function init() {
 
     // 새 모델을 사용해 나무를 다시 생성
     // createTree();
-    createBush();
+    // createBush();
     createFence();
     createFallTree();
     createBench();
     createFlowerBush();
+
+    // 보라 집
+    gltf_loader.load(
+      "./models/village__town_assets/village_purple_house.gltf",
+      function (gltf) {
+      // 오른쪽 보라색 집 1
+      const model = gltf.scene;
+      model.scale.set(1, 1, 1);
+      model.position.setFromSphericalCoords(
+        radius+0.7,
+        Math.PI / 8,
+        Math.PI / 2
+      );
+      model.rotation.z -= Math.PI / 8;
+      // model.position.x += 1;
+      // model.rotation.y -= Math.PI / 2;
+      sphere.add(model);
+
+       // 왼쪽 보라색 집 1
+       const nex_objCopy_0 = model.clone();
+       nex_objCopy_0.position.setFromSphericalCoords(
+        radius+0.8,
+        Math.PI / 4,
+        Math.PI + Math.PI/8
+      );
+      nex_objCopy_0.rotation.z += Math.PI / 4.5;
+      nex_objCopy_0.rotation.x -= Math.PI / 5;
+
+       sphere.add(nex_objCopy_0);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+
+    // 빨간 집
+    gltf_loader.load(
+      "./models/village__town_assets/village_red_house.gltf",
+      function (gltf) {
+      // 고양이 기준 바로 왼쪽 수풀 3개
+      const model = gltf.scene;
+      model.scale.set(1, 1, 1);
+      model.position.setFromSphericalCoords(
+        radius+0.7,
+        Math.PI / 8,
+        Math.PI*2-Math.PI / 2.5
+      );
+      model.rotation.z += Math.PI / 8;
+      // model.position.x += 1;
+      // model.rotation.y -= Math.PI / 2;
+      sphere.add(model);
+
+      // 오른쪽 보라색 집 1
+      const nex_objCopy_0 = model.clone();
+      nex_objCopy_0.position.setFromSphericalCoords(
+        radius+0.8,
+        Math.PI / 3,
+        Math.PI/2 + Math.PI/3
+      );
+      nex_objCopy_0.rotation.z -= Math.PI / 4;
+      nex_objCopy_0.rotation.x -= Math.PI / 3;
+
+      sphere.add(nex_objCopy_0);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+
+    // 볕집 1개
+    gltf_loader.load(
+      "./models/village__town_assets/village_rec_straw.gltf",
+      function (gltf) {
+      // 밀짚 오른쪽 중앙 1
+      const model = gltf.scene;
+      model.scale.set(1, 1, 1);
+      model.position.setFromSphericalCoordsYZ(
+        radius+0.1,
+        Math.PI / 2.4,
+        (Math.PI/2)*3
+      );
+      model.rotation.x += Math.PI / 2;
+      model.rotation.z += Math.PI / 12;
+      sphere.add(model);
+
+
+      // 왼쪽 1
+      const nex_objCopy_0 = model.clone();
+      nex_objCopy_0.position.setFromSphericalCoordsYZ(
+        radius+0.1,
+        Math.PI -  Math.PI/2.4,
+        (Math.PI/2)*3
+      );
+      nex_objCopy_0.rotation.z -= Math.PI / 6;
+      sphere.add(nex_objCopy_0);
+
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+
+      
+    );
+
+    // 볕집 다중
+    gltf_loader.load(
+      "./models/village__town_assets/village_muliple_straw.gltf",
+      function (gltf) {
+      // 밀짚
+      const model = gltf.scene;
+      model.scale.set(1, 1, 1);
+      model.position.setFromSphericalCoordsYZ(
+        radius+0.3,
+        Math.PI / 2.4,
+        Math.PI + Math.PI/6
+      );   
+      model.rotation.x -= Math.PI-Math.PI/6;
+      sphere.add(model);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+
+    // 윈드밀
+    gltf_loader.load(
+      "./models/village__town_assets/village_windmill.gltf",
+      function (gltf) {
+      // 오른쪽 풍차
+      const model = gltf.scene;
+      model.scale.set(0.3, 0.3, 0.3);
+      model.position.setFromSphericalCoords(
+        radius+1.0,
+        Math.PI-Math.PI/8,
+        Math.PI/3
+      );
+      // model.lookAt(sphere.position);
+      model.rotation.x += Math.PI;
+      model.rotation.z -= Math.PI/8;
+      sphere.add(model);
+
+      // 왼쪽 풍차
+      const nex_objCopy_0 = model.clone();
+      nex_objCopy_0.position.setFromSphericalCoordsYZ(
+      radius+1.0,
+      Math.PI/1.8,
+      Math.PI
+      );
+      nex_objCopy_0.rotation.z += Math.PI/6;
+      sphere.add(nex_objCopy_0);
+    
+
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+
+    
+    
+            
+
+
     // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
     const baseColor = loader.load(
       "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_BaseColor.jpg"
@@ -886,7 +1054,7 @@ window.onload = function init() {
     controls.update(); // 카메라 제어 업데이트
 
     // // Rotate sphere along the X-axis
-    // sphere.rotation.x -= 0.002; // Adjust rotation speed as needed
+    sphere.rotation.x += 0.002; // Adjust rotation speed as needed
 
     // // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
     // const x = orbitRadius * Math.cos(angle); // 태양의 X좌표 (코사인 함수 사용)
