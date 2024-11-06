@@ -53,7 +53,7 @@ window.onload = function init() {
   } else {
     camera.position.set(0, 6, 3);
   }
-
+  
   /* --------------------------------------------------------------------------- */
 
   /* --------------------------------------------------------------------------- */
@@ -141,6 +141,42 @@ window.onload = function init() {
   );
   sphere.receiveShadow = true;
   scene.add(sphere);
+
+  function placeObject(
+    filePath,
+    scaleX = 0,
+    scaleY = 0,
+    scaleZ = 0,
+    posRadius = radius, // 구의 반경
+    posPhi = 0, // 세로 각도
+    posTheta = 0, // 가로 각도
+    rotX = 0,
+    rotY = Math.PI,
+    rotZ = 0
+  ) {
+    const gltf_loader = new THREE.GLTFLoader();
+    gltf_loader.load(
+      filePath,
+      function (gltf) {
+        obj = gltf.scene.children[0];
+        obj.scale.set(scaleX, scaleY, scaleZ);
+        obj.position.setFromSphericalCoords(posRadius, posPhi, posTheta);
+
+        sphere.add(obj);
+        //obj.up.set(1, 0, 0); // 필요에 따라 다른 축을 설정합니다.
+        obj.lookAt(sphere.position);
+
+        obj.rotation.x += rotX;
+        obj.rotation.y += rotY;
+        obj.rotation.z += rotZ;
+        render();
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+  }
 
   let modelName = "./models/small_tree/prune_tree_1.gltf";
   console.log("model name:", modelName);
@@ -281,14 +317,6 @@ window.onload = function init() {
       }
     );
   }
-
-  //at the center of the sphere to illustrate what the object looks like
-  // var singletree;
-  // singleTree = new Tree();
-  // scene.add(singleTree.mesh);
-
-  // createTree();
-
   /* --------------------------------------------------------------------------- */
 
   // 각도를 라디안으로 변환하는 함수
@@ -768,46 +796,393 @@ window.onload = function init() {
     console.log("button push");
 
     // 새로운 나무 모델 경로로 업데이트
-    modelName = "./models/small_tree/small_tree_1.gltf";
+    modelName = "./models/summer/tree/scene.gltf";
 
     // 기존 나무들을 삭제
     while (sphere.children.length > 0) {
       sphere.remove(sphere.children[0]);
     }
 
+    function createTree() {
+      let models;
+      gltf_loader.load(
+        modelName,
+        function (gltf) {
+          const model = gltf.scene;
+          model.scale.set(0.7, 0.7, 0.7);
+
+          // shadow
+          model.traverse((child) => {
+            if (child.isMesh) {
+              child.castShadow = true; // Trees cast shadows
+              child.receiveShadow = true; // Trees receive shadows
+            }
+          });
+
+          models = model.clone();
+          for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
+            const objCopy = models.clone();
+            let phi = Math.PI - Math.PI / 2.5 - 0.1;
+            let theta = i;
+            // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+            objCopy.position.setFromSphericalCoordsYZ(radius - 0.2, phi, theta);
+            objCopy.rotation.x += i;
+            sphere.add(objCopy);
+          }
+
+          for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
+            const objCopy = models.clone();
+            let phi = Math.PI / 2.5 + 0.1;
+            let theta = i;
+            // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+            objCopy.position.setFromSphericalCoordsYZ(radius - 0.2, phi, theta);
+            objCopy.rotation.x += i;
+            sphere.add(objCopy);
+          }
+        },
+        undefined,
+        function (error) {
+          console.error(error);
+        }
+      );
+    }
+
     // 새 모델을 사용해 나무를 다시 생성
     createTree();
-    createFence();
-    createBench();
+    //createFence();
+
+    placeObject(
+      "./models/summer/umbrella/scene.gltf",
+      0.8,
+      0.8,
+      0.8,
+      radius,
+      0.3,
+      0.41
+    );
+
+    placeObject(
+      "./models/summer/beachball/scene.gltf",
+      0.6,
+      0.6,
+      0.6,
+      radius + 0.1,
+      0.34,
+      0.4
+    );
+
+    placeObject(
+      "./models/summer/icecream/scene.gltf",
+      0.002,
+      0.002,
+      0.002,
+      radius + 0.01,
+      -0.4,
+      0.5,
+      0,
+      Math.PI,
+      3.5
+    );
+
+    placeObject(
+      "./models/summer/beach_chair_blue_stripes/scene.gltf",
+      0.4,
+      0.4,
+      0.4,
+      radius,
+      0.9,
+      0.2,
+      0,
+      Math.PI,
+      -1.2
+    );
+
+    placeObject(
+      "./models/summer/beach_chair_blue_stripes/scene.gltf",
+      0.4,
+      0.4,
+      0.4,
+      radius,
+      0.8,
+      0.2,
+      0,
+      Math.PI,
+      -1
+    );
+
+    placeObject(
+      "./models/summer/surfboard/scene.gltf",
+      0.3,
+      0.3,
+      0.3,
+      radius - 0.05,
+      1.2,
+      0.2,
+      0,
+      Math.PI,
+      -0.4
+    );
+    placeObject(
+      "./models/summer/sandcastle/scene.gltf",
+      0.004,
+      0.004,
+      0.004,
+      radius - 0.3,
+      0.8,
+      -0.4,
+      0,
+      Math.PI,
+      -0.5
+    );
+
+    placeObject(
+      "./models/summer/tubeseries/scene.gltf",
+      0.8,
+      0.8,
+      0.8,
+      radius + 0.01,
+      1.25,
+      -0.25,
+      0,
+      Math.PI,
+      1.5
+    );
+
+    placeObject(
+      "./models/summer/unicorntube/scene.gltf",
+      0.3,
+      0.3,
+      0.3,
+      radius + 0.01,
+      1.4,
+      0.2,
+      0,
+      Math.PI,
+      -3
+    );
+
+    placeObject(
+      "./models/summer/umbrella/scene.gltf",
+      0.8,
+      0.8,
+      0.8,
+      radius,
+      2.3,
+      -0.25,
+      0,
+      Math.PI,
+      0
+    );
+
+    placeObject(
+      "./models/summer/beachball/scene.gltf",
+      0.5,
+      0.5,
+      0.5,
+      radius + 0.1,
+      2.33,
+      -0.2,
+      0,
+      Math.PI,
+      0
+    );
+
+    placeObject(
+      "./models/summer/beachset/scene.gltf",
+      0.5,
+      0.5,
+      0.5,
+      radius + 0.01,
+      1.8,
+      -0.2,
+      0,
+      Math.PI,
+      0.3
+    );
+
+    placeObject(
+      "./models/summer/table/scene.gltf",
+      0.04,
+      0.04,
+      0.04,
+      radius + 0.01,
+      1.75,
+      0.15,
+      0,
+      Math.PI,
+      -3
+    );
+
+    placeObject(
+      "./models/summer/drink/malibu/scene.gltf",
+      0.05,
+      0.05,
+      0.05,
+      radius + 0.29,
+      1.77,
+      0.15,
+      0,
+      Math.PI,
+      -3
+    );
+
+    placeObject(
+      "./models/summer/table/scene.gltf",
+      0.04,
+      0.04,
+      0.04,
+      radius + 0.01,
+      1.9,
+      0.15,
+      0,
+      Math.PI,
+      -5
+    );
+
+    placeObject(
+      "./models/summer/drink/summerdrink/scene.gltf",
+      0.015,
+      0.015,
+      0.015,
+      radius + 0.3,
+      1.92,
+      0.15,
+      0,
+      Math.PI,
+      -3
+    );
+
+    placeObject(
+      "./models/summer/sandcastle/scene.gltf",
+      0.004,
+      0.004,
+      0.004,
+      radius - 0.3,
+      2.3,
+      0.4,
+      0,
+      Math.PI,
+      -0.7
+    );
+
+    placeObject(
+      "./models/summer/cactus/scene.gltf",
+      0.15,
+      0.15,
+      0.15,
+      radius - 0.3,
+      2.8,
+      0.6,
+      0,
+      Math.PI,
+      -0.7
+    );
+
+    placeObject(
+      "./models/summer/palmtree/scene.gltf",
+      0.1,
+      0.1,
+      0.1,
+      radius,
+      2.8,
+      -0.4,
+      0,
+      Math.PI,
+      -0.7
+    );
+
+    placeObject(
+      "./models/summer/palmtree/scene.gltf",
+      0.07,
+      0.07,
+      0.07,
+      radius,
+      2.95,
+      -0.8,
+      0,
+      Math.PI,
+      -0.7
+    );
+
+    placeObject(
+      "./models/summer/parasol/scene.gltf",
+      0.2,
+      0.2,
+      0.2,
+      radius - 0.2,
+      3.4,
+      0.7,
+      0,
+      Math.PI,
+      1
+    );
+
+    placeObject(
+      "./models/summer/surfboard/scene.gltf",
+      0.3,
+      0.3,
+      0.3,
+      radius - 0.05,
+      3.5,
+      -0.7,
+      0,
+      Math.PI,
+      -0.9
+    );
+
+    placeObject(
+      "./models/summer/beach_chair_blue_stripes/scene.gltf",
+      0.4,
+      0.4,
+      0.4,
+      radius,
+      4,
+      -0.2,
+      0,
+      Math.PI,
+      -5
+    );
+
+    placeObject(
+      "./models/summer/beach_chair_blue_stripes/scene.gltf",
+      0.4,
+      0.4,
+      0.4,
+      radius,
+      0.8,
+      0.2,
+      0,
+      Math.PI,
+      -1
+    );
+
     // 새로운 텍스처 파일 로드
-    const baseColor = loader.load("./textures/Grass001_4K-PNG_Color.png");
-    const normalMap = loader.load("./textures/Grass001_4K-PNG_NormalDX.png");
+    const baseColor = loader.load("./textures/Stylized_Sand_001_basecolor.jpg");
+    const normalMap = loader.load("./textures/Stylized_Sand_001_normal.jpg");
     const roughnessMap = loader.load(
-      "./textures/Grass001_4K-PNG_Roughness.png"
+      "./textures/Stylized_Sand_001_roughness.jpg"
     );
-    const heightMap = loader.load(
-      "./textures/Grass001_4K-PNG_Displacement.png"
-    );
+    const heightMap = loader.load("./textures/Stylized_Sand_001_height.png");
     const ambientOcclusionMap = loader.load(
-      "./textures/Grass001_4K-PNG_AmbientOcclusion.png"
+      "./textures/Stylized_Sand_001_ambientOcclusion.jpg"
     );
 
     // 텍스처 반복 및 스케일 설정
     baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
-    baseColor.repeat.set(1, 1);
+    baseColor.repeat.set(6, 6);
 
     normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-    normalMap.repeat.set(1, 1);
+    normalMap.repeat.set(6, 6);
 
     roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
-    roughnessMap.repeat.set(1, 1);
+    roughnessMap.repeat.set(6, 6);
 
     heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
-    heightMap.repeat.set(1, 1);
+    heightMap.repeat.set(6, 6);
 
     ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
       THREE.RepeatWrapping;
-    ambientOcclusionMap.repeat.set(1, 1);
+    ambientOcclusionMap.repeat.set(6, 6);
 
     // 구의 재질 텍스처 업데이트
     sphere.material.map = baseColor;

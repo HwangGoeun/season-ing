@@ -1,0 +1,11 @@
+Model Information:
+* title:	Stylized Palm Tree
+* source:	https://sketchfab.com/3d-models/stylized-palm-tree-a37b8b1b0b5a4ca8a84221364055f2bd
+* author:	Platrium (https://sketchfab.com/Platrium)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Stylized Palm Tree" (https://sketchfab.com/3d-models/stylized-palm-tree-a37b8b1b0b5a4ca8a84221364055f2bd) by Platrium (https://sketchfab.com/Platrium) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

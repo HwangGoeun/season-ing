@@ -1,0 +1,11 @@
+Model Information:
+* title:	At a beach
+* source:	https://sketchfab.com/3d-models/at-a-beach-027c5c00d12f4cb3bf3e206fe8b7865f
+* author:	barcin (https://sketchfab.com/barcin)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "At a beach" (https://sketchfab.com/3d-models/at-a-beach-027c5c00d12f4cb3bf3e206fe8b7865f) by barcin (https://sketchfab.com/barcin) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
