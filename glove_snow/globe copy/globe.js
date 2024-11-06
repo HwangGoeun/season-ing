@@ -1,4 +1,5 @@
-rotate = true;
+rotate = 1;
+viewAll = 1;
 
 window.onload = function init() {
   // 웹 페이지가 로드되면 init 함수 실행
@@ -44,10 +45,14 @@ window.onload = function init() {
     near, // 카메라가 인식할 수 있는 가장 가까운 거리 (근접 클리핑 평면)
     far // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
   );
-  camera.position.set(0, 6, 3);
 
   // 카메라 제어 설정 (TrackballControls를 사용하여 카메라를 마우스로 제어할 수 있도록 설정)
-  //controls = new THREE.OrbitControls(camera);
+  if (viewAll) {
+    controls = new THREE.OrbitControls(camera);
+    camera.position.z = 20;
+  } else {
+    camera.position.set(0, 6, 3);
+  }
 
   /* --------------------------------------------------------------------------- */
 
@@ -169,7 +174,7 @@ window.onload = function init() {
 
         for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
           const objCopy = models.clone();
-          let phi = Math.PI / 3 + 0.1;
+          let phi = Math.PI / 3 + 0.35;
           let theta = i;
           // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
           objCopy.position.setFromSphericalCoordsYZ(radius + 0.5, phi, theta);
@@ -286,6 +291,11 @@ window.onload = function init() {
 
   /* --------------------------------------------------------------------------- */
 
+  // 각도를 라디안으로 변환하는 함수
+  function degreeToRadian(degree) {
+    return degree * (Math.PI / 180);
+  }
+
   /* --------------------------------------------------------------------------- */
   /* clock */
 
@@ -383,6 +393,7 @@ window.onload = function init() {
   const catScale = 0.0009;
   const gltf_loader = new THREE.GLTFLoader();
   gltf_loader.load(
+    // "../../move_cat/cute_penguin/scene.gltf",
     "../../move_cat/toon_cat_free/scene.gltf",
     function (gltf) {
       cat = gltf.scene.children[0];
@@ -416,7 +427,132 @@ window.onload = function init() {
     }
   );
 
+  let isJumping = false;
+  const originalY = cat ? cat.position.y : 0; // 고양이의 초기 Y 위치
+  let jumpInterval = null;
   
+  // 키보드 이벤트 리스너 추가
+  document.addEventListener("keydown", (event) => {
+    if (event.code === "Space") {
+      if (isJumping) {
+        // 점프 중일 때 스페이스바를 누르면 점프 멈춤
+        clearInterval(jumpInterval);
+        cat.position.y = originalY; // 원래 위치로 초기화
+        isJumping = false;
+      } else {
+        // 점프 시작
+        isJumping = true;
+  
+        // 기본적인 점프 애니메이션 (setInterval 사용)
+        let jumpUp = true;
+        const jumpHeight = 0.2;
+        const jumpSpeed = 0.05;
+        
+        jumpInterval = setInterval(() => {
+          if (!isJumping) {
+            clearInterval(jumpInterval); // 점프 중지 시 인터벌 종료
+            return;
+          }
+  
+          if (jumpUp) {
+            cat.position.y += jumpSpeed;
+            if (cat.position.y >= originalY + jumpHeight) {
+              jumpUp = false;
+            }
+          } else {
+            cat.position.y -= jumpSpeed;
+            if (cat.position.y <= originalY) {
+              cat.position.y = originalY;
+              jumpUp = true; // 다시 점프할 수 있도록 준비
+            }
+          }
+          render();
+        }, 16); // 약 60fps로 렌더링
+      }
+    }
+  });
+
+  // placeObject(
+  //   filePath = "./models/chick_trio_gltf/scene.gltf", 
+  //   scaleX = 0.5, scaleY = 0.5, scaleZ = 0.5,
+  //   posRadius = radius,
+  //   posPhi = Math.PI / 4 + 0.5,
+  //   posTheta = Math.PI / 4,
+  // );
+
+  // placeObject(
+  //   filePath = "./models/picnic_set_free_gltf/scene.gltf", 
+  //   scaleX = 0.5, scaleY = 0.5, scaleZ = 0.5,
+  //   posRadius = radius + 0.1,
+  //   posPhi = Math.PI / 4 + 0.7,
+  //   posTheta = Math.PI / 4 - 0.2,
+  // );
+
+  // placeObject(
+  //   filePath = "./models/picnic_set_free_gltf/scene.gltf", 
+  //   scaleX = 0.5, scaleY = 0.5, scaleZ = 0.5,
+  //   posRadius = radius + 0.1,
+  //   posPhi = Math.PI / 4 + 0.7,
+  //   posTheta = Math.PI / 4 - 0.2,
+  // );
+
+  // placeObject(
+  //   filePath = "./models/pink_book_vdkvcaz_gltf_low/Pink_Book_vdkvcaz_Low.gltf", 
+  //   scaleX = 5, scaleY = 5, scaleZ = 5,
+  //   posRadius = radius + 0.1,
+  //   posPhi = Math.PI / 4 + 0.7,
+  //   posTheta = Math.PI / 4 + 0.2,
+  // );
+
+  // placeObject(
+  //   filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf", 
+  //   scaleX = 2, scaleY = 2, scaleZ = 2,
+  //   posRadius = radius,
+  //   posPhi = Math.PI / 4 - 2.5,
+  //   posTheta = Math.PI / 4,
+  // );
+  
+  // placeObject(
+  //   filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf", 
+  //   scaleX = 2, scaleY = 2, scaleZ = 2,
+  //   posRadius = radius,
+  //   posPhi = Math.PI / 4,
+  //   posTheta = Math.PI / 4,
+  // );
+
+  // placeObject(
+  //   filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf", 
+  //   scaleX = 2, scaleY = 2, scaleZ = 2,
+  //   posRadius = radius,
+  //   posPhi = Math.PI / 4 + 2,
+  //   posTheta = Math.PI / 4,
+  // );
+
+  // placeObject(
+  //   filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf", 
+  //   scaleX = 2, scaleY = 2, scaleZ = 2,
+  //   posRadius = radius,
+  //   posPhi = Math.PI / 4 + 0.5,
+  //   posTheta = Math.PI / 4 + 1.5,
+  // );
+
+  // placeObject(
+  //   filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf", 
+  //   scaleX = 2, scaleY = 2, scaleZ = 2,
+  //   posRadius = radius,
+  //   posPhi = Math.PI / 4 + 5,
+  //   posTheta = Math.PI / 4 + 1.5,
+  // );
+
+  
+  // placeObject(
+  //   filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf", 
+  //   scaleX = 2, scaleY = 2, scaleZ = 2,
+  //   posRadius = radius,
+  //   posPhi = Math.PI / 4 + 5,
+  //   posTheta = Math.PI / 4 + 5,
+  // );
+
 
   /* --------------------------------------------------------------------------- */
 
@@ -424,7 +560,8 @@ window.onload = function init() {
     console.log("spring button pushed");
 
     // 새로운 나무 모델 경로로 업데이트
-    modelName = "./models/small_tree/bush_2.gltf";
+    modelName = "./models/low-_poly_cherry_blossom_tree_3d_models/scene.gltf";
+    // modelName = "./models/small_tree/bush_2.gltf";
 
     // 기존 나무들을 삭제
     while (sphere.children.length > 0) {
@@ -432,7 +569,72 @@ window.onload = function init() {
     }
 
     // 새 모델을 사용해 나무를 다시 생성
-    createTree();
+    // createTree();
+
+    // for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
+    //   let phi = Math.PI - Math.PI / 2.1;
+    //   let theta = i;
+    //   placeObject(
+    //     filePath = "./models/pink_big_tree/scene.gltf", 
+    //     scaleX = 0.00005, scaleY = 0.00005, scaleZ = 0.00005,
+    //     posRadius = radius,
+    //     posPhi = phi,
+    //     // posPhi = Math.PI / 4 + 0.5,
+    //     posTheta = theta,
+    //     // posTheta = Math.PI / 4,
+    //   );
+    // }
+    gltf_loader.load(
+      modelName,
+      function (gltf) {
+        const model = gltf.scene;
+        model.scale.set(0.05, 0.05, 0.05);
+
+        // shadow
+        model.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true; // Trees cast shadows
+            child.receiveShadow = true; // Trees receive shadows
+          }
+        });
+
+        models = model.clone();
+        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
+          const objCopy = models.clone();
+          let phi = (Math.PI - Math.PI / 3) - 0.35;
+          let theta = i;
+          // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+          objCopy.position.setFromSphericalCoordsYZ(radius, phi, theta);
+          objCopy.rotation.x += i;
+          sphere.add(objCopy);
+        }
+
+        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
+          const objCopy = models.clone();
+          let phi = Math.PI / 3 + 0.35;
+          let theta = i;
+          // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+          objCopy.position.setFromSphericalCoordsYZ(radius, phi, theta);
+          objCopy.rotation.x += i;
+          objCopy.rotation.y = 90;
+          sphere.add(objCopy);
+        }
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+    
+  //   const objCopy = model.clone();
+  //   let phi = Math.PI - Math.PI / 2.1;
+  //   let theta = i;
+  //   // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+  //   objCopy.position.setFromSphericalCoordsYZ(radius + 0.1, phi, theta);
+  //   objCopy.rotation.x += i;
+  //   sphere.add(objCopy);
+  // }
+
     createFence();
     // 새로운 텍스처 파일 로드
     const baseColor = loader.load(
@@ -477,29 +679,88 @@ window.onload = function init() {
 
     // 텍스처 업데이트 반영
     sphere.material.needsUpdate = true;
+    placeObject(
+      filePath = "./models/chick_trio_gltf/scene.gltf", 
+      scaleX = 0.5, scaleY = 0.5, scaleZ = 0.5,
+      posRadius = radius - 0.1,
+      posPhi = Math.PI / 4 - 0.3,
+      posTheta = Math.PI / 4,
+    );
+  
+    placeObject(
+      filePath = "./models/pink_big_tree/scene.gltf", 
+      scaleX = 0.002, scaleY = 0.002, scaleZ = 0.002,
+      posRadius = radius + 0.1,
+      posPhi = Math.PI / 4 - 25,
+      posTheta = Math.PI / 4 + 300,
+    );
+
+    placeObject(
+      filePath = "./models/low_poly_camper/scene.gltf", 
+      scaleX = 0.2, scaleY = 0.2, scaleZ = 0.2,
+      posRadius = radius - 0.1,
+      posPhi = degreeToRadian(100),
+      posTheta = - degreeToRadian(30),
+    );
+    placeObject(
+      filePath = "./models/picnic_set_free_gltf/scene.gltf", 
+      scaleX = 0.42, scaleY = 0.42, scaleZ = 0.42,
+      posRadius = radius - 0.1,
+      posPhi = degreeToRadian(100),
+      posTheta = degreeToRadian(10),
+    );
+
+    placeObject(
+      filePath = "./models/japanese_cherry_blossom_-_single_flower/scene.gltf", 
+      scaleX = 5, scaleY = 5, scaleZ = 5,
+      posRadius = radius + 0.1,
+      posPhi = Math.PI / 4 - 305,
+      posTheta = Math.PI / 4 - 3,
+      rotX = degreeToRadian(90),
+    );
+
+    placeObject(
+      filePath = "./models/hot_air_baloon/scene.gltf", 
+      scaleX = 1, scaleY = 1, scaleZ = 1,
+      posRadius = radius + 1,
+      posPhi = Math.PI / 4 - 30,
+      posTheta = Math.PI / 4 - 3,
+    );
+    placeObject(
+      filePath = "./models/cloud__sun_lowpoly/scene.gltf", 
+      scaleX = 0.0002, scaleY = 0.0002, scaleZ = 0.0002,
+      posRadius = radius + 1,
+      posPhi = Math.PI / 4 - 30,
+      posTheta = Math.PI / 4 - 3,
+    );
+    
+    placeObject(
+      filePath = "./models/pink_big_tree/scene.gltf", 
+      scaleX = 0.002, scaleY = 0.002, scaleZ = 0.002,
+      posRadius = radius + 0.1,
+      posPhi = degreeToRadian(190),
+      posTheta = degreeToRadian(90),
+    );
+
+    placeObject(
+      filePath = "./models/cute_chick/scene.gltf", 
+      scaleX = 0.4, scaleY = 0.4, scaleZ = 0.4,
+      posRadius = radius + 0.1,
+      posPhi = degreeToRadian(95),
+      posTheta = degreeToRadian(170),
+      rotY = degreeToRadian(0),
+      rotZ = degreeToRadian(180)
+    );
+    
 
     
-  placeObject(
-    filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf", 
-    scaleX = 2, scaleY = 2, scaleZ = 2,
-    posRadius = radius,
-    posPhi = Math.PI / 4 - 0.5,
-    posTheta = Math.PI / 4,
-  );
-  placeObject(
-    filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf", 
-    scaleX = 2, scaleY = 2, scaleZ = 2,
-    posRadius = radius,
-    posPhi = Math.PI / 4,
-    posTheta = Math.PI / 4,
-  );
-  placeObject(
-    filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf", 
-    scaleX = 2, scaleY = 2, scaleZ = 2,
-    posRadius = radius,
-    posPhi = Math.PI / 4 + 0.5,
-    posTheta = Math.PI / 4,
-  );
+    placeObject(
+      filePath = "./models/pink_big_tree/scene.gltf", 
+      scaleX = 0.002, scaleY = 0.002, scaleZ = 0.002,
+      posRadius = radius + 0.1,
+      posPhi = degreeToRadian(385),
+      posTheta = degreeToRadian(70),
+    );
   }
 
   /* ----- */
@@ -730,6 +991,43 @@ window.onload = function init() {
     );
   }
 
+  /* ------------------------------------------------------- */
+
+  function placeObject(
+    filePath,
+    scaleX = 1, scaleY = 1, scaleZ = 1,
+    posRadius = radius,   // 구의 반경
+    posPhi = 0,         // 세로 각도
+    posTheta = 0,     // 가로 각도
+    rotX = 0, rotY =Math.PI, rotZ = 0,
+    ) {
+      
+    const gltf_loader = new THREE.GLTFLoader();
+    gltf_loader.load(
+      filePath,
+      function (gltf) {
+        obj = gltf.scene.children[0];
+        obj.scale.set(scaleX, scaleY, scaleZ);
+        obj.position.setFromSphericalCoords(posRadius, posPhi, posTheta);
+  
+        sphere.add(obj);
+        //obj.up.set(1, 0, 0); // 필요에 따라 다른 축을 설정합니다.
+        obj.lookAt(sphere.position);
+
+        obj.rotation.x += rotX;
+        obj.rotation.y += rotY;
+        obj.rotation.z += rotZ;
+        render();
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+  };
+
+  spring();
+
   /* --------------------------------------------------------------------------- */
   /* rendering*/
 
@@ -739,11 +1037,13 @@ window.onload = function init() {
 
   // 렌더 함수 (매 프레임마다 호출하여 장면을 렌더링)
   function render() {
-    //controls.update(); // 카메라 제어 업데이트
+    if (viewAll) {
+      controls.update(); // 카메라 제어 업데이트
+    }
 
     // // Rotate sphere along the X-axis
     if (rotate) {
-      sphere.rotation.x -= 0.001; // Adjust rotation speed as needed
+      sphere.rotation.x -= 0.0001; // Adjust rotation speed as needed
     }
 
     // // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
@@ -798,6 +1098,6 @@ window.onload = function init() {
 
   // 초기 렌더링 함수 호출 (첫 프레임을 렌더링하기 위해 호출)
   render();
-  createTree();
+  // createTree();
   /* --------------------------------------------------------------------------- */
 };

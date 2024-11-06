@@ -1,0 +1,256 @@
+{
+  "accessors": [
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 960,
+      "max": [
+        595.645263671875,
+        1000.1640625,
+        943.3093872070313
+      ],
+      "min": [
+        -248.63632202148438,
+        -92.24858093261719,
+        -79.46759796142578
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 11520,
+      "componentType": 5126,
+      "count": 960,
+      "max": [
+        0.9923914670944214,
+        0.9996976256370544,
+        0.9973103404045105
+      ],
+      "min": [
+        -0.9845995903015137,
+        -0.9139293432235718,
+        -0.9949047565460205
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 1158,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 23040,
+      "componentType": 5126,
+      "count": 1680,
+      "max": [
+        798.7532348632813,
+        1037.2747802734375,
+        1046.5966796875
+      ],
+      "min": [
+        -422.1898193359375,
+        73.88837432861328,
+        83.0760498046875
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 43200,
+      "componentType": 5126,
+      "count": 1680,
+      "max": [
+        0.9917200803756714,
+        0.9895440340042114,
+        0.9801850318908691
+      ],
+      "min": [
+        -0.9966382384300232,
+        -0.8454326391220093,
+        -0.9994670152664185
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 4632,
+      "componentType": 5125,
+      "count": 1680,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "MikeDragneel (https://sketchfab.com/MikeDragneel)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/pink-big-tree-dd0059d9e2d7423ebac1190f117b7c1e",
+      "title": "Pink big tree"
+    },
+    "generator": "Sketchfab-12.67.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 11352,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 63360,
+      "byteOffset": 11352,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 74712,
+      "uri": "scene.bin"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "Color4.002",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.195986,
+          0.115344,
+          0.0857676,
+          1.0
+        ],
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.8239417257
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "Color3.002",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.8,
+          0.472846,
+          0.605401,
+          1.0
+        ],
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.8239417257
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Tree.001_Color4.002_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0
+          },
+          "indices": 2,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Tree.001_Color3.002_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 4,
+            "POSITION": 3
+          },
+          "indices": 5,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        -1.0,
+        0.0,
+        0.0,
+        1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "b8db3d5915994e268f0a36461d6ad7e5.fbx"
+    },
+    {
+      "children": [
+        3
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        4,
+        5
+      ],
+      "name": "Tree.001"
+    },
+    {
+      "mesh": 0,
+      "name": "Tree.001_Color4.002_0"
+    },
+    {
+      "mesh": 1,
+      "name": "Tree.001_Color3.002_0"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ]
+}
