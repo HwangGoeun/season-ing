@@ -1,4 +1,4 @@
-rotate = 1;
+rotate = 0;
 viewAll = 1;
 
 window.onload = function init() {
@@ -560,8 +560,7 @@ window.onload = function init() {
     console.log("spring button pushed");
 
     // 새로운 나무 모델 경로로 업데이트
-    modelName = "./models/low-_poly_cherry_blossom_tree_3d_models/scene.gltf";
-    // modelName = "./models/small_tree/bush_2.gltf";
+    modelName = "./models/spring/low-_poly_cherry_blossom_tree_3d_models/scene.gltf";
 
     // 기존 나무들을 삭제
     while (sphere.children.length > 0) {
@@ -575,7 +574,7 @@ window.onload = function init() {
     //   let phi = Math.PI - Math.PI / 2.1;
     //   let theta = i;
     //   placeObject(
-    //     filePath = "./models/pink_big_tree/scene.gltf", 
+    //     filePath = "./models/spring/pink_big_tree/scene.gltf", 
     //     scaleX = 0.00005, scaleY = 0.00005, scaleZ = 0.00005,
     //     posRadius = radius,
     //     posPhi = phi,
@@ -680,7 +679,7 @@ window.onload = function init() {
     // 텍스처 업데이트 반영
     sphere.material.needsUpdate = true;
     placeObject(
-      filePath = "./models/chick_trio_gltf/scene.gltf", 
+      filePath = "./models/spring/chick_trio_gltf/scene.gltf", 
       scaleX = 0.5, scaleY = 0.5, scaleZ = 0.5,
       posRadius = radius - 0.1,
       posPhi = Math.PI / 4 - 0.3,
@@ -688,7 +687,7 @@ window.onload = function init() {
     );
   
     placeObject(
-      filePath = "./models/pink_big_tree/scene.gltf", 
+      filePath = "./models/spring/pink_big_tree/scene.gltf", 
       scaleX = 0.002, scaleY = 0.002, scaleZ = 0.002,
       posRadius = radius + 0.1,
       posPhi = Math.PI / 4 - 25,
@@ -696,14 +695,14 @@ window.onload = function init() {
     );
 
     placeObject(
-      filePath = "./models/low_poly_camper/scene.gltf", 
+      filePath = "./models/spring/low_poly_camper/scene.gltf", 
       scaleX = 0.2, scaleY = 0.2, scaleZ = 0.2,
       posRadius = radius - 0.1,
       posPhi = degreeToRadian(100),
       posTheta = - degreeToRadian(30),
     );
     placeObject(
-      filePath = "./models/picnic_set_free_gltf/scene.gltf", 
+      filePath = "./models/spring/picnic_set_free_gltf/scene.gltf", 
       scaleX = 0.42, scaleY = 0.42, scaleZ = 0.42,
       posRadius = radius - 0.1,
       posPhi = degreeToRadian(100),
@@ -711,7 +710,7 @@ window.onload = function init() {
     );
 
     placeObject(
-      filePath = "./models/japanese_cherry_blossom_-_single_flower/scene.gltf", 
+      filePath = "./models/spring/japanese_cherry_blossom_-_single_flower/scene.gltf", 
       scaleX = 5, scaleY = 5, scaleZ = 5,
       posRadius = radius + 0.1,
       posPhi = Math.PI / 4 - 305,
@@ -720,22 +719,22 @@ window.onload = function init() {
     );
 
     placeObject(
-      filePath = "./models/hot_air_baloon/scene.gltf", 
+      filePath = "./models/spring/hot_air_baloon/scene.gltf", 
       scaleX = 1, scaleY = 1, scaleZ = 1,
       posRadius = radius + 1,
       posPhi = Math.PI / 4 - 30,
       posTheta = Math.PI / 4 - 3,
     );
-    placeObject(
-      filePath = "./models/cloud__sun_lowpoly/scene.gltf", 
-      scaleX = 0.0002, scaleY = 0.0002, scaleZ = 0.0002,
-      posRadius = radius + 1,
-      posPhi = Math.PI / 4 - 30,
-      posTheta = Math.PI / 4 - 3,
-    );
+    // placeObject(
+    //   filePath = "./models/spring/cloud__sun_lowpoly/scene.gltf", 
+    //   scaleX = 0.0002, scaleY = 0.0002, scaleZ = 0.0002,
+    //   posRadius = radius + 1,
+    //   posPhi = Math.PI / 4 - 30,
+    //   posTheta = Math.PI / 4 - 3,
+    // );
     
     placeObject(
-      filePath = "./models/pink_big_tree/scene.gltf", 
+      filePath = "./models/spring/pink_big_tree/scene.gltf", 
       scaleX = 0.002, scaleY = 0.002, scaleZ = 0.002,
       posRadius = radius + 0.1,
       posPhi = degreeToRadian(190),
@@ -743,7 +742,7 @@ window.onload = function init() {
     );
 
     placeObject(
-      filePath = "./models/cute_chick/scene.gltf", 
+      filePath = "./models/spring/cute_chick/scene.gltf", 
       scaleX = 0.4, scaleY = 0.4, scaleZ = 0.4,
       posRadius = radius + 0.1,
       posPhi = degreeToRadian(95),
@@ -755,7 +754,7 @@ window.onload = function init() {
 
     
     placeObject(
-      filePath = "./models/pink_big_tree/scene.gltf", 
+      filePath = "./models/spring/pink_big_tree/scene.gltf", 
       scaleX = 0.002, scaleY = 0.002, scaleZ = 0.002,
       posRadius = radius + 0.1,
       posPhi = degreeToRadian(385),
