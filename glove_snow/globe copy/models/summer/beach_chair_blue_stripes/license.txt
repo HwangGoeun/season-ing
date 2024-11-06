@@ -1,0 +1,8 @@
+Model Information:
+* title:	Beach chair blue stripes
+* source:	https://sketchfab.com/3d-models/beach-chair-blue-stripes-306bd1c648924ca98f22d1d4f1dfb7bf
+* author:	assetfactory (https://sketchfab.com/assetfactory)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works
