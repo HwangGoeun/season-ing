@@ -1,8 +1,0 @@
-Model Information:
-* title:	Colorful Balloons
-* source:	https://sketchfab.com/3d-models/colorful-balloons-27200b6b364f45c085c5e99b891fa5c6
-* author:	assetfactory (https://sketchfab.com/assetfactory)
-
-Model License:
-* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
-* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works

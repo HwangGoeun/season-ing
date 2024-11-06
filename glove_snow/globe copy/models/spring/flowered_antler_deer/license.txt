@@ -1,0 +1,11 @@
+Model Information:
+* title:	Flowered Antler Deer
+* source:	https://sketchfab.com/3d-models/flowered-antler-deer-8017ce1cbe06458aa77a3c7b18df28c8
+* author:	Nerikaen (https://sketchfab.com/Nerikaen)
+
+Model License:
+* license type:	CC-BY-SA-4.0 (http://creativecommons.org/licenses/by-sa/4.0/)
+* requirements:	Author must be credited. Modified versions must have the same license. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Flowered Antler Deer" (https://sketchfab.com/3d-models/flowered-antler-deer-8017ce1cbe06458aa77a3c7b18df28c8) by Nerikaen (https://sketchfab.com/Nerikaen) licensed under CC-BY-SA-4.0 (http://creativecommons.org/licenses/by-sa/4.0/)

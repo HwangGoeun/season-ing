@@ -929,9 +929,12 @@ window.onload = function init() {
     placeObject(
       filePath = "./models/spring/low_poly_camper/scene.gltf", 
       scaleX = 0.2, scaleY = 0.2, scaleZ = 0.2,
-      posRadius = radius - 0.1,
-      posPhi = degreeToRadian(100),
-      posTheta = - degreeToRadian(30),
+      posRadius = radius - 0.07,
+      posPhi = degreeToRadian(80),
+      posTheta = - degreeToRadian(35),
+      rotX = degreeToRadian(0),
+      rotY = degreeToRadian(170),
+      rotZ = -degreeToRadian(15),
     );
     placeObject(
       filePath = "./models/spring/picnic_set_free_gltf/scene.gltf", 
@@ -969,7 +972,7 @@ window.onload = function init() {
       filePath = "./models/spring/pink_big_tree/scene.gltf", 
       scaleX = 0.002, scaleY = 0.002, scaleZ = 0.002,
       posRadius = radius + 0.1,
-      posPhi = degreeToRadian(190),
+      posPhi = degreeToRadian(200),
       posTheta = degreeToRadian(90),
     );
 
@@ -982,8 +985,26 @@ window.onload = function init() {
       rotY = degreeToRadian(0),
       rotZ = degreeToRadian(180)
     );
-    
+    let scaleValue = 0.01;
+    placeObject(
+      filePath = "./models/spring/flowered_antler_deer/scene.gltf", 
+      scaleX = scaleValue, scaleY = scaleValue, scaleZ = scaleValue,
+      posRadius = radius + 0.1,
+      posPhi = degreeToRadian(300),
+      posTheta = degreeToRadian(30),
+      rotX = degreeToRadian(0),
+      rotY = degreeToRadian(178),
+      rotZ = degreeToRadian(90),
+    );
 
+    
+    placeObject(
+      filePath = "./models/spring/pink_big_tree/scene.gltf", 
+      scaleX = 0.002, scaleY = 0.002, scaleZ = 0.002,
+      posRadius = radius + 0.1,
+      posPhi = degreeToRadian(330),
+      posTheta = degreeToRadian(70),
+    );
     
     placeObject(
       filePath = "./models/spring/pink_big_tree/scene.gltf", 
