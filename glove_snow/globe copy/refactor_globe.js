@@ -243,26 +243,6 @@ function setupSlider() {
 // Event listeners setup
 function setupEventListeners() {
     window.addEventListener("resize", resizeCanvas);
-    
-    // // 방향키 입력 이벤트 리스너 설정
-    //     window.addEventListener("keydown", (event) => {
-    //         switch (event.keyCode) {
-    //             case 37: // Left arrow key
-    //                 moveCatLeft();
-    //                 break;
-    //             case 38: // Up arrow key
-    //                 moveCatForward();
-    //                 break;
-    //             case 39: // Right arrow key
-    //                 moveCatRight();
-    //                 break;
-    //             case 40: // Down arrow key
-    //                 moveCatBackward();
-    //                 break;
-    //             default:
-    //                 break;
-    //         }
-    //     });
 
     window.addEventListener("keydown", (event) => {
         if (event.code === "Space") {
@@ -272,26 +252,6 @@ function setupEventListeners() {
         }
     }, { passive: false });
 }
-
-// // 고양이를 왼쪽으로 이동시키는 함수
-// function moveCatLeft() {
-//     cat.position.x -= 0.1;  // 왼쪽으로 이동 (x 좌표 감소)
-// }
-
-// // 고양이를 앞으로 이동시키는 함수
-// function moveCatForward() {
-//     cat.position.y -= 0.1;  // 앞으로 이동 (z 좌표 감소)
-// }
-
-// // 고양이를 오른쪽으로 이동시키는 함수
-// function moveCatRight() {
-//     cat.position.x += 0.1;  // 오른쪽으로 이동 (x 좌표 증가)
-// }
-
-// // 고양이를 뒤로 이동시키는 함수
-// function moveCatBackward() {
-//     cat.position.y += 0.1;  // 뒤로 이동 (z 좌표 증가)
-// }
 
 // Cat model loading
 function loadCatModel() {
@@ -308,6 +268,14 @@ function loadCatModel() {
                 const action = mixer.clipAction(gltf.animations[0]);
                 action.play();
             }
+            
+            // shadow
+            cat.traverse((child) => {
+                if (child.isMesh) {
+                child.castShadow = true; // Trees cast shadows
+                child.receiveShadow = true; // Trees receive shadows
+                }
+            });
         },
         undefined,
         function (error) {
@@ -362,6 +330,14 @@ function createTree(scaleValue = 0.45) {
         function (gltf) {
             const model = gltf.scene;
             model.scale.set(scaleValue, scaleValue, scaleValue);
+
+            // shadow
+            model.traverse((child) => {
+              if (child.isMesh) {
+                child.castShadow = true; // Trees cast shadows
+                child.receiveShadow = true; // Trees receive shadows
+              }
+            });
 
             models = model.clone();
             for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
@@ -586,13 +562,13 @@ function spring() {
     ambientOcclusionMapPath = "./textures/Poliigon_GrassPatchyGround_4585_AmbientOcclusion.jpg"; // 주변광 차단 맵
     setupTextureLoader();
 
-    // placeObject(
-    //     filePath = "./models/spring/pink_big_tree/scene.gltf", 
-    //     scaleX = 0.002, scaleY = 0.002, scaleZ = 0.002,
-    //     posRadius = radius + 0.1,
-    //     posPhi = degreeToRadian(35),
-    //     posTheta = degreeToRadian(330),
-    //   );
+    placeObject(
+        filePath = "./models/spring/pink_big_tree/scene.gltf", 
+        scaleX = 0.002, scaleY = 0.002, scaleZ = 0.002,
+        posRadius = radius + 0.1,
+        posPhi = - degreeToRadian(55),
+        posTheta = degreeToRadian(330),
+      );
 }
 
 function summer() {
