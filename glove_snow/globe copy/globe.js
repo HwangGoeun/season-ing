@@ -162,6 +162,14 @@ window.onload = function init() {
         obj.scale.set(scaleX, scaleY, scaleZ);
         obj.position.setFromSphericalCoords(posRadius, posPhi, posTheta);
 
+        // shadow
+        obj.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true; // objects cast shadows
+            child.receiveShadow = true; // objects receive shadows
+          }
+        });
+
         sphere.add(obj);
         //obj.up.set(1, 0, 0); // 필요에 따라 다른 축을 설정합니다.
         obj.lookAt(sphere.position);
