@@ -42,11 +42,11 @@ window.onload = function init() {
     near, // 카메라가 인식할 수 있는 가장 가까운 거리 (근접 클리핑 평면)
     far // 카메라가 인식할 수 있는 가장 먼 거리 (원거리 클리핑 평면)
   );
-  //camera.position.set(0, 6, 3);
+  camera.position.set(0, 6.5, 3.7);
 
-  camera.position.z = 20;
+  //camera.position.z = 20;
   // 카메라 제어 설정 (TrackballControls를 사용하여 카메라를 마우스로 제어할 수 있도록 설정)
-  controls = new THREE.OrbitControls(camera);
+  //controls = new THREE.OrbitControls(camera);
 
   /* --------------------------------------------------------------------------- */
 
@@ -156,6 +156,13 @@ window.onload = function init() {
         obj.scale.set(scaleX, scaleY, scaleZ);
         obj.position.setFromSphericalCoords(posRadius, posPhi, posTheta);
 
+        obj.traverse((node) => {
+          if (node.isMesh) {
+            node.castShadow = true;
+            node.receiveShadow = true;
+          }
+        });
+
         sphere.add(obj);
         //obj.up.set(1, 0, 0); // 필요에 따라 다른 축을 설정합니다.
         obj.lookAt(sphere.position);
@@ -163,6 +170,7 @@ window.onload = function init() {
         obj.rotation.x += rotX;
         obj.rotation.y += rotY;
         obj.rotation.z += rotZ;
+
         render();
       },
       undefined,
@@ -252,66 +260,6 @@ window.onload = function init() {
       }
     );
   }
-
-  function createBench() {
-    // 벤치
-    gltf_loader.load(
-      "./models/small_tree/chair_2.gltf",
-      function (gltf) {
-        // 오른쪽 나무 바로 옆 벤치 1
-        const model = gltf.scene;
-        model.scale.set(0.2, 0.2, 0.2);
-        model.position.setFromSphericalCoords(
-          radius,
-          Math.PI / 2,
-          Math.PI / 16
-        );
-        model.rotation.x += Math.PI / 2;
-        model.rotation.y -= Math.PI / 2;
-        model.position.z += 0.2;
-        sphere.add(model);
-
-        // 벤치1 옆 벤치
-        const nex_objCopy_0 = model.clone();
-        nex_objCopy_0.position.setFromSphericalCoords(
-          radius,
-          Math.PI / 1.7,
-          Math.PI / 16
-        );
-        nex_objCopy_0.position.z += 0.2;
-        nex_objCopy_0.rotation.x += Math.PI / 18;
-        sphere.add(nex_objCopy_0);
-
-        // 왼쪽 벤치 1
-        const nex_objCopy_1 = model.clone();
-        nex_objCopy_1.position.setFromSphericalCoords(
-          radius,
-          Math.PI / 2,
-          Math.PI * 2 - Math.PI / 16
-        );
-        nex_objCopy_1.rotation.y -= Math.PI;
-        nex_objCopy_1.position.z += 0.2;
-        sphere.add(nex_objCopy_1);
-
-        // 왼쪽 벤치 1 옆 벤치
-        const nex_objCopy_2 = model.clone();
-        nex_objCopy_2.position.setFromSphericalCoords(
-          radius,
-          Math.PI / 1.7,
-          Math.PI * 2 - Math.PI / 16
-        );
-        nex_objCopy_2.position.z += 0.2;
-        nex_objCopy_2.rotation.y -= Math.PI;
-        nex_objCopy_2.rotation.x += Math.PI / 18;
-        sphere.add(nex_objCopy_2);
-      },
-      undefined,
-      function (error) {
-        console.error(error);
-      }
-    );
-  }
-  /* --------------------------------------------------------------------------- */
 
   /* --------------------------------------------------------------------------- */
   /* clock */
@@ -590,7 +538,7 @@ window.onload = function init() {
       0.002,
       0.002,
       radius + 0.01,
-      -0.4,
+      -0.45,
       0.5,
       0,
       Math.PI,
@@ -822,12 +770,12 @@ window.onload = function init() {
       0.2,
       0.2,
       0.2,
-      radius - 0.2,
-      3.4,
-      0.7,
+      radius - 0.1,
+      3.9,
+      0.3,
       0,
       Math.PI,
-      1
+      1.1
     );
 
     placeObject(
@@ -853,7 +801,7 @@ window.onload = function init() {
       -0.2,
       0,
       Math.PI,
-      -5
+      -2.5
     );
 
     placeObject(
@@ -862,11 +810,37 @@ window.onload = function init() {
       0.4,
       0.4,
       radius,
-      0.8,
+      4.1,
+      -0.2,
+      0,
+      Math.PI,
+      -3
+    );
+
+    placeObject(
+      "./models/summer/cactus/scene.gltf",
+      0.15,
+      0.15,
+      0.15,
+      radius - 0.3,
+      4.4,
       0.2,
       0,
       Math.PI,
-      -1
+      3
+    );
+
+    placeObject(
+      "./models/summer/rainbowtube/scene.gltf",
+      0.15,
+      0.15,
+      0.15,
+      radius,
+      4.4,
+      -0.25,
+      0,
+      Math.PI,
+      2
     );
 
     // 새로운 텍스처 파일 로드
@@ -1087,10 +1061,10 @@ window.onload = function init() {
 
   // 렌더 함수 (매 프레임마다 호출하여 장면을 렌더링)
   function render() {
-    controls.update(); // 카메라 제어 업데이트
+    //controls.update(); // 카메라 제어 업데이트
 
     // // Rotate sphere along the X-axis
-    //sphere.rotation.x -= 0.001; // Adjust rotation speed as needed
+    sphere.rotation.x -= 0.0005; // Adjust rotation speed as needed
 
     const now = new Date();
     const utcHours = now.getUTCHours();
