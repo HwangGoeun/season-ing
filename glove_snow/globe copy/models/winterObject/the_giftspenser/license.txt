@@ -1,0 +1,11 @@
+Model Information:
+* title:	The Giftspenser
+* source:	https://sketchfab.com/3d-models/the-giftspenser-a8ef8fb2efba4bd6b287e08af731ff4e
+* author:	Macwithav (https://sketchfab.com/Macwithav)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "The Giftspenser" (https://sketchfab.com/3d-models/the-giftspenser-a8ef8fb2efba4bd6b287e08af731ff4e) by Macwithav (https://sketchfab.com/Macwithav) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
