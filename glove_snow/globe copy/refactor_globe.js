@@ -83,8 +83,8 @@ function setupLight() {
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.1);
     directionalLight.position.set(-1, 0, 0);
     directionalLight.castShadow = true;
-    directionalLight.shadow.mapSize.width = 2048;
-    directionalLight.shadow.mapSize.height = 2048;
+    directionalLight.shadow.mapSize.width = 512;
+    directionalLight.shadow.mapSize.height = 512;
     directionalLight.shadow.camera.near = 0.5;
     directionalLight.shadow.camera.far = 50;
     directionalLight.shadow.camera.left = -20;
@@ -563,11 +563,93 @@ function spring() {
     setupTextureLoader();
 
     placeObject(
+        filePath = "./models/spring/chick_trio_gltf/scene.gltf", 
+        scaleX = 0.5, scaleY = 0.5, scaleZ = 0.5,
+        posRadius = radius - 0.1,
+        posPhi = Math.PI / 4 - 0.3,
+        posTheta = Math.PI / 4,
+      );
+    
+      placeObject(
         filePath = "./models/spring/pink_big_tree/scene.gltf", 
         scaleX = 0.002, scaleY = 0.002, scaleZ = 0.002,
         posRadius = radius + 0.1,
-        posPhi = - degreeToRadian(55),
-        posTheta = degreeToRadian(330),
+        posPhi = Math.PI / 4 - 25,
+        posTheta = Math.PI / 4 + 300,
+      );
+  
+      placeObject(
+        filePath = "./models/spring/low_poly_camper/scene.gltf", 
+        scaleX = 0.2, scaleY = 0.2, scaleZ = 0.2,
+        posRadius = radius - 0.07,
+        posPhi = degreeToRadian(80),
+        posTheta = - degreeToRadian(35),
+        rotX = degreeToRadian(0),
+        rotY = degreeToRadian(170),
+        rotZ = -degreeToRadian(15),
+      );
+      
+      placeObject(
+        filePath = "./models/spring/japanese_cherry_blossom_-_single_flower/scene.gltf", 
+        scaleX = 5, scaleY = 5, scaleZ = 5,
+        posRadius = radius + 0.1,
+        posPhi = Math.PI / 4 - 305,
+        posTheta = Math.PI / 4 - 3,
+        rotX = degreeToRadian(90),
+      );
+  
+      placeObject(
+        filePath = "./models/spring/hot_air_baloon/scene.gltf", 
+        scaleX = 1, scaleY = 1, scaleZ = 1,
+        posRadius = radius + 1,
+        posPhi = Math.PI / 4 - 30,
+        posTheta = Math.PI / 4 - 3,
+      );
+
+      placeObject(
+        filePath = "./models/spring/pink_big_tree/scene.gltf", 
+        scaleX = 0.002, scaleY = 0.002, scaleZ = 0.002,
+        posRadius = radius + 0.1,
+        posPhi = degreeToRadian(200),
+        posTheta = degreeToRadian(90),
+      );
+  
+      placeObject(
+        filePath = "./models/spring/cute_chick/scene.gltf", 
+        scaleX = 0.4, scaleY = 0.4, scaleZ = 0.4,
+        posRadius = radius + 0.1,
+        posPhi = degreeToRadian(95),
+        posTheta = degreeToRadian(170),
+        rotY = degreeToRadian(0),
+        rotZ = degreeToRadian(180)
+      );
+      let sv = 0.01;
+      placeObject(
+        filePath = "./models/spring/flowered_antler_deer/scene.gltf", 
+        scaleX = sv, scaleY = sv, scaleZ = sv,
+        posRadius = radius + 0.1,
+        posPhi = degreeToRadian(300),
+        posTheta = degreeToRadian(30),
+        rotX = degreeToRadian(0),
+        rotY = degreeToRadian(178),
+        rotZ = degreeToRadian(90),
+      );
+  
+      
+      placeObject(
+        filePath = "./models/spring/pink_big_tree/scene.gltf", 
+        scaleX = 0.002, scaleY = 0.002, scaleZ = 0.002,
+        posRadius = radius + 0.1,
+        posPhi = degreeToRadian(330),
+        posTheta = degreeToRadian(70),
+      );
+      
+      placeObject(
+        filePath = "./models/spring/pink_big_tree/scene.gltf", 
+        scaleX = 0.002, scaleY = 0.002, scaleZ = 0.002,
+        posRadius = radius + 0.1,
+        posPhi = degreeToRadian(385),
+        posTheta = degreeToRadian(70),
       );
 }
 
@@ -589,6 +671,310 @@ function summer() {
     heightMapPath = "./textures/Stylized_Sand_001_height.png";                     // 높이 맵
     ambientOcclusionMapPath = "./textures/Stylized_Sand_001_ambientOcclusion.jpg"; // 주변광 차단 맵
     setupTextureLoader();
+    placeObject(
+        "./models/summer/umbrella/scene.gltf",
+        0.8,
+        0.8,
+        0.8,
+        radius,
+        0.3,
+        0.41
+      );
+  
+      placeObject(
+        "./models/summer/beachball/scene.gltf",
+        0.6,
+        0.6,
+        0.6,
+        radius + 0.1,
+        0.34,
+        0.4
+      );
+  
+      placeObject(
+        "./models/summer/icecream/scene.gltf",
+        0.002,
+        0.002,
+        0.002,
+        radius + 0.01,
+        -0.4,
+        0.5,
+        0,
+        Math.PI,
+        3.5
+      );
+  
+      placeObject(
+        "./models/summer/beach_chair_blue_stripes/scene.gltf",
+        0.4,
+        0.4,
+        0.4,
+        radius,
+        0.9,
+        0.2,
+        0,
+        Math.PI,
+        -1.2
+      );
+  
+      placeObject(
+        "./models/summer/beach_chair_blue_stripes/scene.gltf",
+        0.4,
+        0.4,
+        0.4,
+        radius,
+        0.8,
+        0.2,
+        0,
+        Math.PI,
+        -1
+      );
+  
+      placeObject(
+        "./models/summer/surfboard/scene.gltf",
+        0.3,
+        0.3,
+        0.3,
+        radius - 0.05,
+        1.2,
+        0.2,
+        0,
+        Math.PI,
+        -0.4
+      );
+      placeObject(
+        "./models/summer/sandcastle/scene.gltf",
+        0.004,
+        0.004,
+        0.004,
+        radius - 0.3,
+        0.8,
+        -0.4,
+        0,
+        Math.PI,
+        -0.5
+      );
+  
+      placeObject(
+        "./models/summer/tubeseries/scene.gltf",
+        0.8,
+        0.8,
+        0.8,
+        radius + 0.01,
+        1.25,
+        -0.25,
+        0,
+        Math.PI,
+        1.5
+      );
+  
+      placeObject(
+        "./models/summer/unicorntube/scene.gltf",
+        0.3,
+        0.3,
+        0.3,
+        radius + 0.01,
+        1.4,
+        0.2,
+        0,
+        Math.PI,
+        -3
+      );
+  
+      placeObject(
+        "./models/summer/umbrella/scene.gltf",
+        0.8,
+        0.8,
+        0.8,
+        radius,
+        2.3,
+        -0.25,
+        0,
+        Math.PI,
+        0
+      );
+  
+      placeObject(
+        "./models/summer/beachball/scene.gltf",
+        0.5,
+        0.5,
+        0.5,
+        radius + 0.1,
+        2.33,
+        -0.2,
+        0,
+        Math.PI,
+        0
+      );
+  
+      placeObject(
+        "./models/summer/beachset/scene.gltf",
+        0.5,
+        0.5,
+        0.5,
+        radius + 0.01,
+        1.8,
+        -0.2,
+        0,
+        Math.PI,
+        0.3
+      );
+  
+      placeObject(
+        "./models/summer/table/scene.gltf",
+        0.04,
+        0.04,
+        0.04,
+        radius + 0.01,
+        1.75,
+        0.15,
+        0,
+        Math.PI,
+        -3
+      );
+  
+      placeObject(
+        "./models/summer/drink/malibu/scene.gltf",
+        0.05,
+        0.05,
+        0.05,
+        radius + 0.29,
+        1.77,
+        0.15,
+        0,
+        Math.PI,
+        -3
+      );
+  
+      placeObject(
+        "./models/summer/table/scene.gltf",
+        0.04,
+        0.04,
+        0.04,
+        radius + 0.01,
+        1.9,
+        0.15,
+        0,
+        Math.PI,
+        -5
+      );
+  
+      placeObject(
+        "./models/summer/drink/summerdrink/scene.gltf",
+        0.015,
+        0.015,
+        0.015,
+        radius + 0.3,
+        1.92,
+        0.15,
+        0,
+        Math.PI,
+        -3
+      );
+  
+      placeObject(
+        "./models/summer/sandcastle/scene.gltf",
+        0.004,
+        0.004,
+        0.004,
+        radius - 0.3,
+        2.3,
+        0.4,
+        0,
+        Math.PI,
+        -0.7
+      );
+  
+      placeObject(
+        "./models/summer/cactus/scene.gltf",
+        0.15,
+        0.15,
+        0.15,
+        radius - 0.3,
+        2.8,
+        0.6,
+        0,
+        Math.PI,
+        -0.7
+      );
+  
+      placeObject(
+        "./models/summer/palmtree/scene.gltf",
+        0.1,
+        0.1,
+        0.1,
+        radius,
+        2.8,
+        -0.4,
+        0,
+        Math.PI,
+        -0.7
+      );
+  
+      placeObject(
+        "./models/summer/palmtree/scene.gltf",
+        0.07,
+        0.07,
+        0.07,
+        radius,
+        2.95,
+        -0.8,
+        0,
+        Math.PI,
+        -0.7
+      );
+  
+      placeObject(
+        "./models/summer/parasol/scene.gltf",
+        0.2,
+        0.2,
+        0.2,
+        radius - 0.2,
+        3.4,
+        0.7,
+        0,
+        Math.PI,
+        1
+      );
+  
+      placeObject(
+        "./models/summer/surfboard/scene.gltf",
+        0.3,
+        0.3,
+        0.3,
+        radius - 0.05,
+        3.5,
+        -0.7,
+        0,
+        Math.PI,
+        -0.9
+      );
+  
+      placeObject(
+        "./models/summer/beach_chair_blue_stripes/scene.gltf",
+        0.4,
+        0.4,
+        0.4,
+        radius,
+        4,
+        -0.2,
+        0,
+        Math.PI,
+        -5
+      );
+  
+      placeObject(
+        "./models/summer/beach_chair_blue_stripes/scene.gltf",
+        0.4,
+        0.4,
+        0.4,
+        radius,
+        0.8,
+        0.2,
+        0,
+        Math.PI,
+        -1
+      );
 }
 
 function fall() {
@@ -621,7 +1007,7 @@ function winter() {
 
     // 새로운 나무 모델 경로로 업데이트
     treeModelName = "./models/winterObject/snowTree/scene.gltf";
-    createTree(scaleValue = 0.45);
+    createTree(scaleValue = 0.3);
 
     baseColorPath = "./textures/Snow_004_COLOR.jpg";                  // 기본 색상 텍스처
     normalMapPath = "./textures/Snow_004_NORM.jpg";                     // 노멀 맵
@@ -629,6 +1015,147 @@ function winter() {
     heightMapPath = "../textures/Snow_004_DISP.png";                     // 높이 맵
     ambientOcclusionMapPath = "./textures/Snow_004_OCC.jpg"; // 주변광 차단 맵
     setupTextureLoader();
+
+    //집 로드
+    placeObject(
+        "./models/winterObject/winter_house/scene.gltf",
+        scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
+        posRadius = radius,   // 구의 반경
+        posPhi = 20,         // 세로 각도
+        posTheta = -12.8,     // 가로 각도
+        rotX =0 , rotY =Math.PI, rotZ = 0,
+        );
+        placeObject(
+          "./models/winterObject/winter_house/scene.gltf",
+          scaleX = 0.07, scaleY = 0.07, scaleZ = 0.07,
+          posRadius = radius,   // 구의 반경
+          posPhi = 20,         // 세로 각도
+          posTheta = -12.7,     // 가로 각도
+          rotX =0 , rotY =Math.PI, rotZ = 0,
+          );
+          placeObject(
+            "./models/winterObject/winter_house2/scene.gltf",
+            scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
+            posRadius = radius,   // 구의 반경
+            posPhi = 20.2,         // 세로 각도
+            posTheta = -12.4,     // 가로 각도
+            rotX =0 , rotY =Math.PI, rotZ = 0,
+            );
+            placeObject(
+              "./models/winterObject/winter_house2/scene.gltf",
+              scaleX = 0.07, scaleY = 0.07, scaleZ = 0.07,
+              posRadius = radius,   // 구의 반경
+              posPhi = 20.2,         // 세로 각도
+              posTheta = -12.3,     // 가로 각도
+              rotX =0 , rotY =Math.PI, rotZ = 0,
+              );
+              placeObject(
+                "./models/winterObject/winter_house/scene.gltf",
+                scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
+                posRadius = radius,   // 구의 반경
+                posPhi = 20.3,         // 세로 각도
+                posTheta = -12.8,     // 가로 각도
+                rotX =0 , rotY =Math.PI, rotZ = 0,
+                );
+                placeObject(
+                  "./models/winterObject/winter_house/scene.gltf",
+                  scaleX = 0.07, scaleY = 0.07, scaleZ = 0.07,
+                  posRadius = radius,   // 구의 반경
+                  posPhi = 20.3,         // 세로 각도
+                  posTheta = -12.7,     // 가로 각도
+                  rotX =0 , rotY =Math.PI, rotZ = 0,
+                  );      
+                  placeObject(
+                    "./models/winterObject/winter_house2/scene.gltf",
+                    scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
+                    posRadius = radius,   // 구의 반경
+                    posPhi = 20.6,         // 세로 각도
+                    posTheta = -12.3,     // 가로 각도
+                    rotX =0 , rotY =Math.PI, rotZ = 0,
+                    );
+                    placeObject(
+                      "./models/winterObject/winter_house2/scene.gltf",
+                      scaleX = 0.07, scaleY = 0.07, scaleZ = 0.07,
+                      posRadius = radius,   // 구의 반경
+                      posPhi = 20.6,         // 세로 각도
+                      posTheta = -12.4,     // 가로 각도
+                      rotX =0 , rotY =Math.PI, rotZ = 0,
+                      ); 
+        //눈사람 로드     
+        placeObject(
+           "./models/winterObject/snow_man/scene.gltf",
+          scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
+          posRadius = radius+0.13,   // 구의 반경
+          posPhi = 20.15,         // 세로 각도
+          posTheta = -12.8,     // 가로 각도
+          rotX =0 , rotY =Math.PI, rotZ = -0.5,
+          );  
+        placeObject(
+         "./models/winterObject/snow_man/scene.gltf",
+           scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
+           posRadius = radius+0.13,   // 구의 반경
+           posPhi = 20.78,         // 세로 각도
+           posTheta = -12.35,     // 가로 각도
+           rotX =0 , rotY =Math.PI, rotZ = 3.5,
+           );           
+            
+  //산타 로드
+  placeObject(
+    "./models/winterObject/santa_s_sleigh_wip/scene.gltf",
+      scaleX = 0.3, scaleY = 0.3, scaleZ = 0.3,
+      posRadius = radius+0.5,   // 구의 반경
+      posPhi = 8.35,         // 세로 각도
+      posTheta = -12.2,     // 가로 각도
+      rotX =0 , rotY =Math.PI, rotZ = degreeToRadian(300),
+      ); 
+   //스노우볼 로드
+  placeObject(
+    "./models/winterObject/christmas_ball/scene.gltf",
+      scaleX = 0.05, scaleY = 0.05, scaleZ = 0.05,
+      posRadius = radius+0.25,   // 구의 반경
+      posPhi = 23.35,         // 세로 각도
+      posTheta = -12.3,     // 가로 각도
+      rotX =0 , rotY =Math.PI, rotZ = degreeToRadian(300),
+      ); 
+  //머그컵 로드
+  placeObject(
+    "./models/winterObject/christmas_hot_chocolate_with_marshmallow_snowman/scene.gltf",
+      scaleX = 5, scaleY = 5, scaleZ = 5,
+      posRadius = radius-0.05,   // 구의 반경
+      posPhi = 27.35,         // 세로 각도
+      posTheta = -12.8,     // 가로 각도
+      rotX =0 , rotY =Math.PI, rotZ = 0,
+      ); 
+  
+  //크리스마스 트리 로드
+  placeObject(
+    "./models/winterObject/christmas_tree_polycraft/scene.gltf",
+      scaleX = 0.002, scaleY = 0.002, scaleZ = 0.002,
+      posRadius = radius,   // 구의 반경
+      posPhi = 15.35,         // 세로 각도
+      posTheta = -12,     // 가로 각도
+      rotX =0 , rotY =Math.PI, rotZ = degreeToRadian(270),
+      ); 
+  // 캔디캐인 로드
+  placeObject(
+    "./models/winterObject/the_giftspenser/scene.gltf",
+      scaleX = 0.0005, scaleY = 0.0005, scaleZ = 0.0005,
+      posRadius = radius,   // 구의 반경
+      posPhi = 5.35,         // 세로 각도
+      posTheta = -13,     // 가로 각도
+      rotX =0 , rotY =Math.PI, rotZ = degreeToRadian(220),
+      );
+  
+  // 이글루 로드
+  placeObject(
+    "./models/winterObject/eggloo/scene.gltf",
+      scaleX = 0.015, scaleY = 0.015, scaleZ = 0.015,
+      posRadius = radius,   // 구의 반경
+      posPhi = 10.5,         // 세로 각도
+      posTheta = -0.18,     // 가로 각도
+      rotX =0 , rotY =Math.PI, rotZ = 30,
+      );
+  
 }
 
 // Initialize the scene when the window loads
