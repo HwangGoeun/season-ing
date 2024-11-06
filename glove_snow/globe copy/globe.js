@@ -330,7 +330,118 @@ window.onload = function init() {
 
   }
   
+  function createFlowerBush() {
+    // 벤치 옆 수풀
+  gltf_loader.load(
+    "./models/small_tree/bush_4.gltf",
+    function (gltf) {
+      // 오른쪽 나무 바로 옆 부쉬 1
+      const model = gltf.scene;
+      model.scale.set(0.12, 0.12, 0.12);
+      model.position.setFromSphericalCoords(
+        radius,
+        Math.PI / 2.2,
+        Math.PI / 16
+      );
+      model.rotation.x += Math.PI / 2;
+      model.rotation.y -= Math.PI / 2;
+      model.position.z += 0.2;
+      sphere.add(model);
+
+      // 왼쪽 나무 바로 옆 부쉬 1
+      const nex_objCopy_0 = model.clone();
+      nex_objCopy_0.position.setFromSphericalCoords(
+        radius,
+        Math.PI / 2.2,
+        Math.PI * 2 - Math.PI / 16
+      );
+      nex_objCopy_0.position.z += 0.2;
+      sphere.add(nex_objCopy_0);
+
+      // 오른쪽 나무 바로 옆 부쉬 2
+      const nex_objCopy_1 = model.clone();
+      nex_objCopy_1.position.setFromSphericalCoords(
+        radius,
+        Math.PI / 1.58,
+        Math.PI / 16
+      );
+      nex_objCopy_1.rotation.x += Math.PI / 18;
+      nex_objCopy_1.position.z += 0.2;
+      sphere.add(nex_objCopy_1);
+
+      // 왼쪽 나무 벤치 옆 부쉬 2
+      const nex_objCopy_2 = nex_objCopy_0.clone();
+      nex_objCopy_2.position.setFromSphericalCoords(
+        radius,
+        Math.PI / 1.58,
+        Math.PI * 2 - Math.PI / 16
+      );
+      nex_objCopy_2.rotation.x += Math.PI / 18;
+      nex_objCopy_2.position.z += 0.2;
+      sphere.add(nex_objCopy_2);
+    },
+    undefined,
+    function (error) {
+      console.error(error);
+    }
+  );
+  }
+
   function createBush() {
+    // 3단 수풀
+    gltf_loader.load(
+      "./models/small_tree/bush_2.gltf",
+      function (gltf) {
+        // 고양이 기준 바로 왼쪽 수풀 3개
+        const model = gltf.scene;
+        model.scale.set(0.12, 0.12, 0.12);
+        model.position.setFromSphericalCoords(
+          radius - 0.14,
+          Math.PI / 16,
+          Math.PI / 2
+        );
+        model.rotation.z -= Math.PI / 12;
+        sphere.add(model);
+
+        const objCopy_0 = model.clone();
+        objCopy_0.position.setFromSphericalCoords(
+          radius + 0.1,
+          Math.PI / 12,
+          Math.PI / 2
+        );
+        sphere.add(objCopy_0);
+        const objCopy_1 = model.clone();
+        objCopy_1.position.setFromSphericalCoords(
+          radius + 0.4,
+          Math.PI / 9.5,
+          Math.PI / 2
+        );
+        sphere.add(objCopy_1);
+
+        // 만들어진 기본 수풀에서 z축으로 앞으로 이동
+        const nex_objCopy = model.clone();
+        nex_objCopy.position.z += 1.5;
+        nex_objCopy.position.y -= 0.2;
+        nex_objCopy.rotation.x += Math.PI / 12;
+        sphere.add(nex_objCopy);
+
+        const nex_objCopy_0 = objCopy_0.clone();
+        nex_objCopy_0.position.z += 1.5;
+        nex_objCopy_0.position.y -= 0.2;
+        nex_objCopy_0.rotation.x += Math.PI / 12;
+        sphere.add(nex_objCopy_0);
+
+        const nex_objCopy_1 = objCopy_1.clone();
+        nex_objCopy_1.position.z += 1.5;
+        nex_objCopy_1.position.y -= 0.2;
+        nex_objCopy_1.rotation.x += Math.PI / 12;
+        sphere.add(nex_objCopy_1);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
   }
   //at the center of the sphere to illustrate what the object looks like
   // var singletree;
@@ -605,10 +716,11 @@ window.onload = function init() {
 
     // 새 모델을 사용해 나무를 다시 생성
     // createTree();
+    createBush();
     createFence();
     createFallTree();
     createBench();
-    createBush();
+    createFlowerBush();
     // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
     const baseColor = loader.load(
       "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_BaseColor.jpg"
