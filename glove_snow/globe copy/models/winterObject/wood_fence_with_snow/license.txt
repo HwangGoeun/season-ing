@@ -1,0 +1,8 @@
+Model Information:
+* title:	Low poly wood fence with snow
+* source:	https://sketchfab.com/3d-models/low-poly-wood-fence-with-snow-fabc2ab1d035464b845e8cc5b047ad50
+* author:	assetfactory (https://sketchfab.com/assetfactory)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works

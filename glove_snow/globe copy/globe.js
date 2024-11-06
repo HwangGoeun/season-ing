@@ -1,5 +1,5 @@
-rotate = 0;
-viewAll = 1;
+rotate = 1;
+viewAll = 0;
 
 window.onload = function init() {
   // 웹 페이지가 로드되면 init 함수 실행
@@ -269,8 +269,8 @@ window.onload = function init() {
         model.scale.set(0.2, 0.2, 0.2);
         model.position.setFromSphericalCoords(
           radius,
-          Math.PI / 2,
-          Math.PI / 16
+          Math.PI / 2,//xz각도 오른쪽
+          Math.PI / 16//y각도
         );
         model.rotation.x += Math.PI / 2;
         model.rotation.y -= Math.PI / 2;
@@ -317,6 +317,27 @@ window.onload = function init() {
       }
     );
   }
+  function placeObject(
+    filePath,
+    scaleX = 0, scaleY = 0, scaleZ = 0,
+    posRadius = radius,   // 구의 반경
+    posPhi = 0,         // 세로 각도
+    posTheta = 0,     // 가로 각도
+    rotX = 0, rotY =Math.PI, rotZ = 0,
+    ) {
+      
+    const gltf_loader = new THREE.GLTFLoader();
+    gltf_loader.load(
+      filePath,
+      function (gltf) {
+        obj = gltf.scene.children[0];
+        obj.scale.set(scaleX, scaleY, scaleZ);
+        obj.position.setFromSphericalCoords(posRadius, posPhi, posTheta);
+  
+        sphere.add(obj);
+        //obj.up.set(1, 0, 0); // 필요에 따라 다른 축을 설정합니다.
+        obj.lookAt(sphere.position);
+      });
 
   function createFallTree() {
     // 모여있는 나무들
@@ -478,6 +499,10 @@ window.onload = function init() {
         nex_objCopy_1.position.y -= 0.2;
         nex_objCopy_1.rotation.x += Math.PI / 12;
         sphere.add(nex_objCopy_1);
+        obj.rotation.x += rotX;
+        obj.rotation.y += rotY;
+        obj.rotation.z += rotZ;
+        render();
       },
       undefined,
       function (error) {
@@ -485,6 +510,7 @@ window.onload = function init() {
       }
     );
   }
+  };
   //at the center of the sphere to illustrate what the object looks like
   // var singletree;
   // singleTree = new Tree();
@@ -534,6 +560,9 @@ window.onload = function init() {
   }
 
   /* --------------------------------------------------------------------------- */
+  function degreeToRadian(degree) {
+    return degree * (Math.PI / 180);
+}
 
   /* --------------------------------------------------------------------------- */
   /* background */
@@ -1443,16 +1472,230 @@ window.onload = function init() {
     console.log("button push");
 
     // 새로운 나무 모델 경로로 업데이트
-    modelName = "./models/small_tree/prune_tree_1.gltf";
-
+    modelName = "./models/winterObject/snowTree/scene.gltf";
+    
     // 기존 나무들을 삭제
     while (sphere.children.length > 0) {
       sphere.remove(sphere.children[0]);
     }
 
-    // 새 모델을 사용해 나무를 다시 생성
+
+    function createTree() {
+      let models;
+      gltf_loader.load(
+        modelName,
+        function (gltf) {
+          const model = gltf.scene;
+          model.scale.set(0.45, 0.45, 0.45);
+  
+          // shadow
+          model.traverse((child) => {
+            if (child.isMesh) {
+              child.castShadow = true; // Trees cast shadows
+              child.receiveShadow = true; // Trees receive shadows
+            }
+          });
+  
+          models = model.clone();
+          for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
+            const objCopy = models.clone();
+            let phi = Math.PI - Math.PI / 3 - 0.1;
+            let theta = i;
+            // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+            objCopy.position.setFromSphericalCoordsYZ(radius + 0.5, phi, theta);
+            objCopy.rotation.x += i;
+            sphere.add(objCopy);
+          }
+  
+          for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
+            const objCopy = models.clone();
+            let phi = Math.PI / 3 + 0.1;
+            let theta = i;
+            // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+            objCopy.position.setFromSphericalCoordsYZ(radius + 0.5, phi, theta);
+            objCopy.rotation.x += i;
+            sphere.add(objCopy);
+          }
+        },
+        undefined,
+        function (error) {
+          console.error(error);
+        }
+      );
+    }
+    //집 로드
+    placeObject(
+      "./models/winterObject/winter_house/scene.gltf",
+      scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
+      posRadius = radius,   // 구의 반경
+      posPhi = 20,         // 세로 각도
+      posTheta = -12.8,     // 가로 각도
+      rotX =0 , rotY =Math.PI, rotZ = 0,
+      );
+      placeObject(
+        "./models/winterObject/winter_house/scene.gltf",
+        scaleX = 0.07, scaleY = 0.07, scaleZ = 0.07,
+        posRadius = radius,   // 구의 반경
+        posPhi = 20,         // 세로 각도
+        posTheta = -12.7,     // 가로 각도
+        rotX =0 , rotY =Math.PI, rotZ = 0,
+        );
+        placeObject(
+          "./models/winterObject/winter_house2/scene.gltf",
+          scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
+          posRadius = radius,   // 구의 반경
+          posPhi = 20.2,         // 세로 각도
+          posTheta = -12.4,     // 가로 각도
+          rotX =0 , rotY =Math.PI, rotZ = 0,
+          );
+          placeObject(
+            "./models/winterObject/winter_house2/scene.gltf",
+            scaleX = 0.07, scaleY = 0.07, scaleZ = 0.07,
+            posRadius = radius,   // 구의 반경
+            posPhi = 20.2,         // 세로 각도
+            posTheta = -12.3,     // 가로 각도
+            rotX =0 , rotY =Math.PI, rotZ = 0,
+            );
+            placeObject(
+              "./models/winterObject/winter_house/scene.gltf",
+              scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
+              posRadius = radius,   // 구의 반경
+              posPhi = 20.3,         // 세로 각도
+              posTheta = -12.8,     // 가로 각도
+              rotX =0 , rotY =Math.PI, rotZ = 0,
+              );
+              placeObject(
+                "./models/winterObject/winter_house/scene.gltf",
+                scaleX = 0.07, scaleY = 0.07, scaleZ = 0.07,
+                posRadius = radius,   // 구의 반경
+                posPhi = 20.3,         // 세로 각도
+                posTheta = -12.7,     // 가로 각도
+                rotX =0 , rotY =Math.PI, rotZ = 0,
+                );      
+                placeObject(
+                  "./models/winterObject/winter_house2/scene.gltf",
+                  scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
+                  posRadius = radius,   // 구의 반경
+                  posPhi = 20.6,         // 세로 각도
+                  posTheta = -12.3,     // 가로 각도
+                  rotX =0 , rotY =Math.PI, rotZ = 0,
+                  );
+                  placeObject(
+                    "./models/winterObject/winter_house2/scene.gltf",
+                    scaleX = 0.07, scaleY = 0.07, scaleZ = 0.07,
+                    posRadius = radius,   // 구의 반경
+                    posPhi = 20.6,         // 세로 각도
+                    posTheta = -12.4,     // 가로 각도
+                    rotX =0 , rotY =Math.PI, rotZ = 0,
+                    ); 
+      //눈사람 로드     
+      placeObject(
+         "./models/winterObject/snow_man/scene.gltf",
+        scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
+        posRadius = radius+0.13,   // 구의 반경
+        posPhi = 20.15,         // 세로 각도
+        posTheta = -12.8,     // 가로 각도
+        rotX =0 , rotY =Math.PI, rotZ = -0.5,
+        );  
+      placeObject(
+       "./models/winterObject/snow_man/scene.gltf",
+         scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
+         posRadius = radius+0.13,   // 구의 반경
+         posPhi = 20.78,         // 세로 각도
+         posTheta = -12.35,     // 가로 각도
+         rotX =0 , rotY =Math.PI, rotZ = 3.5,
+         );           
+          
+//산타 로드
+placeObject(
+  "./models/winterObject/santa_s_sleigh_wip/scene.gltf",
+    scaleX = 0.3, scaleY = 0.3, scaleZ = 0.3,
+    posRadius = radius+0.5,   // 구의 반경
+    posPhi = 8.35,         // 세로 각도
+    posTheta = -12.2,     // 가로 각도
+    rotX =0 , rotY =Math.PI, rotZ = degreeToRadian(300),
+    ); 
+ //스노우볼 로드
+placeObject(
+  "./models/winterObject/christmas_ball/scene.gltf",
+    scaleX = 0.05, scaleY = 0.05, scaleZ = 0.05,
+    posRadius = radius+0.25,   // 구의 반경
+    posPhi = 23.35,         // 세로 각도
+    posTheta = -12.3,     // 가로 각도
+    rotX =0 , rotY =Math.PI, rotZ = degreeToRadian(300),
+    ); 
+//머그컵 로드
+placeObject(
+  "./models/winterObject/christmas_hot_chocolate_with_marshmallow_snowman/scene.gltf",
+    scaleX = 5, scaleY = 5, scaleZ = 5,
+    posRadius = radius-0.05,   // 구의 반경
+    posPhi = 27.35,         // 세로 각도
+    posTheta = -12.8,     // 가로 각도
+    rotX =0 , rotY =Math.PI, rotZ = 0,
+    ); 
+
+//크리스마스 트리 로드
+placeObject(
+  "./models/winterObject/christmas_tree_polycraft/scene.gltf",
+    scaleX = 0.002, scaleY = 0.002, scaleZ = 0.002,
+    posRadius = radius,   // 구의 반경
+    posPhi = 15.35,         // 세로 각도
+    posTheta = -12,     // 가로 각도
+    rotX =0 , rotY =Math.PI, rotZ = degreeToRadian(270),
+    ); 
+// 캔디캐인 로드
+placeObject(
+  "./models/winterObject/the_giftspenser/scene.gltf",
+    scaleX = 0.0005, scaleY = 0.0005, scaleZ = 0.0005,
+    posRadius = radius,   // 구의 반경
+    posPhi = 5.35,         // 세로 각도
+    posTheta = -13,     // 가로 각도
+    rotX =0 , rotY =Math.PI, rotZ = degreeToRadian(220),
+    );
+
+// 이글루 로드
+placeObject(
+  "./models/winterObject/eggloo/scene.gltf",
+    scaleX = 0.015, scaleY = 0.015, scaleZ = 0.015,
+    posRadius = radius,   // 구의 반경
+    posPhi = 10.5,         // 세로 각도
+    posTheta = -0.18,     // 가로 각도
+    rotX =0 , rotY =Math.PI, rotZ = 30,
+    );
+
+  //나무를 다시 생성
     createTree();
-    createFence();
+    gltf_loader.load(
+      "./models/winterObject/wood_fence_with_snow/scene.gltf",
+      function (gltf) {
+        const model = gltf.scene;
+        model.scale.set(0.3, 0.3, 0.3);
+        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 60) {
+          const objCopy = model.clone();
+          let phi = Math.PI / 2.1;
+          let theta = i;
+          // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+          objCopy.position.setFromSphericalCoordsYZ(radius + 0.02, phi, theta);
+          objCopy.rotation.x += i;
+          sphere.add(objCopy);
+        }
+
+        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 60) {
+          const objCopy = model.clone();
+          let phi = Math.PI - Math.PI / 2.1;
+          let theta = i;
+          // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+          objCopy.position.setFromSphericalCoordsYZ(radius + 0.02, phi, theta);
+          objCopy.rotation.x += i;
+          sphere.add(objCopy);
+        }
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+      
+    );
 
     // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
     const baseColor = loader.load("./textures/Snow_004_COLOR.jpg"); // 기본 색상 텍스처
@@ -1488,60 +1731,8 @@ window.onload = function init() {
     // 텍스처 업데이트 반영
     sphere.material.needsUpdate = true;
 
-    // 3단 수풀
-    gltf_loader.load(
-      "./models/small_tree/bush_2.gltf",
-      function (gltf) {
-        // 고양이 기준 바로 왼쪽 수풀 3개
-        const model = gltf.scene;
-        model.scale.set(0.12, 0.12, 0.12);
-        model.position.setFromSphericalCoords(
-          radius - 0.14,
-          Math.PI / 16,
-          Math.PI / 2
-        );
-        model.rotation.z -= Math.PI / 12;
-        sphere.add(model);
-
-        const objCopy_0 = model.clone();
-        objCopy_0.position.setFromSphericalCoords(
-          radius + 0.1,
-          Math.PI / 12,
-          Math.PI / 2
-        );
-        sphere.add(objCopy_0);
-        const objCopy_1 = model.clone();
-        objCopy_1.position.setFromSphericalCoords(
-          radius + 0.4,
-          Math.PI / 9.5,
-          Math.PI / 2
-        );
-        sphere.add(objCopy_1);
-
-        // 만들어진 기본 수풀에서 z축으로 앞으로 이동
-        const nex_objCopy = model.clone();
-        nex_objCopy.position.z += 1.5;
-        nex_objCopy.position.y -= 0.2;
-        nex_objCopy.rotation.x += Math.PI / 12;
-        sphere.add(nex_objCopy);
-
-        const nex_objCopy_0 = objCopy_0.clone();
-        nex_objCopy_0.position.z += 1.5;
-        nex_objCopy_0.position.y -= 0.2;
-        nex_objCopy_0.rotation.x += Math.PI / 12;
-        sphere.add(nex_objCopy_0);
-
-        const nex_objCopy_1 = objCopy_1.clone();
-        nex_objCopy_1.position.z += 1.5;
-        nex_objCopy_1.position.y -= 0.2;
-        nex_objCopy_1.rotation.x += Math.PI / 12;
-        sphere.add(nex_objCopy_1);
-      },
-      undefined,
-      function (error) {
-        console.error(error);
-      }
-    );
+    
+   
   }
 
   /* ------------------------------------------------------- */
