@@ -1,0 +1,339 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 1524,
+      "max": [
+        7.990975856781006,
+        9.425262451171875,
+        27.415695190429688
+      ],
+      "min": [
+        -20.541221618652344,
+        -10.687816619873047,
+        11.590042114257813
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 18288,
+      "componentType": 5126,
+      "count": 1524,
+      "max": [
+        0.9858574867248535,
+        0.998582661151886,
+        0.9921271204948425
+      ],
+      "min": [
+        -0.99135422706604,
+        -0.9963447451591492,
+        -0.9997538924217224
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 1524,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 36576,
+      "componentType": 5126,
+      "count": 476,
+      "max": [
+        2.0394339561462402,
+        2.2510390281677246,
+        15.4600830078125
+      ],
+      "min": [
+        -12.322745323181152,
+        -2.077341079711914,
+        -0.9533740282058716
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 42288,
+      "componentType": 5126,
+      "count": 476,
+      "max": [
+        0.9968540072441101,
+        0.9978731274604797,
+        0.999997615814209
+      ],
+      "min": [
+        -1.0,
+        -0.9979846477508545,
+        -1.0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 476,
+      "max": [
+        0.65625,
+        0.9960830211639404
+      ],
+      "min": [
+        0.35922399163246155,
+        0.003918000031262636
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 6096,
+      "componentType": 5125,
+      "count": 1134,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 48000,
+      "componentType": 5126,
+      "count": 150,
+      "max": [
+        5.981902122497559,
+        8.884384155273438,
+        25.574186325073242
+      ],
+      "min": [
+        -17.48564910888672,
+        -7.561581134796143,
+        14.28433609008789
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 49800,
+      "componentType": 5126,
+      "count": 150,
+      "max": [
+        0.9725888967514038,
+        0.9981143474578857,
+        0.9923193454742432
+      ],
+      "min": [
+        -0.7047371864318848,
+        -0.9930534958839417,
+        -0.12405698746442795
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 3808,
+      "componentType": 5126,
+      "count": 150,
+      "max": [
+        1.0,
+        1.0
+      ],
+      "min": [
+        0.0,
+        0.0
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 10632,
+      "componentType": 5125,
+      "count": 480,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "lsclarke (https://sketchfab.com/lsclarke)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/low-poly-cherry-blossom-tree-3d-models-4b76fd63c81e4d489cc06ec66c12a866",
+      "title": "Low- Poly Cherry Blossom Tree 3D Models"
+    },
+    "generator": "Sketchfab-12.60.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 12552,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 5008,
+      "byteOffset": 12552,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 51600,
+      "byteOffset": 17560,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 69160,
+      "uri": "scene.bin"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "lambert2SG",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.27119792872178344,
+          0.09430201737786156,
+          0.041254318046291434,
+          1.0
+        ],
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.6
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "lambert3SG",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1.0,
+          0.33108273651581677,
+          0.6158160763728032,
+          1.0
+        ],
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.6
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "lambert4SG",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.9117889721365602,
+          0.0921404733441813,
+          0.0921404733441813,
+          1.0
+        ],
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.6
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Object_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0
+          },
+          "indices": 2,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Object_1",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 4,
+            "POSITION": 3,
+            "TEXCOORD_0": 5
+          },
+          "indices": 6,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Object_2",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 8,
+            "POSITION": 7,
+            "TEXCOORD_0": 9
+          },
+          "indices": 10,
+          "material": 2,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        -1.0,
+        0.0,
+        0.0,
+        1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2,
+        3,
+        4
+      ],
+      "name": "0fcf059d292d407286c34283a6664cd3.obj.cleaner.materialmerger.gles"
+    },
+    {
+      "mesh": 0,
+      "name": "Object_2"
+    },
+    {
+      "mesh": 1,
+      "name": "Object_3"
+    },
+    {
+      "mesh": 2,
+      "name": "Object_4"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ]
+}

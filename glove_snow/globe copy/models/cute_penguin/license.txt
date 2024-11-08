@@ -1,0 +1,11 @@
+Model Information:
+* title:	Cute Penguin
+* source:	https://sketchfab.com/3d-models/cute-penguin-08369ebd33cd4cc88f238fcf483a53a9
+* author:	labocho (https://sketchfab.com/labocho)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Cute Penguin" (https://sketchfab.com/3d-models/cute-penguin-08369ebd33cd4cc88f238fcf483a53a9) by labocho (https://sketchfab.com/labocho) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)

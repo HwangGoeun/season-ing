@@ -1,0 +1,539 @@
+{
+  "assetCategories": {
+    "decal": {
+      "vegetation": {
+        "flower": {}
+      }
+    }
+  },
+  "averageColor": "#816014",
+  "categories": [
+    "atlas",
+    "Scatter",
+    "Misc"
+  ],
+  "comp_version": 1,
+  "description": "",
+  "displacementBias": 0.658442,
+  "displacementCalibrationAccuracy": 0.951278,
+  "displacementScale": 0.332085,
+  "environment": {
+    "biome": "undefined",
+    "region": "undefined"
+  },
+  "highest_available_res": 16384,
+  "id": "tbxnkko",
+  "json": {
+    "contentLength": 11416,
+    "uri": "tbxnkko.json"
+  },
+  "maps": [
+    {
+      "averageColor": "#C4C4C4",
+      "bitDepth": 32,
+      "colorSpace": "sRGB",
+      "contentLength": 206325607,
+      "maxIntensity": 255,
+      "mimeType": "image/x-exr",
+      "minIntensity": 104,
+      "name": "AO",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "ao",
+      "uri": "tbxnkko_8K_AO.exr"
+    },
+    {
+      "averageColor": "#C4C4C4",
+      "bitDepth": 8,
+      "colorSpace": "sRGB",
+      "contentLength": 29864305,
+      "maxIntensity": 255,
+      "mimeType": "image/jpeg",
+      "minIntensity": 104,
+      "name": "AO",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "ao",
+      "uri": "tbxnkko_8K_AO.jpg"
+    },
+    {
+      "averageColor": "#816014",
+      "bitDepth": 16,
+      "colorSpace": "sRGB",
+      "contentLength": 268840301,
+      "maxIntensity": 196,
+      "mimeType": "image/x-exr",
+      "minIntensity": 0,
+      "name": "Basecolor",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "basecolor",
+      "uri": "tbxnkko_8K_Basecolor.exr"
+    },
+    {
+      "averageColor": "#816014",
+      "bitDepth": 8,
+      "colorSpace": "sRGB",
+      "contentLength": 58673688,
+      "maxIntensity": 196,
+      "mimeType": "image/jpeg",
+      "minIntensity": 0,
+      "name": "Basecolor",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "basecolor",
+      "uri": "tbxnkko_8K_Basecolor.jpg"
+    },
+    {
+      "averageColor": "#808080",
+      "bitDepth": 32,
+      "colorSpace": "Linear",
+      "contentLength": 207738629,
+      "maxIntensity": 255,
+      "mimeType": "image/x-exr",
+      "minIntensity": 0,
+      "name": "Bump",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "bump",
+      "uri": "tbxnkko_8K_Bump.exr"
+    },
+    {
+      "averageColor": "#808080",
+      "bitDepth": 8,
+      "colorSpace": "Linear",
+      "contentLength": 25679635,
+      "maxIntensity": 255,
+      "mimeType": "image/jpeg",
+      "minIntensity": 0,
+      "name": "Bump",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "bump",
+      "uri": "tbxnkko_8K_Bump.jpg"
+    },
+    {
+      "averageColor": "#E0E0E0",
+      "bitDepth": 32,
+      "colorSpace": "sRGB",
+      "contentLength": 203844620,
+      "maxIntensity": 255,
+      "mimeType": "image/x-exr",
+      "minIntensity": 0,
+      "name": "Cavity",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "cavity",
+      "uri": "tbxnkko_8K_Cavity.exr"
+    },
+    {
+      "averageColor": "#E0E0E0",
+      "bitDepth": 8,
+      "colorSpace": "sRGB",
+      "contentLength": 28608412,
+      "maxIntensity": 255,
+      "mimeType": "image/jpeg",
+      "minIntensity": 0,
+      "name": "Cavity",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "cavity",
+      "uri": "tbxnkko_8K_Cavity.jpg"
+    },
+    {
+      "averageColor": "#2B2B2B",
+      "bitDepth": 32,
+      "colorSpace": "Linear",
+      "contentLength": 218470983,
+      "maxIntensity": 94,
+      "mimeType": "image/x-exr",
+      "minIntensity": 0,
+      "name": "Gloss",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "gloss",
+      "uri": "tbxnkko_8K_Gloss.exr"
+    },
+    {
+      "averageColor": "#2B2B2B",
+      "bitDepth": 8,
+      "colorSpace": "Linear",
+      "contentLength": 27502450,
+      "maxIntensity": 94,
+      "mimeType": "image/jpeg",
+      "minIntensity": 0,
+      "name": "Gloss",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "gloss",
+      "uri": "tbxnkko_8K_Gloss.jpg"
+    },
+    {
+      "averageColor": "#7F81F6",
+      "bitDepth": 16,
+      "colorSpace": "Linear",
+      "contentLength": 181673973,
+      "maxIntensity": 213,
+      "mimeType": "image/x-exr",
+      "minIntensity": 66,
+      "name": "Normal",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "normal",
+      "uri": "tbxnkko_8K_Normal.exr"
+    },
+    {
+      "averageColor": "#7F81F6",
+      "bitDepth": 8,
+      "colorSpace": "Linear",
+      "contentLength": 67230063,
+      "maxIntensity": 213,
+      "mimeType": "image/jpeg",
+      "minIntensity": 66,
+      "name": "Normal",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "normal",
+      "uri": "tbxnkko_8K_Normal.jpg"
+    },
+    {
+      "averageColor": "#7C7C7C",
+      "bitDepth": 32,
+      "colorSpace": "Linear",
+      "contentLength": 75872885,
+      "maxIntensity": 255,
+      "mimeType": "image/x-exr",
+      "minIntensity": 0,
+      "name": "Opacity",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "opacity",
+      "uri": "tbxnkko_8K_Opacity.exr"
+    },
+    {
+      "averageColor": "#7C7C7C",
+      "bitDepth": 8,
+      "colorSpace": "Linear",
+      "contentLength": 15622597,
+      "maxIntensity": 255,
+      "mimeType": "image/jpeg",
+      "minIntensity": 0,
+      "name": "Opacity",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "opacity",
+      "uri": "tbxnkko_8K_Opacity.jpg"
+    },
+    {
+      "averageColor": "#D4D4D4",
+      "bitDepth": 32,
+      "colorSpace": "Linear",
+      "contentLength": 201895073,
+      "maxIntensity": 255,
+      "mimeType": "image/x-exr",
+      "minIntensity": 161,
+      "name": "Roughness",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "roughness",
+      "uri": "tbxnkko_8K_Roughness.exr"
+    },
+    {
+      "averageColor": "#D4D4D4",
+      "bitDepth": 8,
+      "colorSpace": "Linear",
+      "contentLength": 26510034,
+      "maxIntensity": 255,
+      "mimeType": "image/jpeg",
+      "minIntensity": 161,
+      "name": "Roughness",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "roughness",
+      "uri": "tbxnkko_8K_Roughness.jpg"
+    },
+    {
+      "averageColor": "#313131",
+      "bitDepth": 16,
+      "colorSpace": "sRGB",
+      "contentLength": 191965478,
+      "maxIntensity": 0,
+      "mimeType": "image/x-exr",
+      "minIntensity": 56.1,
+      "name": "Specular",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "specular",
+      "uri": "tbxnkko_8K_Specular.exr"
+    },
+    {
+      "averageColor": "#313131",
+      "bitDepth": 8,
+      "colorSpace": "sRGB",
+      "contentLength": 17869227,
+      "maxIntensity": 0,
+      "mimeType": "image/jpeg",
+      "minIntensity": 56.1,
+      "name": "Specular",
+      "physicalSize": "2x2",
+      "resolution": "8192x8192",
+      "type": "specular",
+      "uri": "tbxnkko_8K_Specular.jpg"
+    }
+  ],
+  "meta": [
+    {
+      "key": "scanArea",
+      "name": "Scan Area",
+      "value": "2x2 m"
+    },
+    {
+      "key": "height",
+      "name": "Height",
+      "value": "0.024 m"
+    },
+    {
+      "key": "tileable",
+      "name": "Tileable",
+      "value": true
+    },
+    {
+      "key": "texelDensity",
+      "name": "Texel Density",
+      "value": "8192 px/m"
+    },
+    {
+      "key": "calibration",
+      "name": "Calibration",
+      "value": "GretagMacbeth ColorChecker Color Rendition Chart"
+    },
+    {
+      "key": "scanner",
+      "name": "Scanner",
+      "value": "MKX"
+    }
+  ],
+  "models": [],
+  "name": "Fresh and Dried Tagetes",
+  "pack": null,
+  "physicalSize": null,
+  "points": 1,
+  "previews": {
+    "images": [
+      {
+        "contentLength": 270639,
+        "resolution": "360x360",
+        "tags": [
+          "thumb"
+        ],
+        "uri": "tbxnkko_Grid_360.png"
+      },
+      {
+        "contentLength": 363921,
+        "resolution": "420x420",
+        "tags": [
+          "thumb"
+        ],
+        "uri": "tbxnkko_Grid_420.png"
+      },
+      {
+        "contentLength": 1027978,
+        "resolution": "720x720",
+        "tags": [
+          "thumb",
+          "retina"
+        ],
+        "uri": "tbxnkko_Grid_720.png"
+      },
+      {
+        "contentLength": 1383014,
+        "resolution": "840x840",
+        "tags": [
+          "thumb",
+          "retina"
+        ],
+        "uri": "tbxnkko_Grid_840.png"
+      },
+      {
+        "contentLength": 2639617,
+        "resolution": "1440x768",
+        "tags": [
+          "preview",
+          "clay"
+        ],
+        "uri": "tbxnkko_PopupClay_1440.png"
+      },
+      {
+        "contentLength": 4922303,
+        "resolution": "1920x1080",
+        "tags": [
+          "preview",
+          "clay"
+        ],
+        "uri": "tbxnkko_PopupClay_1920.png"
+      },
+      {
+        "contentLength": 10406367,
+        "resolution": "2880x1536",
+        "tags": [
+          "preview",
+          "clay",
+          "retina"
+        ],
+        "uri": "tbxnkko_PopupClay_2880.png"
+      },
+      {
+        "contentLength": 19451284,
+        "resolution": "3840x2160",
+        "tags": [
+          "preview",
+          "clay",
+          "retina"
+        ],
+        "uri": "tbxnkko_PopupClay_3840.png"
+      },
+      {
+        "contentLength": 2937601,
+        "resolution": "1440x768",
+        "tags": [
+          "preview"
+        ],
+        "uri": "tbxnkko_Popup_1440.png"
+      },
+      {
+        "contentLength": 5440639,
+        "resolution": "1920x1080",
+        "tags": [
+          "preview"
+        ],
+        "uri": "tbxnkko_Popup_1920.png"
+      },
+      {
+        "contentLength": 11413824,
+        "resolution": "2880x1536",
+        "tags": [
+          "preview",
+          "retina"
+        ],
+        "uri": "tbxnkko_Popup_2880.png"
+      },
+      {
+        "contentLength": 21415376,
+        "resolution": "3840x2160",
+        "tags": [
+          "preview",
+          "retina"
+        ],
+        "uri": "tbxnkko_Popup_3840.png"
+      }
+    ],
+    "relativeSize": "1x1",
+    "scaleReferences": []
+  },
+  "process_date": "2024-04-17 11:28:13",
+  "properties": [],
+  "referencePreviews": {
+    "maps": [],
+    "models": []
+  },
+  "references": [],
+  "revised": false,
+  "semanticTags": {
+    "architectural_style": {},
+    "asset_type": "decal",
+    "color": [
+      "orange",
+      "brown",
+      "yellow"
+    ],
+    "contains": [
+      "flowers",
+      "petals"
+    ],
+    "descriptive": [
+      "dense scatter",
+      " marigold",
+      " dry",
+      " dead"
+    ],
+    "environment": [
+      "grassland biome",
+      "rainforest biome",
+      "fresh water biome",
+      "tropical jungle biome"
+    ],
+    "industry": [
+      "archviz",
+      "games",
+      "VFX"
+    ],
+    "interior_exterior": [],
+    "locations": {
+      "Global": {
+        "Global": {}
+      }
+    },
+    "maxSize": 2,
+    "minSize": 2,
+    "name": "Fresh and Dried Tagetes",
+    "orientation": [],
+    "resolution": 16384,
+    "state": [
+      "old",
+      "damaged"
+    ],
+    "subject_matter": "nature",
+    "theme": [
+      ""
+    ]
+  },
+  "tags": [
+    "decal",
+    "saturated",
+    "vivid",
+    "orange",
+    "brown",
+    "yellow",
+    "scatter",
+    "scattered",
+    "marigold",
+    "archviz"
+  ],
+  "texelDensity": 8192,
+  "texture_type": "basic",
+  "ue_plugin_archives": [
+    {
+      "contentLength": 284557273,
+      "gltfVersion": "2.0",
+      "tier": 0,
+      "type": "gltf",
+      "uri": "ue_plugin_archives/tier_0/tbxnkko_tier_0.zip",
+      "version": 1
+    },
+    {
+      "contentLength": 83519264,
+      "gltfVersion": "2.0",
+      "tier": 1,
+      "type": "gltf",
+      "uri": "ue_plugin_archives/tier_1/tbxnkko_tier_1.zip",
+      "version": 1
+    },
+    {
+      "contentLength": 23417224,
+      "gltfVersion": "2.0",
+      "tier": 2,
+      "type": "gltf",
+      "uri": "ue_plugin_archives/tier_2/tbxnkko_tier_2.zip",
+      "version": 1
+    },
+    {
+      "contentLength": 4178895,
+      "gltfVersion": "2.0",
+      "tier": 3,
+      "type": "gltf",
+      "uri": "ue_plugin_archives/tier_3/tbxnkko_tier_3.zip",
+      "version": 1
+    }
+  ],
+  "version": 2
+}
