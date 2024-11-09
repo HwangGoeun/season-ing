@@ -1,4 +1,4 @@
-rotate = 0;
+rotate = 1;
 viewAll = 1;
 
 window.onload = function init() {
@@ -94,11 +94,11 @@ window.onload = function init() {
   const loader = new THREE.TextureLoader();
 
   // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
-  const baseColor = loader.load("./textures/Snow_004_COLOR.jpg"); // 기본 색상 텍스처
-  const normalMap = loader.load("./textures/Snow_004_NORM.jpg"); // 노멀 맵 (표면의 작은 굴곡 표현)
-  const roughnessMap = loader.load("./textures/Snow_004_ROUGH.jpg"); // 거칠기 맵 (표면의 거칠기 표현)
-  const heightMap = loader.load("./textures/Snow_004_DISP.png"); // 높이 맵 (높낮이 변화를 표현)
-  const ambientOcclusionMap = loader.load("./textures/Snow_004_OCC.jpg"); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
+  let baseColor = loader.load("./textures/Snow_004_COLOR.jpg"); // 기본 색상 텍스처
+  let normalMap = loader.load("./textures/Snow_004_NORM.jpg"); // 노멀 맵 (표면의 작은 굴곡 표현)
+  let roughnessMap = loader.load("./textures/Snow_004_ROUGH.jpg"); // 거칠기 맵 (표면의 거칠기 표현)
+  let heightMap = loader.load("./textures/Snow_004_DISP.png"); // 높이 맵 (높낮이 변화를 표현)
+  let ambientOcclusionMap = loader.load("./textures/Snow_004_OCC.jpg"); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
 
   // 텍스처 반복 및 스케일 설정 (더 큰 구체에 텍스처를 여러 번 반복 적용)
   baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping; // 텍스처를 반복시키도록 설정 (가로, 세로 방향)
@@ -126,7 +126,7 @@ window.onload = function init() {
   const segments = 256; // 구체를 렌더링할 때 사용할 세그먼트 수 (세부 표현도를 높임)
   const rotation = 6; // 구체의 초기 회전 각도 설정
 
-  const sphere = new THREE.Mesh(
+  const sphere_spring = new THREE.Mesh(
     new THREE.SphereGeometry(radius, segments, segments),
     new THREE.MeshStandardMaterial({
       map: baseColor, // 기본 색상 텍스처
@@ -139,11 +139,218 @@ window.onload = function init() {
       displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
     })
   );
-  sphere.receiveShadow = true;
-  scene.add(sphere);
+  // 새로운 텍스처 파일 로드
+  baseColor = loader.load(
+    "./textures/Poliigon_GrassPatchyGround_4585_BaseColor.jpg"
+  ); // 기본 색상 텍스처
+  normalMap = loader.load(
+    "./textures/Poliigon_GrassPatchyGround_4585_Normal.jpg"
+  ); // 노멀 맵
+  roughnessMap = loader.load(
+    "./textures/Poliigon_GrassPatchyGround_4585_Roughness.jpg"
+  ); // 거칠기 맵
+  heightMap = loader.load(
+    "./textures/Poliigon_GrassPatchyGround_4585_Displacement.tiff"
+  ); // 높이 맵
+  ambientOcclusionMap = loader.load(
+    "./textures/Poliigon_GrassPatchyGround_4585_AmbientOcclusion.jpg"
+  ); // 주변광 차단 맵
+
+  // 텍스처 반복 및 스케일 설정
+  baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
+  baseColor.repeat.set(1, 1);
+
+  normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+  normalMap.repeat.set(1, 1);
+
+  roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+  roughnessMap.repeat.set(1, 1);
+
+  heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
+  heightMap.repeat.set(1, 1);
+
+  ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
+  ambientOcclusionMap.repeat.set(1, 1);
+
+  // 구의 재질 텍스처 업데이트
+  sphere_spring.material.map = baseColor;
+  sphere_spring.material.normalMap = normalMap;
+  sphere_spring.material.roughnessMap = roughnessMap;
+  sphere_spring.material.displacementMap = heightMap;
+  sphere_spring.material.aoMap = ambientOcclusionMap;
+  scene.add(sphere_spring);
+
+  const sphere_summer = new THREE.Mesh(
+    new THREE.SphereGeometry(radius, segments, segments),
+    new THREE.MeshStandardMaterial({
+      map: baseColor, // 기본 색상 텍스처
+      normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
+      roughnessMap: roughnessMap, // 거칠기 맵 적용
+      displacementMap: heightMap, // 높이 맵 적용 (표면의 높낮이 표현)
+      aoMap: ambientOcclusionMap, // 주변광 차단 맵 적용
+      roughness: 0.8, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
+      metalness: 0.0, // 금속성 제거 (0으로 설정하여 금속 느낌 없앰)
+      displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
+    })
+  );
+  sphere_summer.position.x = 24;
+  // 새로운 텍스처 파일 로드
+  baseColor = loader.load("./textures/Stylized_Sand_001_basecolor.jpg");
+  normalMap = loader.load("./textures/Stylized_Sand_001_normal.jpg");
+  roughnessMap = loader.load("./textures/Stylized_Sand_001_roughness.jpg");
+  heightMap = loader.load("./textures/Stylized_Sand_001_height.png");
+  ambientOcclusionMap = loader.load(
+    "./textures/Stylized_Sand_001_ambientOcclusion.jpg"
+  );
+
+  // 텍스처 반복 및 스케일 설정
+  baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
+  baseColor.repeat.set(6, 6);
+
+  normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+  normalMap.repeat.set(6, 6);
+
+  roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+  roughnessMap.repeat.set(6, 6);
+
+  heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
+  heightMap.repeat.set(6, 6);
+
+  ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
+  ambientOcclusionMap.repeat.set(6, 6);
+
+  // 구의 재질 텍스처 업데이트
+  sphere_summer.material.map = baseColor;
+  sphere_summer.material.normalMap = normalMap;
+  sphere_summer.material.roughnessMap = roughnessMap;
+  sphere_summer.material.displacementMap = heightMap;
+  sphere_summer.material.aoMap = ambientOcclusionMap;
+
+  // 텍스처 업데이트 반영
+  sphere_summer.material.needsUpdate = true;
+  scene.add(sphere_summer);
+
+  const sphere_autumn = new THREE.Mesh(
+    new THREE.SphereGeometry(radius, segments, segments),
+    new THREE.MeshStandardMaterial({
+      map: baseColor, // 기본 색상 텍스처
+      normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
+      roughnessMap: roughnessMap, // 거칠기 맵 적용
+      displacementMap: heightMap, // 높이 맵 적용 (표면의 높낮이 표현)
+      aoMap: ambientOcclusionMap, // 주변광 차단 맵 적용
+      roughness: 0.8, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
+      metalness: 0.0, // 금속성 제거 (0으로 설정하여 금속 느낌 없앰)
+      displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
+    })
+  );
+  sphere_autumn.position.x = 48;
+
+  // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
+  baseColor = loader.load(
+    "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_BaseColor.jpg"
+  ); // 기본 색상 텍스처
+  normalMap = loader.load(
+    "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Normal.jpg"
+  ); // 노멀 맵 (표면의 작은 굴곡 표현)
+  roughnessMap = loader.load(
+    "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Roughness.jpg"
+  ); // 거칠기 맵 (표면의 거칠기 표현)
+  heightMap = loader.load(
+    "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Bump.jpg"
+  ); // 높이 맵 (높낮이 변화를 표현)
+  ambientOcclusionMap = loader.load(
+    "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_AO.jpg"
+  ); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
+
+  // 텍스처 반복 및 스케일 설정
+  baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
+  baseColor.repeat.set(10, 10);
+
+  normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+  normalMap.repeat.set(1, 1);
+
+  roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+  roughnessMap.repeat.set(1, 1);
+
+  heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
+  heightMap.repeat.set(1, 1);
+
+  ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
+  ambientOcclusionMap.repeat.set(1, 1);
+
+  // 구의 재질 텍스처 업데이트
+  sphere_autumn.material.map = baseColor;
+  sphere_autumn.material.normalMap = normalMap;
+  sphere_autumn.material.roughnessMap = roughnessMap;
+  sphere_autumn.material.displacementMap = heightMap;
+  sphere_autumn.material.aoMap = ambientOcclusionMap;
+
+  // 텍스처 업데이트 반영
+  sphere_autumn.material.needsUpdate = true;
+  scene.add(sphere_autumn);
+
+  const sphere_winter = new THREE.Mesh(
+    new THREE.SphereGeometry(radius, segments, segments),
+    new THREE.MeshStandardMaterial({
+      map: baseColor, // 기본 색상 텍스처
+      normalMap: normalMap, // 노멀 맵 적용 (표면 굴곡 표현)
+      roughnessMap: roughnessMap, // 거칠기 맵 적용
+      displacementMap: heightMap, // 높이 맵 적용 (표면의 높낮이 표현)
+      aoMap: ambientOcclusionMap, // 주변광 차단 맵 적용
+      roughness: 0.8, // 표면의 거칠기 설정 (값이 클수록 거칠어짐)
+      metalness: 0.0, // 금속성 제거 (0으로 설정하여 금속 느낌 없앰)
+      displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
+    })
+  );
+  sphere_winter.position.x = 72;
+  // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
+  baseColor = loader.load("./textures/Snow_004_COLOR.jpg"); // 기본 색상 텍스처
+  normalMap = loader.load("./textures/Snow_004_NORM.jpg"); // 노멀 맵 (표면의 작은 굴곡 표현)
+  roughnessMap = loader.load("./textures/Snow_004_ROUGH.jpg"); // 거칠기 맵 (표면의 거칠기 표현)
+  heightMap = loader.load("./textures/Snow_004_DISP.png"); // 높이 맵 (높낮이 변화를 표현)
+  ambientOcclusionMap = loader.load("./textures/Snow_004_OCC.jpg"); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
+
+  // 텍스처 반복 및 스케일 설정
+  baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
+  baseColor.repeat.set(4, 4);
+
+  normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+  normalMap.repeat.set(1, 1);
+
+  roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+  roughnessMap.repeat.set(1, 1);
+
+  heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
+  heightMap.repeat.set(1, 1);
+
+  ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
+  ambientOcclusionMap.repeat.set(1, 1);
+
+  // 구의 재질 텍스처 업데이트
+  sphere_winter.material.map = baseColor;
+  sphere_winter.material.normalMap = normalMap;
+  sphere_winter.material.roughnessMap = roughnessMap;
+  sphere_winter.material.displacementMap = heightMap;
+  sphere_winter.material.aoMap = ambientOcclusionMap;
+
+  // 텍스처 업데이트 반영
+  sphere_winter.material.needsUpdate = true;
+  scene.add(sphere_winter);
+
+  // const sphere = new THREE.Mesh(
+  //   new THREE.SphereGeometry(radius, segments, segments),
+  //   new THREE.MeshStandardMaterial({
+  //     color: 0xc7d26,
+  //     roughness: 0.8,
+  //     metalness: 0.1,
+  //   })
+  // );
+  // sphere.receiveShadow = true;
+  // sphere.position.x = 5;
 
   function placeObject(
     filePath,
+    sphere = null,
     scaleX = 0,
     scaleY = 0,
     scaleZ = 0,
@@ -177,7 +384,7 @@ window.onload = function init() {
         obj.rotation.x += rotX;
         obj.rotation.y += rotY;
         obj.rotation.z += rotZ;
-        render();
+        // render();
       },
       undefined,
       function (error) {
@@ -189,7 +396,7 @@ window.onload = function init() {
   let modelName = "./models/small_tree/prune_tree_1.gltf";
   console.log("model name:", modelName);
 
-  function createTree() {
+  function createTree(sphere) {
     let models;
     gltf_loader.load(
       modelName,
@@ -466,7 +673,7 @@ window.onload = function init() {
       }
 
       scene.add(gltf.scene);
-      render();
+      // render();
     },
     undefined,
     function (error) {
@@ -513,7 +720,7 @@ window.onload = function init() {
               jumpUp = true; // 다시 점프할 수 있도록 준비
             }
           }
-          render();
+          // render();
         }, 16); // 약 60fps로 렌더링
       }
     }
@@ -609,9 +816,9 @@ window.onload = function init() {
       "./models/spring/low-_poly_cherry_blossom_tree_3d_models/scene.gltf";
 
     // 기존 나무들을 삭제
-    while (sphere.children.length > 0) {
-      sphere.remove(sphere.children[0]);
-    }
+    // while (sphere.children.length > 0) {
+    //   sphere.remove(sphere.children[0]);
+    // }
 
     // 새 모델을 사용해 나무를 다시 생성
     // createTree();
@@ -651,7 +858,7 @@ window.onload = function init() {
           // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
           objCopy.position.setFromSphericalCoordsYZ(radius, phi, theta);
           objCopy.rotation.x += i;
-          sphere.add(objCopy);
+          sphere_spring.add(objCopy);
         }
 
         for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
@@ -662,7 +869,7 @@ window.onload = function init() {
           objCopy.position.setFromSphericalCoordsYZ(radius, phi, theta);
           objCopy.rotation.x += i;
           objCopy.rotation.y = 90;
-          sphere.add(objCopy);
+          sphere_spring.add(objCopy);
         }
       },
       undefined,
@@ -681,51 +888,52 @@ window.onload = function init() {
     // }
 
     createFence();
-    // 새로운 텍스처 파일 로드
-    const baseColor = loader.load(
-      "./textures/Poliigon_GrassPatchyGround_4585_BaseColor.jpg"
-    ); // 기본 색상 텍스처
-    const normalMap = loader.load(
-      "./textures/Poliigon_GrassPatchyGround_4585_Normal.jpg"
-    ); // 노멀 맵
-    const roughnessMap = loader.load(
-      "./textures/Poliigon_GrassPatchyGround_4585_Roughness.jpg"
-    ); // 거칠기 맵
-    const heightMap = loader.load(
-      "./textures/Poliigon_GrassPatchyGround_4585_Displacement.tiff"
-    ); // 높이 맵
-    const ambientOcclusionMap = loader.load(
-      "./textures/Poliigon_GrassPatchyGround_4585_AmbientOcclusion.jpg"
-    ); // 주변광 차단 맵
+    // // 새로운 텍스처 파일 로드
+    // const baseColor = loader.load(
+    //   "./textures/Poliigon_GrassPatchyGround_4585_BaseColor.jpg"
+    // ); // 기본 색상 텍스처
+    // const normalMap = loader.load(
+    //   "./textures/Poliigon_GrassPatchyGround_4585_Normal.jpg"
+    // ); // 노멀 맵
+    // const roughnessMap = loader.load(
+    //   "./textures/Poliigon_GrassPatchyGround_4585_Roughness.jpg"
+    // ); // 거칠기 맵
+    // const heightMap = loader.load(
+    //   "./textures/Poliigon_GrassPatchyGround_4585_Displacement.tiff"
+    // ); // 높이 맵
+    // const ambientOcclusionMap = loader.load(
+    //   "./textures/Poliigon_GrassPatchyGround_4585_AmbientOcclusion.jpg"
+    // ); // 주변광 차단 맵
 
-    // 텍스처 반복 및 스케일 설정
-    baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
-    baseColor.repeat.set(1, 1);
+    // // 텍스처 반복 및 스케일 설정
+    // baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
+    // baseColor.repeat.set(1, 1);
 
-    normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-    normalMap.repeat.set(1, 1);
+    // normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+    // normalMap.repeat.set(1, 1);
 
-    roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
-    roughnessMap.repeat.set(1, 1);
+    // roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+    // roughnessMap.repeat.set(1, 1);
 
-    heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
-    heightMap.repeat.set(1, 1);
+    // heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
+    // heightMap.repeat.set(1, 1);
 
-    ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
-      THREE.RepeatWrapping;
-    ambientOcclusionMap.repeat.set(1, 1);
+    // ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
+    //   THREE.RepeatWrapping;
+    // ambientOcclusionMap.repeat.set(1, 1);
 
-    // 구의 재질 텍스처 업데이트
-    sphere.material.map = baseColor;
-    sphere.material.normalMap = normalMap;
-    sphere.material.roughnessMap = roughnessMap;
-    sphere.material.displacementMap = heightMap;
-    sphere.material.aoMap = ambientOcclusionMap;
+    // // 구의 재질 텍스처 업데이트
+    // sphere_spring.material.map = baseColor;
+    // sphere_spring.material.normalMap = normalMap;
+    // sphere_spring.material.roughnessMap = roughnessMap;
+    // sphere_spring.material.displacementMap = heightMap;
+    // sphere_spring.material.aoMap = ambientOcclusionMap;
 
-    // 텍스처 업데이트 반영
-    sphere.material.needsUpdate = true;
+    // // 텍스처 업데이트 반영
+    // sphere.material.needsUpdate = true;
     placeObject(
       (filePath = "./models/spring/chick_trio_gltf/scene.gltf"),
+      (sphere = sphere_spring),
       (scaleX = 0.5),
       (scaleY = 0.5),
       (scaleZ = 0.5),
@@ -736,6 +944,7 @@ window.onload = function init() {
 
     placeObject(
       (filePath = "./models/spring/pink_big_tree/scene.gltf"),
+      (sphere = sphere_spring),
       (scaleX = 0.002),
       (scaleY = 0.002),
       (scaleZ = 0.002),
@@ -746,6 +955,7 @@ window.onload = function init() {
 
     placeObject(
       (filePath = "./models/spring/low_poly_camper/scene.gltf"),
+      (sphere = sphere_spring),
       (scaleX = 0.2),
       (scaleY = 0.2),
       (scaleZ = 0.2),
@@ -755,6 +965,7 @@ window.onload = function init() {
     );
     placeObject(
       (filePath = "./models/spring/picnic_set_free_gltf/scene.gltf"),
+      (sphere = sphere_spring),
       (scaleX = 0.42),
       (scaleY = 0.42),
       (scaleZ = 0.42),
@@ -766,6 +977,7 @@ window.onload = function init() {
     placeObject(
       (filePath =
         "./models/spring/japanese_cherry_blossom_-_single_flower/scene.gltf"),
+      (sphere = sphere_spring),
       (scaleX = 5),
       (scaleY = 5),
       (scaleZ = 5),
@@ -777,6 +989,7 @@ window.onload = function init() {
 
     placeObject(
       (filePath = "./models/spring/hot_air_baloon/scene.gltf"),
+      (sphere = sphere_spring),
       (scaleX = 1),
       (scaleY = 1),
       (scaleZ = 1),
@@ -794,6 +1007,7 @@ window.onload = function init() {
 
     placeObject(
       (filePath = "./models/spring/pink_big_tree/scene.gltf"),
+      (sphere = sphere_spring),
       (scaleX = 0.002),
       (scaleY = 0.002),
       (scaleZ = 0.002),
@@ -804,6 +1018,7 @@ window.onload = function init() {
 
     placeObject(
       (filePath = "./models/spring/cute_chick/scene.gltf"),
+      (sphere = sphere_spring),
       (scaleX = 0.4),
       (scaleY = 0.4),
       (scaleZ = 0.4),
@@ -816,6 +1031,7 @@ window.onload = function init() {
 
     placeObject(
       (filePath = "./models/spring/pink_big_tree/scene.gltf"),
+      (sphere = sphere_spring),
       (scaleX = 0.002),
       (scaleY = 0.002),
       (scaleZ = 0.002),
@@ -834,9 +1050,9 @@ window.onload = function init() {
     modelName = "./models/summer/tree/scene.gltf";
 
     // 기존 나무들을 삭제
-    while (sphere.children.length > 0) {
-      sphere.remove(sphere.children[0]);
-    }
+    // while (sphere.children.length > 0) {
+    //   sphere.remove(sphere.children[0]);
+    // }
 
     function createTree() {
       let models;
@@ -862,7 +1078,7 @@ window.onload = function init() {
             // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
             objCopy.position.setFromSphericalCoordsYZ(radius - 0.2, phi, theta);
             objCopy.rotation.x += i;
-            sphere.add(objCopy);
+            sphere_summer.add(objCopy);
           }
 
           for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
@@ -872,7 +1088,7 @@ window.onload = function init() {
             // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
             objCopy.position.setFromSphericalCoordsYZ(radius - 0.2, phi, theta);
             objCopy.rotation.x += i;
-            sphere.add(objCopy);
+            sphere_summer.add(objCopy);
           }
         },
         undefined,
@@ -882,12 +1098,13 @@ window.onload = function init() {
       );
     }
 
-    // 새 모델을 사용해 나무를 다시 생성
+    // // 새 모델을 사용해 나무를 다시 생성
     createTree();
     //createFence();
 
     placeObject(
       "./models/summer/umbrella/scene.gltf",
+      sphere_summer,
       0.8,
       0.8,
       0.8,
@@ -898,6 +1115,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/beachball/scene.gltf",
+      sphere_summer,
       0.6,
       0.6,
       0.6,
@@ -908,6 +1126,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/icecream/scene.gltf",
+      sphere_summer,
       0.002,
       0.002,
       0.002,
@@ -921,6 +1140,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/beach_chair_blue_stripes/scene.gltf",
+      sphere_summer,
       0.4,
       0.4,
       0.4,
@@ -934,6 +1154,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/beach_chair_blue_stripes/scene.gltf",
+      sphere_summer,
       0.4,
       0.4,
       0.4,
@@ -947,6 +1168,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/surfboard/scene.gltf",
+      sphere_summer,
       0.3,
       0.3,
       0.3,
@@ -959,6 +1181,7 @@ window.onload = function init() {
     );
     placeObject(
       "./models/summer/sandcastle/scene.gltf",
+      sphere_summer,
       0.004,
       0.004,
       0.004,
@@ -972,6 +1195,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/tubeseries/scene.gltf",
+      sphere_summer,
       0.8,
       0.8,
       0.8,
@@ -985,6 +1209,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/unicorntube/scene.gltf",
+      sphere_summer,
       0.3,
       0.3,
       0.3,
@@ -998,6 +1223,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/umbrella/scene.gltf",
+      sphere_summer,
       0.8,
       0.8,
       0.8,
@@ -1011,6 +1237,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/beachball/scene.gltf",
+      sphere_summer,
       0.5,
       0.5,
       0.5,
@@ -1024,6 +1251,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/beachset/scene.gltf",
+      sphere_summer,
       0.5,
       0.5,
       0.5,
@@ -1037,6 +1265,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/table/scene.gltf",
+      sphere_summer,
       0.04,
       0.04,
       0.04,
@@ -1050,6 +1279,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/drink/malibu/scene.gltf",
+      sphere_summer,
       0.05,
       0.05,
       0.05,
@@ -1063,6 +1293,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/table/scene.gltf",
+      sphere_summer,
       0.04,
       0.04,
       0.04,
@@ -1076,6 +1307,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/drink/summerdrink/scene.gltf",
+      sphere_summer,
       0.015,
       0.015,
       0.015,
@@ -1087,21 +1319,23 @@ window.onload = function init() {
       -3
     );
 
-    placeObject(
-      "./models/summer/sandcastle/scene.gltf",
-      0.004,
-      0.004,
-      0.004,
-      radius - 0.3,
-      2.3,
-      0.4,
-      0,
-      Math.PI,
-      -0.7
-    );
+    // placeObject(
+    //   "./models/summer/sandcastle/scene.gltf",
+    //   sphere_summer,
+    //   0.004,
+    //   0.004,
+    //   0.004,
+    //   radius - 0.3,
+    //   2.3,
+    //   0.4,
+    //   0,
+    //   Math.PI,
+    //   -0.7
+    // );
 
     placeObject(
       "./models/summer/cactus/scene.gltf",
+      sphere_summer,
       0.15,
       0.15,
       0.15,
@@ -1115,6 +1349,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/palmtree/scene.gltf",
+      sphere_summer,
       0.1,
       0.1,
       0.1,
@@ -1128,6 +1363,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/palmtree/scene.gltf",
+      sphere_summer,
       0.07,
       0.07,
       0.07,
@@ -1141,6 +1377,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/parasol/scene.gltf",
+      sphere_summer,
       0.2,
       0.2,
       0.2,
@@ -1154,6 +1391,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/beach_chair_blue_stripes/scene.gltf",
+      sphere_summer,
       0.4,
       0.4,
       0.4,
@@ -1167,6 +1405,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/beach_chair_blue_stripes/scene.gltf",
+      sphere_summer,
       0.4,
       0.4,
       0.4,
@@ -1180,6 +1419,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/cactus/scene.gltf",
+      sphere_summer,
       0.15,
       0.15,
       0.15,
@@ -1193,6 +1433,7 @@ window.onload = function init() {
 
     placeObject(
       "./models/summer/rainbowtube/scene.gltf",
+      sphere_summer,
       0.15,
       0.15,
       0.15,
@@ -1204,43 +1445,43 @@ window.onload = function init() {
       2
     );
 
-    // 새로운 텍스처 파일 로드
-    const baseColor = loader.load("./textures/Stylized_Sand_001_basecolor.jpg");
-    const normalMap = loader.load("./textures/Stylized_Sand_001_normal.jpg");
-    const roughnessMap = loader.load(
-      "./textures/Stylized_Sand_001_roughness.jpg"
-    );
-    const heightMap = loader.load("./textures/Stylized_Sand_001_height.png");
-    const ambientOcclusionMap = loader.load(
-      "./textures/Stylized_Sand_001_ambientOcclusion.jpg"
-    );
+    // // 새로운 텍스처 파일 로드
+    // const baseColor = loader.load("./textures/Stylized_Sand_001_basecolor.jpg");
+    // const normalMap = loader.load("./textures/Stylized_Sand_001_normal.jpg");
+    // const roughnessMap = loader.load(
+    //   "./textures/Stylized_Sand_001_roughness.jpg"
+    // );
+    // const heightMap = loader.load("./textures/Stylized_Sand_001_height.png");
+    // const ambientOcclusionMap = loader.load(
+    //   "./textures/Stylized_Sand_001_ambientOcclusion.jpg"
+    // );
 
-    // 텍스처 반복 및 스케일 설정
-    baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
-    baseColor.repeat.set(6, 6);
+    // // 텍스처 반복 및 스케일 설정
+    // baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
+    // baseColor.repeat.set(6, 6);
 
-    normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-    normalMap.repeat.set(6, 6);
+    // normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+    // normalMap.repeat.set(6, 6);
 
-    roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
-    roughnessMap.repeat.set(6, 6);
+    // roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+    // roughnessMap.repeat.set(6, 6);
 
-    heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
-    heightMap.repeat.set(6, 6);
+    // heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
+    // heightMap.repeat.set(6, 6);
 
-    ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
-      THREE.RepeatWrapping;
-    ambientOcclusionMap.repeat.set(6, 6);
+    // ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
+    //   THREE.RepeatWrapping;
+    // ambientOcclusionMap.repeat.set(6, 6);
 
-    // 구의 재질 텍스처 업데이트
-    sphere.material.map = baseColor;
-    sphere.material.normalMap = normalMap;
-    sphere.material.roughnessMap = roughnessMap;
-    sphere.material.displacementMap = heightMap;
-    sphere.material.aoMap = ambientOcclusionMap;
+    // // 구의 재질 텍스처 업데이트
+    // sphere.material.map = baseColor;
+    // sphere.material.normalMap = normalMap;
+    // sphere.material.roughnessMap = roughnessMap;
+    // sphere.material.displacementMap = heightMap;
+    // sphere.material.aoMap = ambientOcclusionMap;
 
-    // 텍스처 업데이트 반영
-    sphere.material.needsUpdate = true;
+    // // 텍스처 업데이트 반영
+    // sphere.material.needsUpdate = true;
   }
 
   /* ----- */
@@ -1253,60 +1494,60 @@ window.onload = function init() {
     modelName = "./models/small_tree/pretty_big_tree_3.gltf";
 
     // 기존 나무들을 삭제
-    while (sphere.children.length > 0) {
-      sphere.remove(sphere.children[0]);
-    }
+    // while (sphere.children.length > 0) {
+    //   sphere.remove(sphere.children[0]);
+    // }
 
     // 새 모델을 사용해 나무를 다시 생성
-    // createTree();
-    createBush();
-    createFence();
-    createFallTree();
-    createBench();
-    createFlowerBush();
-    // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
-    const baseColor = loader.load(
-      "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_BaseColor.jpg"
-    ); // 기본 색상 텍스처
-    const normalMap = loader.load(
-      "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Normal.jpg"
-    ); // 노멀 맵 (표면의 작은 굴곡 표현)
-    const roughnessMap = loader.load(
-      "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Roughness.jpg"
-    ); // 거칠기 맵 (표면의 거칠기 표현)
-    const heightMap = loader.load(
-      "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Bump.jpg"
-    ); // 높이 맵 (높낮이 변화를 표현)
-    const ambientOcclusionMap = loader.load(
-      "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_AO.jpg"
-    ); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
+    createTree();
+    // createBush();
+    // createFence();
+    // createFallTree();
+    // createBench();
+    // createFlowerBush();
+    // // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
+    // const baseColor = loader.load(
+    //   "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_BaseColor.jpg"
+    // ); // 기본 색상 텍스처
+    // const normalMap = loader.load(
+    //   "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Normal.jpg"
+    // ); // 노멀 맵 (표면의 작은 굴곡 표현)
+    // const roughnessMap = loader.load(
+    //   "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Roughness.jpg"
+    // ); // 거칠기 맵 (표면의 거칠기 표현)
+    // const heightMap = loader.load(
+    //   "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Bump.jpg"
+    // ); // 높이 맵 (높낮이 변화를 표현)
+    // const ambientOcclusionMap = loader.load(
+    //   "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_AO.jpg"
+    // ); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
 
-    // 텍스처 반복 및 스케일 설정
-    baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
-    baseColor.repeat.set(10, 10);
+    // // 텍스처 반복 및 스케일 설정
+    // baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
+    // baseColor.repeat.set(10, 10);
 
-    normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-    normalMap.repeat.set(1, 1);
+    // normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+    // normalMap.repeat.set(1, 1);
 
-    roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
-    roughnessMap.repeat.set(1, 1);
+    // roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+    // roughnessMap.repeat.set(1, 1);
 
-    heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
-    heightMap.repeat.set(1, 1);
+    // heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
+    // heightMap.repeat.set(1, 1);
 
-    ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
-      THREE.RepeatWrapping;
-    ambientOcclusionMap.repeat.set(1, 1);
+    // ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
+    //   THREE.RepeatWrapping;
+    // ambientOcclusionMap.repeat.set(1, 1);
 
-    // 구의 재질 텍스처 업데이트
-    sphere.material.map = baseColor;
-    sphere.material.normalMap = normalMap;
-    sphere.material.roughnessMap = roughnessMap;
-    sphere.material.displacementMap = heightMap;
-    sphere.material.aoMap = ambientOcclusionMap;
+    // // 구의 재질 텍스처 업데이트
+    // sphere.material.map = baseColor;
+    // sphere.material.normalMap = normalMap;
+    // sphere.material.roughnessMap = roughnessMap;
+    // sphere.material.displacementMap = heightMap;
+    // sphere.material.aoMap = ambientOcclusionMap;
 
-    // 텍스처 업데이트 반영
-    sphere.material.needsUpdate = true;
+    // // 텍스처 업데이트 반영
+    // sphere.material.needsUpdate = true;
   }
 
   /* ----- */
@@ -1319,9 +1560,9 @@ window.onload = function init() {
     modelName = "./models/winterObject/snowTree/scene.gltf";
 
     // 기존 나무들을 삭제
-    while (sphere.children.length > 0) {
-      sphere.remove(sphere.children[0]);
-    }
+    // while (sphere.children.length > 0) {
+    //   sphere.remove(sphere.children[0]);
+    // }
 
     function createTree() {
       let models;
@@ -1347,7 +1588,7 @@ window.onload = function init() {
             // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
             objCopy.position.setFromSphericalCoordsYZ(radius + 0.5, phi, theta);
             objCopy.rotation.x += i;
-            sphere.add(objCopy);
+            sphere_winter.add(objCopy);
           }
 
           for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
@@ -1357,7 +1598,7 @@ window.onload = function init() {
             // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
             objCopy.position.setFromSphericalCoordsYZ(radius + 0.5, phi, theta);
             objCopy.rotation.x += i;
-            sphere.add(objCopy);
+            sphere_winter.add(objCopy);
           }
         },
         undefined,
@@ -1369,6 +1610,7 @@ window.onload = function init() {
     //집 로드
     placeObject(
       "./models/winterObject/winter_house/scene.gltf",
+      sphere_winter,
       (scaleX = 0.1),
       (scaleY = 0.1),
       (scaleZ = 0.1),
@@ -1381,6 +1623,7 @@ window.onload = function init() {
     );
     placeObject(
       "./models/winterObject/winter_house/scene.gltf",
+      sphere_winter,
       (scaleX = 0.07),
       (scaleY = 0.07),
       (scaleZ = 0.07),
@@ -1393,6 +1636,7 @@ window.onload = function init() {
     );
     placeObject(
       "./models/winterObject/winter_house2/scene.gltf",
+      sphere_winter,
       (scaleX = 0.1),
       (scaleY = 0.1),
       (scaleZ = 0.1),
@@ -1405,6 +1649,7 @@ window.onload = function init() {
     );
     placeObject(
       "./models/winterObject/winter_house2/scene.gltf",
+      sphere_winter,
       (scaleX = 0.07),
       (scaleY = 0.07),
       (scaleZ = 0.07),
@@ -1417,6 +1662,7 @@ window.onload = function init() {
     );
     placeObject(
       "./models/winterObject/winter_house/scene.gltf",
+      sphere_winter,
       (scaleX = 0.1),
       (scaleY = 0.1),
       (scaleZ = 0.1),
@@ -1429,6 +1675,7 @@ window.onload = function init() {
     );
     placeObject(
       "./models/winterObject/winter_house/scene.gltf",
+      sphere_winter,
       (scaleX = 0.07),
       (scaleY = 0.07),
       (scaleZ = 0.07),
@@ -1441,6 +1688,7 @@ window.onload = function init() {
     );
     placeObject(
       "./models/winterObject/winter_house2/scene.gltf",
+      sphere_winter,
       (scaleX = 0.1),
       (scaleY = 0.1),
       (scaleZ = 0.1),
@@ -1453,6 +1701,7 @@ window.onload = function init() {
     );
     placeObject(
       "./models/winterObject/winter_house2/scene.gltf",
+      sphere_winter,
       (scaleX = 0.07),
       (scaleY = 0.07),
       (scaleZ = 0.07),
@@ -1466,6 +1715,7 @@ window.onload = function init() {
     //눈사람 로드
     placeObject(
       "./models/winterObject/snow_man/scene.gltf",
+      sphere_winter,
       (scaleX = 0.1),
       (scaleY = 0.1),
       (scaleZ = 0.1),
@@ -1478,6 +1728,7 @@ window.onload = function init() {
     );
     placeObject(
       "./models/winterObject/snow_man/scene.gltf",
+      sphere_winter,
       (scaleX = 0.1),
       (scaleY = 0.1),
       (scaleZ = 0.1),
@@ -1492,6 +1743,7 @@ window.onload = function init() {
     //산타 로드
     placeObject(
       "./models/winterObject/santa_s_sleigh_wip/scene.gltf",
+      sphere_winter,
       (scaleX = 0.3),
       (scaleY = 0.3),
       (scaleZ = 0.3),
@@ -1505,6 +1757,7 @@ window.onload = function init() {
     //스노우볼 로드
     placeObject(
       "./models/winterObject/christmas_ball/scene.gltf",
+      sphere_winter,
       (scaleX = 0.05),
       (scaleY = 0.05),
       (scaleZ = 0.05),
@@ -1518,6 +1771,7 @@ window.onload = function init() {
     //머그컵 로드
     placeObject(
       "./models/winterObject/christmas_hot_chocolate_with_marshmallow_snowman/scene.gltf",
+      sphere_winter,
       (scaleX = 5),
       (scaleY = 5),
       (scaleZ = 5),
@@ -1532,6 +1786,7 @@ window.onload = function init() {
     //크리스마스 트리 로드
     placeObject(
       "./models/winterObject/christmas_tree_polycraft/scene.gltf",
+      sphere_winter,
       (scaleX = 0.002),
       (scaleY = 0.002),
       (scaleZ = 0.002),
@@ -1545,6 +1800,7 @@ window.onload = function init() {
     // 캔디캐인 로드
     placeObject(
       "./models/winterObject/the_giftspenser/scene.gltf",
+      sphere_winter,
       (scaleX = 0.0005),
       (scaleY = 0.0005),
       (scaleZ = 0.0005),
@@ -1559,6 +1815,7 @@ window.onload = function init() {
     // 이글루 로드
     placeObject(
       "./models/winterObject/eggloo/scene.gltf",
+      sphere_winter,
       (scaleX = 0.015),
       (scaleY = 0.015),
       (scaleZ = 0.015),
@@ -1577,24 +1834,24 @@ window.onload = function init() {
       function (gltf) {
         const model = gltf.scene;
         model.scale.set(0.3, 0.3, 0.3);
-        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 60) {
+        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 12) {
           const objCopy = model.clone();
           let phi = Math.PI / 2.1;
           let theta = i;
           // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
           objCopy.position.setFromSphericalCoordsYZ(radius + 0.02, phi, theta);
           objCopy.rotation.x += i;
-          sphere.add(objCopy);
+          sphere_winter.add(objCopy);
         }
 
-        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 60) {
+        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 12) {
           const objCopy = model.clone();
           let phi = Math.PI - Math.PI / 2.1;
           let theta = i;
           // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
           objCopy.position.setFromSphericalCoordsYZ(radius + 0.02, phi, theta);
           objCopy.rotation.x += i;
-          sphere.add(objCopy);
+          sphere_winter.add(objCopy);
         }
       },
       undefined,
@@ -1603,45 +1860,47 @@ window.onload = function init() {
       }
     );
 
-    // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
-    const baseColor = loader.load("./textures/Snow_004_COLOR.jpg"); // 기본 색상 텍스처
-    const normalMap = loader.load("./textures/Snow_004_NORM.jpg"); // 노멀 맵 (표면의 작은 굴곡 표현)
-    const roughnessMap = loader.load("./textures/Snow_004_ROUGH.jpg"); // 거칠기 맵 (표면의 거칠기 표현)
-    const heightMap = loader.load("./textures/Snow_004_DISP.png"); // 높이 맵 (높낮이 변화를 표현)
-    const ambientOcclusionMap = loader.load("./textures/Snow_004_OCC.jpg"); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
+    // // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
+    // const baseColor = loader.load("./textures/Snow_004_COLOR.jpg"); // 기본 색상 텍스처
+    // const normalMap = loader.load("./textures/Snow_004_NORM.jpg"); // 노멀 맵 (표면의 작은 굴곡 표현)
+    // const roughnessMap = loader.load("./textures/Snow_004_ROUGH.jpg"); // 거칠기 맵 (표면의 거칠기 표현)
+    // const heightMap = loader.load("./textures/Snow_004_DISP.png"); // 높이 맵 (높낮이 변화를 표현)
+    // const ambientOcclusionMap = loader.load("./textures/Snow_004_OCC.jpg"); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
 
-    // 텍스처 반복 및 스케일 설정
-    baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
-    baseColor.repeat.set(4, 4);
+    // // 텍스처 반복 및 스케일 설정
+    // baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
+    // baseColor.repeat.set(4, 4);
 
-    normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-    normalMap.repeat.set(1, 1);
+    // normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+    // normalMap.repeat.set(1, 1);
 
-    roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
-    roughnessMap.repeat.set(1, 1);
+    // roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+    // roughnessMap.repeat.set(1, 1);
 
-    heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
-    heightMap.repeat.set(1, 1);
+    // heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
+    // heightMap.repeat.set(1, 1);
 
-    ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
-      THREE.RepeatWrapping;
-    ambientOcclusionMap.repeat.set(1, 1);
+    // ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
+    //   THREE.RepeatWrapping;
+    // ambientOcclusionMap.repeat.set(1, 1);
 
-    // 구의 재질 텍스처 업데이트
-    sphere.material.map = baseColor;
-    sphere.material.normalMap = normalMap;
-    sphere.material.roughnessMap = roughnessMap;
-    sphere.material.displacementMap = heightMap;
-    sphere.material.aoMap = ambientOcclusionMap;
+    // // 구의 재질 텍스처 업데이트
+    // sphere.material.map = baseColor;
+    // sphere.material.normalMap = normalMap;
+    // sphere.material.roughnessMap = roughnessMap;
+    // sphere.material.displacementMap = heightMap;
+    // sphere.material.aoMap = ambientOcclusionMap;
 
-    // 텍스처 업데이트 반영
-    sphere.material.needsUpdate = true;
+    // // 텍스처 업데이트 반영
+    // sphere.material.needsUpdate = true;
   }
 
   /* ------------------------------------------------------- */
 
   spring();
-
+  summer();
+  fall();
+  winter();
   /* --------------------------------------------------------------------------- */
   /* rendering*/
 
@@ -1657,7 +1916,8 @@ window.onload = function init() {
 
     // // Rotate sphere along the X-axis
     if (rotate) {
-      sphere.rotation.x -= 0.0001; // Adjust rotation speed as needed
+      sphere_spring.rotation.x -= 0.0001; // Adjust rotation speed as needed
+      sphere_summer.rotation.x -= 0.0001; // Adjust rotation speed as needed
     }
 
     // // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
@@ -1682,15 +1942,15 @@ window.onload = function init() {
     const x = orbitRadius * Math.cos(angle); // 왼쪽 90도에서 오른쪽 90도까지
     const z = orbitRadius * Math.sin(angle); // 고양이의 반대쪽으로 이동
     light.position.set(x, 0, -z); // 광원의 새로운 위치 설정
-    light.lookAt(sphere.position); // 광원이 고양이 쪽을 향하게 설정
+    light.lookAt(sphere_spring.position); // 광원이 고양이 쪽을 향하게 설정
 
     updateBackgroundColor();
 
     if (mixer) mixer.update(0.004); // Adjust timing for animation
     // Check for collision and keep cat on sphere
-    if (cat) {
-      keepCatOnSphere();
-    }
+    // if (cat) {
+    //   keepCatOnSphere();
+    // }
 
     // 그 외 렌더링 관련 코드
     renderer.render(scene, camera); // 현재 프레임을 렌더링
@@ -1701,14 +1961,14 @@ window.onload = function init() {
   window.addEventListener("resize", resizeCanvas);
 
   // 고양이 collision detection 수행
-  function keepCatOnSphere() {
-    const sphereCenter = sphere.position; // Sphere center
-    const catDirection = cat.position.clone().sub(sphereCenter).normalize(); // Direction vector from sphere to cat
+  // function keepCatOnSphere() {
+  //   const sphereCenter = sphere.position; // Sphere center
+  //   const catDirection = cat.position.clone().sub(sphereCenter).normalize(); // Direction vector from sphere to cat
 
-    // Adjust position so the cat stays on the surface of the sphere
-    const targetPosition = catDirection.multiplyScalar(radius + 0.03); // Offset to keep the cat slightly above the surface
-    cat.position.copy(targetPosition);
-  }
+  //   // Adjust position so the cat stays on the surface of the sphere
+  //   const targetPosition = catDirection.multiplyScalar(radius + 0.03); // Offset to keep the cat slightly above the surface
+  //   cat.position.copy(targetPosition);
+  // }
 
   // 초기 렌더링 함수 호출 (첫 프레임을 렌더링하기 위해 호출)
   render();
