@@ -1499,45 +1499,198 @@ window.onload = function init() {
     // }
 
     // 새 모델을 사용해 나무를 다시 생성
-    createTree();
+    // createTree();
     // createBush();
-    // createFence();
-    // createFallTree();
-    // createBench();
-    // createFlowerBush();
-    // // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
-    // const baseColor = loader.load(
-    //   "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_BaseColor.jpg"
-    // ); // 기본 색상 텍스처
-    // const normalMap = loader.load(
-    //   "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Normal.jpg"
-    // ); // 노멀 맵 (표면의 작은 굴곡 표현)
-    // const roughnessMap = loader.load(
-    //   "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Roughness.jpg"
-    // ); // 거칠기 맵 (표면의 거칠기 표현)
-    // const heightMap = loader.load(
-    //   "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_Bump.jpg"
-    // ); // 높이 맵 (높낮이 변화를 표현)
-    // const ambientOcclusionMap = loader.load(
-    //   "./textures/Fresh_and_Dried_Tagetes_tbxnkko_1K_AO.jpg"
-    // ); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
+    createFence();
+    createFallTree();
+    createBench();
+    createFlowerBush();
 
-    // // 텍스처 반복 및 스케일 설정
-    // baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
-    // baseColor.repeat.set(10, 10);
+    // 보라 집
+    gltf_loader.load(
+      "./models/village__town_assets/village_purple_house.gltf",
+      function (gltf) {
+        // 오른쪽 보라색 집 1
+        const model = gltf.scene;
+        model.scale.set(1, 1, 1);
+        model.position.setFromSphericalCoords(
+          radius + 0.7,
+          Math.PI / 8,
+          Math.PI / 2
+        );
+        model.rotation.z -= Math.PI / 8;
+        // model.position.x += 1;
+        // model.rotation.y -= Math.PI / 2;
+        sphere.add(model);
 
-    // normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-    // normalMap.repeat.set(1, 1);
+        // 왼쪽 보라색 집 1
+        const nex_objCopy_0 = model.clone();
+        nex_objCopy_0.position.setFromSphericalCoords(
+          radius + 0.8,
+          Math.PI / 4,
+          Math.PI + Math.PI / 8
+        );
+        nex_objCopy_0.rotation.z += Math.PI / 4.5;
+        nex_objCopy_0.rotation.x -= Math.PI / 5;
 
-    // roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
-    // roughnessMap.repeat.set(1, 1);
+        sphere.add(nex_objCopy_0);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
 
-    // heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
-    // heightMap.repeat.set(1, 1);
+    // 빨간 집
+    gltf_loader.load(
+      "./models/village__town_assets/village_red_house.gltf",
+      function (gltf) {
+        // 고양이 기준 바로 왼쪽 수풀 3개
+        const model = gltf.scene;
+        model.scale.set(1, 1, 1);
+        model.position.setFromSphericalCoords(
+          radius + 0.7,
+          Math.PI / 8,
+          Math.PI * 2 - Math.PI / 2.5
+        );
+        model.rotation.z += Math.PI / 8;
+        // model.position.x += 1;
+        // model.rotation.y -= Math.PI / 2;
+        sphere.add(model);
 
-    // ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
-    //   THREE.RepeatWrapping;
-    // ambientOcclusionMap.repeat.set(1, 1);
+        // 오른쪽 보라색 집 1
+        const nex_objCopy_0 = model.clone();
+        nex_objCopy_0.position.setFromSphericalCoords(
+          radius + 0.8,
+          Math.PI / 3,
+          Math.PI / 2 + Math.PI / 3
+        );
+        nex_objCopy_0.rotation.z -= Math.PI / 4;
+        nex_objCopy_0.rotation.x -= Math.PI / 3;
+
+        sphere.add(nex_objCopy_0);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+
+    // 볕집 1개
+    gltf_loader.load(
+      "./models/village__town_assets/village_rec_straw.gltf",
+      function (gltf) {
+        // 밀짚 오른쪽 중앙 1
+        const model = gltf.scene;
+        model.scale.set(1, 1, 1);
+        model.position.setFromSphericalCoordsYZ(
+          radius + 0.1,
+          Math.PI / 2.4,
+          (Math.PI / 2) * 3
+        );
+        model.rotation.x += Math.PI / 2;
+        model.rotation.z += Math.PI / 12;
+        sphere.add(model);
+
+        // 왼쪽 1
+        const nex_objCopy_0 = model.clone();
+        nex_objCopy_0.position.setFromSphericalCoordsYZ(
+          radius + 0.1,
+          Math.PI - Math.PI / 2.4,
+          (Math.PI / 2) * 3
+        );
+        nex_objCopy_0.rotation.z -= Math.PI / 6;
+        sphere.add(nex_objCopy_0);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+
+    // 볕집 다중
+    gltf_loader.load(
+      "./models/village__town_assets/village_muliple_straw.gltf",
+      function (gltf) {
+        // 밀짚
+        const model = gltf.scene;
+        model.scale.set(1, 1, 1);
+        model.position.setFromSphericalCoordsYZ(
+          radius + 0.3,
+          Math.PI / 2.4,
+          Math.PI + Math.PI / 6
+        );
+        model.rotation.x -= Math.PI - Math.PI / 6;
+        sphere.add(model);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+
+    // 윈드밀
+    gltf_loader.load(
+      "./models/village__town_assets/village_windmill.gltf",
+      function (gltf) {
+        // 오른쪽 풍차
+        const model = gltf.scene;
+        model.scale.set(0.3, 0.3, 0.3);
+        model.position.setFromSphericalCoords(
+          radius + 1.0,
+          Math.PI - Math.PI / 8,
+          Math.PI / 3
+        );
+        // model.lookAt(sphere.position);
+        model.rotation.x += Math.PI;
+        model.rotation.z -= Math.PI / 8;
+        sphere.add(model);
+
+        // 왼쪽 풍차
+        const nex_objCopy_0 = model.clone();
+        nex_objCopy_0.position.setFromSphericalCoordsYZ(
+          radius + 1.0,
+          Math.PI / 1.8,
+          Math.PI
+        );
+        nex_objCopy_0.rotation.z += Math.PI / 6;
+        sphere.add(nex_objCopy_0);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+
+    // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
+    const baseColor = loader.load(
+      "./textures/Stylized_Ground_002_basecolor.png"
+    ); // 기본 색상 텍스처
+    const normalMap = loader.load("./textures/Stylized_Ground_002_normal.png"); // 노멀 맵 (표면의 작은 굴곡 표현)
+    const roughnessMap = loader.load(
+      "./textures/Stylized_Ground_002_roughness.png"
+    ); // 거칠기 맵 (표면의 거칠기 표현)
+    const heightMap = loader.load("./textures/Stylized_Ground_002_height.png"); // 높이 맵 (높낮이 변화를 표현)
+    const ambientOcclusionMap = loader.load(
+      "./textures/Stylized_Ground_002_ambientOcclusion.png"
+    ); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
+
+    // 텍스처 반복 및 스케일 설정
+    baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
+    baseColor.repeat.set(6, 6);
+
+    normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+    normalMap.repeat.set(6, 6);
+
+    roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+    roughnessMap.repeat.set(6, 6);
+
+    heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
+    heightMap.repeat.set(6, 6);
+
+    ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
+      THREE.RepeatWrapping;
+    ambientOcclusionMap.repeat.set(6, 6);
 
     // // 구의 재질 텍스처 업데이트
     // sphere.material.map = baseColor;
