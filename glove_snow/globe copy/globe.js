@@ -393,7 +393,7 @@ window.onload = function init() {
     );
   }
 
-  let modelName = "./models/small_tree/prune_tree_1.gltf";
+  let modelName = "./models/autumn_objects/prune_tree_1.gltf";
   console.log("model name:", modelName);
 
   function createTree(sphere) {
@@ -442,7 +442,7 @@ window.onload = function init() {
 
   // function createFence(sphere) {
   //   gltf_loader.load(
-  //     "./models/small_tree/fence_center.gltf",
+  //     "./models/autumn_objects/fence_center.gltf",
   //     function (gltf) {
   //       const model = gltf.scene;
   //       model.scale.set(0.05, 0.05, 0.05);
@@ -1432,7 +1432,7 @@ window.onload = function init() {
     console.log("fall button pushed");
 
     // 새로운 나무 모델 경로로 업데이트
-    modelName = "./models/small_tree/pretty_big_tree_3.gltf";
+    modelName = "./models/autumn_objects/pretty_big_tree_3.gltf";
 
     // 기존 나무들을 삭제
     // while (sphere.children.length > 0) {
@@ -1441,7 +1441,7 @@ window.onload = function init() {
     function createFallTree() {
       // 모여있는 나무들
       gltf_loader.load(
-        "./models/small_tree/pretty_big_tree_3.gltf",
+        "./models/autumn_objects/pretty_big_tree_3.gltf",
         function (gltf) {
           // 수풀 옆 왼쪽 나무 1
           const model = gltf.scene;
@@ -1498,7 +1498,7 @@ window.onload = function init() {
     function createFlowerBush() {
       // 벤치 옆 수풀
       gltf_loader.load(
-        "./models/small_tree/bush_4.gltf",
+        "./models/autumn_objects/bush_4.gltf",
         function (gltf) {
           // 오른쪽 나무 바로 옆 부쉬 1
           const model = gltf.scene;
@@ -1555,7 +1555,7 @@ window.onload = function init() {
     function createBench() {
       // 벤치
       gltf_loader.load(
-        "./models/small_tree/chair_2.gltf",
+        "./models/autumn_objects/chair_2.gltf",
         function (gltf) {
           // 오른쪽 나무 바로 옆 벤치 1
           const model = gltf.scene;
@@ -1613,7 +1613,7 @@ window.onload = function init() {
     // 새 모델을 사용해 나무를 다시 생성
     // createTree();
     // createBush();
-    createFence();
+    // createFence();
     createFallTree();
     createBench();
     createFlowerBush();
@@ -2183,6 +2183,8 @@ window.onload = function init() {
     if (rotate) {
       sphere_spring.rotation.x -= 0.0001; // Adjust rotation speed as needed
       sphere_summer.rotation.x -= 0.0001; // Adjust rotation speed as needed
+      sphere_autumn.rotation.x -= 0.0001; // Adjust rotation speed as needed
+      sphere_winter.rotation.x -= 0.0001; // Adjust rotation speed as needed
     }
 
     // // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
