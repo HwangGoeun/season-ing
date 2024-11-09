@@ -60,12 +60,19 @@ window.onload = function init() {
   /* Light */
 
   // 장면에 주변광(Ambient Light) 추가 (전체적으로 고르게 빛을 비춤)
-  scene.add(new THREE.AmbientLight(0x333333)); // 약한 회색 빛으로 설정
+  const lightAmb = new THREE.AmbientLight(0x333333);
+  lightAmb.castShadow = true;
+  scene.add(lightAmb);
+
+  //scene.add(new THREE.AmbientLight(0x333333)); // 약한 회색 빛으로 설정
 
   // 방향광(Directional Light) 설정 (특정 방향으로 빛을 쏘는 조명)
   const light = new THREE.DirectionalLight(0xffffff, 0.1); // 하얀색 빛에 강도는 0.1로 설정
   light.position.set(-1, 0, 0); // 빛이 -X축 방향에서 비추도록 위치 설정
   scene.add(light); // 장면에 빛 추가
+
+  const dlhelper = new THREE.DirectionalLightHelper(light, 0.5);
+  scene.add(dlhelper);
 
   // 빛의 타겟을 설정 (빛이 구체를 향하게 설정)
   const lightTarget = new THREE.Object3D(); // 빈 객체를 생성 (빛의 목표를 설정하기 위해)
@@ -86,7 +93,7 @@ window.onload = function init() {
   scene.add(light);
 
   // 태양의 회전 변수 (태양이 구체 주위를 공전하는 모션 설정)
-  const orbitRadius = 10; // 태양의 궤도 반지름 설정
+  const orbitRadius = 60; // 태양의 궤도 반지름 설정
 
   /* texture */
 
@@ -178,6 +185,8 @@ window.onload = function init() {
   sphere_spring.material.roughnessMap = roughnessMap;
   sphere_spring.material.displacementMap = heightMap;
   sphere_spring.material.aoMap = ambientOcclusionMap;
+
+  sphere_spring.receiveShadow = true;
   scene.add(sphere_spring);
 
   const sphere_summer = new THREE.Mesh(
@@ -228,6 +237,7 @@ window.onload = function init() {
 
   // 텍스처 업데이트 반영
   sphere_summer.material.needsUpdate = true;
+  sphere_summer.receiveShadow = true;
   scene.add(sphere_summer);
 
   const sphere_autumn = new THREE.Mesh(
@@ -287,6 +297,7 @@ window.onload = function init() {
 
   // 텍스처 업데이트 반영
   sphere_autumn.material.needsUpdate = true;
+  sphere_autumn.receiveShadow = true;
   scene.add(sphere_autumn);
 
   const sphere_winter = new THREE.Mesh(
@@ -302,7 +313,7 @@ window.onload = function init() {
       displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
     })
   );
-  sphere_winter.position.x = 72;
+  sphere_winter.position.x = 70;
   // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
   baseColor = loader.load("./textures/Snow_004_COLOR.jpg"); // 기본 색상 텍스처
   normalMap = loader.load("./textures/Snow_004_NORM.jpg"); // 노멀 맵 (표면의 작은 굴곡 표현)
@@ -335,6 +346,7 @@ window.onload = function init() {
 
   // 텍스처 업데이트 반영
   sphere_winter.material.needsUpdate = true;
+  sphere_winter.receiveShadow = true;
   scene.add(sphere_winter);
 
   // const sphere = new THREE.Mesh(
@@ -1464,6 +1476,15 @@ window.onload = function init() {
             Math.PI / 16,
             Math.PI / 2
           );
+
+          // shadow
+          model.traverse((node) => {
+            if (node.isMesh) {
+              node.castShadow = true; // objects cast shadows
+              node.receiveShadow = true; // objects receive shadows
+            }
+          });
+
           model.rotation.x += Math.PI / 6;
           model.rotation.y -= Math.PI / 2;
           model.position.z += 3;
@@ -1521,6 +1542,14 @@ window.onload = function init() {
             Math.PI / 2.2,
             Math.PI / 16
           );
+          // shadow
+          model.traverse((node) => {
+            if (node.isMesh) {
+              node.castShadow = true; // objects cast shadows
+              node.receiveShadow = true; // objects receive shadows
+            }
+          });
+
           model.rotation.x += Math.PI / 2;
           model.rotation.y -= Math.PI / 2;
           model.position.z += 0.2;
@@ -1578,6 +1607,15 @@ window.onload = function init() {
             Math.PI / 2, //xz각도 오른쪽
             Math.PI / 16 //y각도
           );
+
+          // shadow
+          model.traverse((node) => {
+            if (node.isMesh) {
+              node.castShadow = true; // objects cast shadows
+              node.receiveShadow = true; // objects receive shadows
+            }
+          });
+
           model.rotation.x += Math.PI / 2;
           model.rotation.y -= Math.PI / 2;
           model.position.z += 0.2;
@@ -1643,6 +1681,15 @@ window.onload = function init() {
           Math.PI / 8,
           Math.PI / 2
         );
+
+        // shadow
+        model.traverse((node) => {
+          if (node.isMesh) {
+            node.castShadow = true; // objects cast shadows
+            node.receiveShadow = true; // objects receive shadows
+          }
+        });
+
         model.rotation.z -= Math.PI / 8;
         // model.position.x += 1;
         // model.rotation.y -= Math.PI / 2;
@@ -1678,6 +1725,15 @@ window.onload = function init() {
           Math.PI / 8,
           Math.PI * 2 - Math.PI / 2.5
         );
+
+        // shadow
+        model.traverse((node) => {
+          if (node.isMesh) {
+            node.castShadow = true; // objects cast shadows
+            node.receiveShadow = true; // objects receive shadows
+          }
+        });
+
         model.rotation.z += Math.PI / 8;
         // model.position.x += 1;
         // model.rotation.y -= Math.PI / 2;
@@ -1713,6 +1769,15 @@ window.onload = function init() {
           Math.PI / 2.4,
           (Math.PI / 2) * 3
         );
+
+        // shadow
+        model.traverse((node) => {
+          if (node.isMesh) {
+            node.castShadow = true; // objects cast shadows
+            node.receiveShadow = true; // objects receive shadows
+          }
+        });
+
         model.rotation.x += Math.PI / 2;
         model.rotation.z += Math.PI / 12;
         sphere_autumn.add(model);
@@ -1745,6 +1810,15 @@ window.onload = function init() {
           Math.PI / 2.4,
           Math.PI + Math.PI / 6
         );
+
+        // shadow
+        model.traverse((node) => {
+          if (node.isMesh) {
+            node.castShadow = true; // objects cast shadows
+            node.receiveShadow = true; // objects receive shadows
+          }
+        });
+
         model.rotation.x -= Math.PI - Math.PI / 6;
         sphere_autumn.add(model);
       },
@@ -1766,6 +1840,15 @@ window.onload = function init() {
           Math.PI - Math.PI / 8,
           Math.PI / 3
         );
+
+        // shadow
+        model.traverse((node) => {
+          if (node.isMesh) {
+            node.castShadow = true; // objects cast shadows
+            node.receiveShadow = true; // objects receive shadows
+          }
+        });
+
         // model.lookAt(sphere_autumn.position);
         model.rotation.x += Math.PI;
         model.rotation.z -= Math.PI / 8;
