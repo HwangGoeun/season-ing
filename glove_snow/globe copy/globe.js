@@ -1,5 +1,5 @@
 rotate = 1;
-viewAll = 1;
+viewAll = 0;
 
 window.onload = function init() {
   // 웹 페이지가 로드되면 init 함수 실행
@@ -93,7 +93,7 @@ window.onload = function init() {
   scene.add(light);
 
   // 태양의 회전 변수 (태양이 구체 주위를 공전하는 모션 설정)
-  const orbitRadius = 60; // 태양의 궤도 반지름 설정
+  const orbitRadius = 10; // 태양의 궤도 반지름 설정
 
   /* texture */
 
