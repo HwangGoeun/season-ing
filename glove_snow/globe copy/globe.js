@@ -81,8 +81,8 @@ window.onload = function init() {
   light.target = lightTarget; // 빛이 타겟을 향하게 설정
   light.castShadow = true;
 
-  light.shadow.mapSize.width = 2048;
-  light.shadow.mapSize.height = 2048;
+  light.shadow.mapSize.width = 8192;
+  light.shadow.mapSize.height = 8192;
   light.shadow.camera.near = 0.5;
   light.shadow.camera.far = 50;
   light.shadow.camera.left = -20;
@@ -2292,10 +2292,10 @@ window.onload = function init() {
 
     // // Rotate sphere along the X-axis
     if (rotate) {
-      sphere_spring.rotation.x -= 0.0001; // Adjust rotation speed as needed
-      sphere_summer.rotation.x -= 0.0001; // Adjust rotation speed as needed
-      sphere_autumn.rotation.x -= 0.0001; // Adjust rotation speed as needed
-      sphere_winter.rotation.x -= 0.0001; // Adjust rotation speed as needed
+      sphere_spring.rotation.x -= 0.001; // Adjust rotation speed as needed
+      sphere_summer.rotation.x -= 0.001; // Adjust rotation speed as needed
+      sphere_autumn.rotation.x -= 0.001; // Adjust rotation speed as needed
+      sphere_winter.rotation.x -= 0.001; // Adjust rotation speed as needed
     }
 
     // // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
@@ -2324,7 +2324,7 @@ window.onload = function init() {
 
     updateBackgroundColor();
 
-    if (mixer) mixer.update(0.004); // Adjust timing for animation
+    if (mixer) mixer.update(0.007); // Adjust timing for animation
     // Check for collision and keep cat on sphere
     // if (cat) {
     //   keepCatOnSphere();
