@@ -440,98 +440,39 @@ window.onload = function init() {
     );
   }
 
-  function createFence() {
-    gltf_loader.load(
-      "./models/small_tree/fence_center.gltf",
-      function (gltf) {
-        const model = gltf.scene;
-        model.scale.set(0.05, 0.05, 0.05);
-        model.rotation.y += Math.PI / 2;
-        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 60) {
-          const objCopy = model.clone();
-          let phi = Math.PI / 2.1;
-          let theta = i;
-          // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
-          objCopy.position.setFromSphericalCoordsYZ(radius + 0.1, phi, theta);
-          objCopy.rotation.x += i;
-          sphere.add(objCopy);
-        }
+  // function createFence(sphere) {
+  //   gltf_loader.load(
+  //     "./models/small_tree/fence_center.gltf",
+  //     function (gltf) {
+  //       const model = gltf.scene;
+  //       model.scale.set(0.05, 0.05, 0.05);
+  //       model.rotation.y += Math.PI / 2;
+  //       for (var i = 0; i < 2 * Math.PI; i += Math.PI / 60) {
+  //         const objCopy = model.clone();
+  //         let phi = Math.PI / 2.1;
+  //         let theta = i;
+  //         // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+  //         objCopy.position.setFromSphericalCoordsYZ(radius + 0.1, phi, theta);
+  //         objCopy.rotation.x += i;
+  //         sphere.add(objCopy);
+  //       }
 
-        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 60) {
-          const objCopy = model.clone();
-          let phi = Math.PI - Math.PI / 2.1;
-          let theta = i;
-          // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
-          objCopy.position.setFromSphericalCoordsYZ(radius + 0.1, phi, theta);
-          objCopy.rotation.x += i;
-          sphere.add(objCopy);
-        }
-      },
-      undefined,
-      function (error) {
-        console.error(error);
-      }
-    );
-  }
-
-  function createBench() {
-    // 벤치
-    gltf_loader.load(
-      "./models/small_tree/chair_2.gltf",
-      function (gltf) {
-        // 오른쪽 나무 바로 옆 벤치 1
-        const model = gltf.scene;
-        model.scale.set(0.2, 0.2, 0.2);
-        model.position.setFromSphericalCoords(
-          radius,
-          Math.PI / 2, //xz각도 오른쪽
-          Math.PI / 16 //y각도
-        );
-        model.rotation.x += Math.PI / 2;
-        model.rotation.y -= Math.PI / 2;
-        model.position.z += 0.2;
-        sphere.add(model);
-
-        // 벤치1 옆 벤치
-        const nex_objCopy_0 = model.clone();
-        nex_objCopy_0.position.setFromSphericalCoords(
-          radius,
-          Math.PI / 1.7,
-          Math.PI / 16
-        );
-        nex_objCopy_0.position.z += 0.2;
-        nex_objCopy_0.rotation.x += Math.PI / 18;
-        sphere.add(nex_objCopy_0);
-
-        // 왼쪽 벤치 1
-        const nex_objCopy_1 = model.clone();
-        nex_objCopy_1.position.setFromSphericalCoords(
-          radius,
-          Math.PI / 2,
-          Math.PI * 2 - Math.PI / 16
-        );
-        nex_objCopy_1.rotation.y -= Math.PI;
-        nex_objCopy_1.position.z += 0.2;
-        sphere.add(nex_objCopy_1);
-
-        // 왼쪽 벤치 1 옆 벤치
-        const nex_objCopy_2 = model.clone();
-        nex_objCopy_2.position.setFromSphericalCoords(
-          radius,
-          Math.PI / 1.7,
-          Math.PI * 2 - Math.PI / 16
-        );
-        nex_objCopy_2.position.z += 0.2;
-        nex_objCopy_2.rotation.y -= Math.PI;
-        nex_objCopy_2.rotation.x += Math.PI / 18;
-        sphere.add(nex_objCopy_2);
-      },
-      undefined,
-      function (error) {
-        console.error(error);
-      }
-    );
-  }
+  //       for (var i = 0; i < 2 * Math.PI; i += Math.PI / 60) {
+  //         const objCopy = model.clone();
+  //         let phi = Math.PI - Math.PI / 2.1;
+  //         let theta = i;
+  //         // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+  //         objCopy.position.setFromSphericalCoordsYZ(radius + 0.1, phi, theta);
+  //         objCopy.rotation.x += i;
+  //         sphere.add(objCopy);
+  //       }
+  //     },
+  //     undefined,
+  //     function (error) {
+  //       console.error(error);
+  //     }
+  //   );
+  // }
 
   //at the center of the sphere to illustrate what the object looks like
   // var singletree;
@@ -887,7 +828,7 @@ window.onload = function init() {
     //   sphere.add(objCopy);
     // }
 
-    createFence();
+    // createFence(sphere_spring);
     // // 새로운 텍스처 파일 로드
     // const baseColor = loader.load(
     //   "./textures/Poliigon_GrassPatchyGround_4585_BaseColor.jpg"
@@ -1497,14 +1438,185 @@ window.onload = function init() {
     // while (sphere.children.length > 0) {
     //   sphere.remove(sphere.children[0]);
     // }
+    function createFallTree() {
+      // 모여있는 나무들
+      gltf_loader.load(
+        "./models/small_tree/pretty_big_tree_3.gltf",
+        function (gltf) {
+          // 수풀 옆 왼쪽 나무 1
+          const model = gltf.scene;
+          model.scale.set(0.12, 0.12, 0.12);
+          model.position.setFromSphericalCoords(
+            radius,
+            Math.PI / 16,
+            Math.PI / 2
+          );
+          model.rotation.x += Math.PI / 6;
+          model.rotation.y -= Math.PI / 2;
+          model.position.z += 3;
+          model.position.x += 0.5;
+          sphere_autumn.add(model);
 
+          // 수풀 옆 왼쪽 나무 2
+          const nex_objCopy_0 = model.clone();
+          nex_objCopy_0.position.setFromSphericalCoords(
+            radius + 0.2,
+            Math.PI / 16,
+            Math.PI / 2
+          );
+          nex_objCopy_0.position.z += 5;
+          nex_objCopy_0.position.y -= 2;
+          nex_objCopy_0.position.x += 0.5;
+          sphere_autumn.add(nex_objCopy_0);
+
+          // 오른쪽 나무 1
+          const objCopy_0 = model.clone();
+          objCopy_0.position.setFromSphericalCoords(
+            radius,
+            Math.PI * 2 - Math.PI / 16,
+            Math.PI / 2
+          );
+          objCopy_0.position.z += 4.5;
+          objCopy_0.position.y -= 1.0;
+          objCopy_0.position.x -= 0.5;
+          sphere_autumn.add(objCopy_0);
+
+          const nex_objCopy_1 = objCopy_0.clone();
+          nex_objCopy_1.position.z += 1.5;
+          nex_objCopy_1.position.y -= 2.5;
+          nex_objCopy_1.rotation.x += Math.PI / 8;
+          nex_objCopy_1.position.x -= 0.4;
+          sphere_autumn.add(nex_objCopy_1);
+        },
+        undefined,
+        function (error) {
+          console.error(error);
+        }
+      );
+    }
+
+    function createFlowerBush() {
+      // 벤치 옆 수풀
+      gltf_loader.load(
+        "./models/small_tree/bush_4.gltf",
+        function (gltf) {
+          // 오른쪽 나무 바로 옆 부쉬 1
+          const model = gltf.scene;
+          model.scale.set(0.12, 0.12, 0.12);
+          model.position.setFromSphericalCoords(
+            radius,
+            Math.PI / 2.2,
+            Math.PI / 16
+          );
+          model.rotation.x += Math.PI / 2;
+          model.rotation.y -= Math.PI / 2;
+          model.position.z += 0.2;
+          sphere_autumn.add(model);
+
+          // 왼쪽 나무 바로 옆 부쉬 1
+          const nex_objCopy_0 = model.clone();
+          nex_objCopy_0.position.setFromSphericalCoords(
+            radius,
+            Math.PI / 2.2,
+            Math.PI * 2 - Math.PI / 16
+          );
+          nex_objCopy_0.position.z += 0.2;
+          sphere_autumn.add(nex_objCopy_0);
+
+          // 오른쪽 나무 바로 옆 부쉬 2
+          const nex_objCopy_1 = model.clone();
+          nex_objCopy_1.position.setFromSphericalCoords(
+            radius,
+            Math.PI / 1.58,
+            Math.PI / 16
+          );
+          nex_objCopy_1.rotation.x += Math.PI / 18;
+          nex_objCopy_1.position.z += 0.2;
+          sphere_autumn.add(nex_objCopy_1);
+
+          // 왼쪽 나무 벤치 옆 부쉬 2
+          const nex_objCopy_2 = nex_objCopy_0.clone();
+          nex_objCopy_2.position.setFromSphericalCoords(
+            radius,
+            Math.PI / 1.58,
+            Math.PI * 2 - Math.PI / 16
+          );
+          nex_objCopy_2.rotation.x += Math.PI / 18;
+          nex_objCopy_2.position.z += 0.2;
+          sphere_autumn.add(nex_objCopy_2);
+        },
+        undefined,
+        function (error) {
+          console.error(error);
+        }
+      );
+    }
+
+    function createBench() {
+      // 벤치
+      gltf_loader.load(
+        "./models/small_tree/chair_2.gltf",
+        function (gltf) {
+          // 오른쪽 나무 바로 옆 벤치 1
+          const model = gltf.scene;
+          model.scale.set(0.2, 0.2, 0.2);
+          model.position.setFromSphericalCoords(
+            radius,
+            Math.PI / 2, //xz각도 오른쪽
+            Math.PI / 16 //y각도
+          );
+          model.rotation.x += Math.PI / 2;
+          model.rotation.y -= Math.PI / 2;
+          model.position.z += 0.2;
+          sphere_autumn.add(model);
+
+          // 벤치1 옆 벤치
+          const nex_objCopy_0 = model.clone();
+          nex_objCopy_0.position.setFromSphericalCoords(
+            radius,
+            Math.PI / 1.7,
+            Math.PI / 16
+          );
+          nex_objCopy_0.position.z += 0.2;
+          nex_objCopy_0.rotation.x += Math.PI / 18;
+          sphere_autumn.add(nex_objCopy_0);
+
+          // 왼쪽 벤치 1
+          const nex_objCopy_1 = model.clone();
+          nex_objCopy_1.position.setFromSphericalCoords(
+            radius,
+            Math.PI / 2,
+            Math.PI * 2 - Math.PI / 16
+          );
+          nex_objCopy_1.rotation.y -= Math.PI;
+          nex_objCopy_1.position.z += 0.2;
+          sphere_autumn.add(nex_objCopy_1);
+
+          // 왼쪽 벤치 1 옆 벤치
+          const nex_objCopy_2 = model.clone();
+          nex_objCopy_2.position.setFromSphericalCoords(
+            radius,
+            Math.PI / 1.7,
+            Math.PI * 2 - Math.PI / 16
+          );
+          nex_objCopy_2.position.z += 0.2;
+          nex_objCopy_2.rotation.y -= Math.PI;
+          nex_objCopy_2.rotation.x += Math.PI / 18;
+          sphere_autumn.add(nex_objCopy_2);
+        },
+        undefined,
+        function (error) {
+          console.error(error);
+        }
+      );
+    }
     // 새 모델을 사용해 나무를 다시 생성
     // createTree();
     // createBush();
-    // createFence();
-    // createFallTree();
-    // createBench();
-    // createFlowerBush();
+    createFence();
+    createFallTree();
+    createBench();
+    createFlowerBush();
 
     // 보라 집
     gltf_loader.load(
