@@ -61,7 +61,7 @@ window.onload = function init() {
 
   // 장면에 주변광(Ambient Light) 추가 (전체적으로 고르게 빛을 비춤)
   const lightAmb = new THREE.AmbientLight(0x333333);
-  lightAmb.castShadow = true;
+  // lightAmb.castShadow = true;
   scene.add(lightAmb);
 
   //scene.add(new THREE.AmbientLight(0x333333)); // 약한 회색 빛으로 설정
@@ -202,7 +202,7 @@ window.onload = function init() {
       displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
     })
   );
-  sphere_summer.position.x = 24;
+  // sphere_summer.position.x = 24;
   // 새로운 텍스처 파일 로드
   baseColor = loader.load("./textures/Stylized_Sand_001_basecolor.jpg");
   normalMap = loader.load("./textures/Stylized_Sand_001_normal.jpg");
@@ -253,7 +253,7 @@ window.onload = function init() {
       displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
     })
   );
-  sphere_autumn.position.x = 48;
+  // sphere_autumn.position.x = 48;
 
   // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
   baseColor = loader.load(
@@ -313,7 +313,7 @@ window.onload = function init() {
       displacementScale: 0.03, // 높이 맵의 변위를 조절 (표면의 높낮이 변화를 조정)
     })
   );
-  sphere_winter.position.x = 70;
+  // sphere_winter.position.x = 70;
   // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
   baseColor = loader.load("./textures/Snow_004_COLOR.jpg"); // 기본 색상 텍스처
   normalMap = loader.load("./textures/Snow_004_NORM.jpg"); // 노멀 맵 (표면의 작은 굴곡 표현)
@@ -593,16 +593,28 @@ window.onload = function init() {
   };
 
   function spring_camera() {
-    camera.position.set(0, 6, 3);
+    sphere_spring.scale.set(1, 1, 1);
+    sphere_summer.scale.set(0.1, 0.1, 0.1);
+    sphere_autumn.scale.set(0.1, 0.1, 0.1);
+    sphere_winter.scale.set(0.1, 0.1, 0.1);
   }
   function summer_camera() {
-    camera.position.set(24, 6, 3);
+    sphere_spring.scale.set(0.1, 0.1, 0.1);
+    sphere_summer.scale.set(1, 1, 1);
+    sphere_autumn.scale.set(0.1, 0.1, 0.1);
+    sphere_winter.scale.set(0.1, 0.1, 0.1);
   }
   function fall_camera() {
-    camera.position.set(48, 6, 3);
+    sphere_spring.scale.set(0.1, 0.1, 0.1);
+    sphere_summer.scale.set(0.1, 0.1, 0.1);
+    sphere_autumn.scale.set(1, 1, 1);
+    sphere_winter.scale.set(0.1, 0.1, 0.1);
   }
   function winter_camera() {
-    camera.position.set(72, 6, 3);
+    sphere_spring.scale.set(0.1, 0.1, 0.1);
+    sphere_summer.scale.set(0.1, 0.1, 0.1);
+    sphere_autumn.scale.set(0.1, 0.1, 0.1);
+    sphere_winter.scale.set(1, 1, 1);
   }
 
   /* --------------------------------------------------------------------------- */
@@ -2257,7 +2269,10 @@ window.onload = function init() {
   }
 
   /* ------------------------------------------------------- */
-
+  sphere_spring.scale.set(1, 1, 1);
+  sphere_summer.scale.set(0.1, 0.1, 0.1);
+  sphere_autumn.scale.set(0.1, 0.1, 0.1);
+  sphere_winter.scale.set(0.1, 0.1, 0.1);
   spring();
   summer();
   fall();
