@@ -568,17 +568,30 @@ window.onload = function init() {
   /* --------------------------------------------------------------------------- */
 
   document.getElementById("spring").onclick = function () {
-    spring();
+    spring_camera();
   };
   document.getElementById("summer").onclick = function () {
-    summer();
+    summer_camera();
   };
   document.getElementById("fall").onclick = function () {
-    fall();
+    fall_camera();
   };
   document.getElementById("winter").onclick = function () {
-    winter();
+    winter_camera();
   };
+
+  function spring_camera() {
+    camera.position.set(0, 6, 3);
+  }
+  function summer_camera() {
+    camera.position.set(24, 6, 3);
+  }
+  function fall_camera() {
+    camera.position.set(48, 6, 3);
+  }
+  function winter_camera() {
+    camera.position.set(72, 6, 3);
+  }
 
   /* --------------------------------------------------------------------------- */
 
@@ -2099,7 +2112,7 @@ window.onload = function init() {
       function (gltf) {
         const model = gltf.scene;
         model.scale.set(0.3, 0.3, 0.3);
-        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 12) {
+        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 60) {
           const objCopy = model.clone();
           let phi = Math.PI / 2.1;
           let theta = i;
@@ -2109,7 +2122,7 @@ window.onload = function init() {
           sphere_winter.add(objCopy);
         }
 
-        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 12) {
+        for (var i = 0; i < 2 * Math.PI; i += Math.PI / 60) {
           const objCopy = model.clone();
           let phi = Math.PI - Math.PI / 2.1;
           let theta = i;
