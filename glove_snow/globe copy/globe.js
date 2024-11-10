@@ -1,5 +1,5 @@
 rotate = 1;
-viewAll = 0;
+viewAll = 1;
 
 window.onload = function init() {
   // 웹 페이지가 로드되면 init 함수 실행
@@ -65,14 +65,20 @@ window.onload = function init() {
   scene.add(lightAmb);
 
   //scene.add(new THREE.AmbientLight(0x333333)); // 약한 회색 빛으로 설정
+  // 방향광(Directional Light) 설정 (특정 방향으로 빛을 쏘는 조명)
+  const light_top = new THREE.DirectionalLight(0xffffff, 0.5); // 하얀색 빛에 강도는 0.1로 설정
+  light_top.position.set(0, 12, 0); // 빛이 -X축 방향에서 비추도록 위치 설정
+  // scene.add(light_top); // 장면에 빛 추가
+
+  // 방향광(Directional Light) 설정 (특정 방향으로 빛을 쏘는 조명)
+  const light_bright = new THREE.DirectionalLight(0xffffff, 0.3); // 하얀색 빛에 강도는 0.1로 설정
+  light_bright.position.set(0, 12, 0); // 빛이 -X축 방향에서 비추도록 위치 설정
+  scene.add(light_bright); // 장면에 빛 추가
 
   // 방향광(Directional Light) 설정 (특정 방향으로 빛을 쏘는 조명)
   const light = new THREE.DirectionalLight(0xffffff, 0.1); // 하얀색 빛에 강도는 0.1로 설정
   light.position.set(-1, 0, 0); // 빛이 -X축 방향에서 비추도록 위치 설정
   scene.add(light); // 장면에 빛 추가
-
-  const dlhelper = new THREE.DirectionalLightHelper(light, 0.5);
-  scene.add(dlhelper);
 
   // 빛의 타겟을 설정 (빛이 구체를 향하게 설정)
   const lightTarget = new THREE.Object3D(); // 빈 객체를 생성 (빛의 목표를 설정하기 위해)
@@ -165,19 +171,19 @@ window.onload = function init() {
 
   // 텍스처 반복 및 스케일 설정
   baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
-  baseColor.repeat.set(1, 1);
+  baseColor.repeat.set(5, 5);
 
   normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-  normalMap.repeat.set(1, 1);
+  normalMap.repeat.set(5, 5);
 
   roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
-  roughnessMap.repeat.set(1, 1);
+  roughnessMap.repeat.set(5, 5);
 
   heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
-  heightMap.repeat.set(1, 1);
+  heightMap.repeat.set(5, 5);
 
   ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
-  ambientOcclusionMap.repeat.set(1, 1);
+  ambientOcclusionMap.repeat.set(5, 5);
 
   // 구의 재질 텍스처 업데이트
   sphere_spring.material.map = baseColor;
@@ -274,19 +280,19 @@ window.onload = function init() {
 
   // 텍스처 반복 및 스케일 설정
   baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
-  baseColor.repeat.set(10, 10);
+  baseColor.repeat.set(5, 5);
 
   normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-  normalMap.repeat.set(1, 1);
+  normalMap.repeat.set(5, 5);
 
   roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
-  roughnessMap.repeat.set(1, 1);
+  roughnessMap.repeat.set(5, 5);
 
   heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
-  heightMap.repeat.set(1, 1);
+  heightMap.repeat.set(5, 5);
 
   ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
-  ambientOcclusionMap.repeat.set(1, 1);
+  ambientOcclusionMap.repeat.set(5, 5);
 
   // 구의 재질 텍스처 업데이트
   sphere_autumn.material.map = baseColor;
@@ -326,16 +332,16 @@ window.onload = function init() {
   baseColor.repeat.set(4, 4);
 
   normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-  normalMap.repeat.set(1, 1);
+  normalMap.repeat.set(4, 4);
 
   roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
-  roughnessMap.repeat.set(1, 1);
+  roughnessMap.repeat.set(4, 4);
 
   heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
-  heightMap.repeat.set(1, 1);
+  heightMap.repeat.set(4, 4);
 
   ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT = THREE.RepeatWrapping;
-  ambientOcclusionMap.repeat.set(1, 1);
+  ambientOcclusionMap.repeat.set(4, 4);
 
   // 구의 재질 텍스처 업데이트
   sphere_winter.material.map = baseColor;
@@ -348,17 +354,6 @@ window.onload = function init() {
   sphere_winter.material.needsUpdate = true;
   sphere_winter.receiveShadow = true;
   scene.add(sphere_winter);
-
-  // const sphere = new THREE.Mesh(
-  //   new THREE.SphereGeometry(radius, segments, segments),
-  //   new THREE.MeshStandardMaterial({
-  //     color: 0xc7d26,
-  //     roughness: 0.8,
-  //     metalness: 0.1,
-  //   })
-  // );
-  // sphere.receiveShadow = true;
-  // sphere.position.x = 5;
 
   function placeObject(
     filePath,
@@ -452,47 +447,6 @@ window.onload = function init() {
     );
   }
 
-  // function createFence(sphere) {
-  //   gltf_loader.load(
-  //     "./models/autumn_objects/fence_center.gltf",
-  //     function (gltf) {
-  //       const model = gltf.scene;
-  //       model.scale.set(0.05, 0.05, 0.05);
-  //       model.rotation.y += Math.PI / 2;
-  //       for (var i = 0; i < 2 * Math.PI; i += Math.PI / 60) {
-  //         const objCopy = model.clone();
-  //         let phi = Math.PI / 2.1;
-  //         let theta = i;
-  //         // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
-  //         objCopy.position.setFromSphericalCoordsYZ(radius + 0.1, phi, theta);
-  //         objCopy.rotation.x += i;
-  //         sphere.add(objCopy);
-  //       }
-
-  //       for (var i = 0; i < 2 * Math.PI; i += Math.PI / 60) {
-  //         const objCopy = model.clone();
-  //         let phi = Math.PI - Math.PI / 2.1;
-  //         let theta = i;
-  //         // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
-  //         objCopy.position.setFromSphericalCoordsYZ(radius + 0.1, phi, theta);
-  //         objCopy.rotation.x += i;
-  //         sphere.add(objCopy);
-  //       }
-  //     },
-  //     undefined,
-  //     function (error) {
-  //       console.error(error);
-  //     }
-  //   );
-  // }
-
-  //at the center of the sphere to illustrate what the object looks like
-  // var singletree;
-  // singleTree = new Tree();
-  // scene.add(singleTree.mesh);
-
-  // createTree();
-
   /* --------------------------------------------------------------------------- */
 
   // 각도를 라디안으로 변환하는 함수
@@ -501,23 +455,92 @@ window.onload = function init() {
   }
 
   /* --------------------------------------------------------------------------- */
-  /* clock */
-
-  // 시계 업데이트 함수
-  function updateClock() {
-    const clockElement = document.getElementById("clock");
+  /* clock and time*/
+  // 시간 관련 정보 반환 함수
+  function getCurrentTimeInfo() {
     const now = new Date();
-    const hours = String(now.getHours()).padStart(2, "0"); // 두 자리로 표시
-    const minutes = String(now.getMinutes()).padStart(2, "0"); // 두 자리로 표시
-    const seconds = String(now.getSeconds()).padStart(2, "0"); // 두 자리로 표시
-    clockElement.textContent = `${hours}:${minutes}:${seconds}`; // 시계에 시간 표시
+    const utcHours = now.getUTCHours();
+    const kstHours = (utcHours + 9) % 24;
+    // const kstHours = 15;
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
+
+    // 일중 초 단위 계산 (24시간 기준)
+    const secondsInDay = hours * 3600 + minutes * 60 + seconds;
+    const normalizedTime = secondsInDay / 86400;
+
+    return {
+      now,
+      utcHours,
+      kstHours,
+      hours,
+      minutes,
+      seconds,
+      normalizedTime,
+    };
   }
 
   // 1초마다 시계와 배경색을 업데이트
-  setInterval(() => {
-    updateClock();
-    updateBackgroundColor(); // 시간에 맞추어 배경색 업데이트
-  }, 1000);
+  function setupClock() {
+    setInterval(() => {
+      updateClock();
+      updateBackgroundColor(); // 시간에 맞추어 배경색 업데이트
+    }, 1000);
+  }
+
+  // 시계 업데이트 함수
+  function updateClock() {
+    const { kstHours, hours, minutes, seconds } = getCurrentTimeInfo();
+    const clockElement = document.getElementById("clock");
+    clockElement.textContent = `${String(hours).padStart(2, "0")}:${String(
+      minutes
+    ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    // 밤 9시에 유성우 활성화
+    if (kstHours >= 19 && !meteorShowerActive) {
+      meteorShowerActive = true;
+      if (meteorMode) {
+        createMeteorShower();
+      } else {
+        createStarField();
+      }
+    }
+  }
+
+  /* --------------------------------------------------------------------------- */
+
+  /* Light temperature  */
+  // 광원 위치 및 색 온도 업데이트 함수
+  function updateLightPosition() {
+    const { kstHours, normalizedTime } = getCurrentTimeInfo();
+    // console.log(kstHours, normalizedTime);
+
+    // 각도를 0시부터 24시 기준으로 180도로 매핑
+    const angle = (kstHours / 24) * Math.PI - Math.PI;
+
+    // 광원의 위치 설정 (XZ 평면에서만 회전)
+    const x = orbitRadius * Math.cos(angle);
+    const y = orbitRadius * Math.sin(angle);
+    light.position.set(x, -y, 0);
+    light.lookAt(sphere_spring);
+
+    // 색 온도 조정
+    if (kstHours >= 7 && kstHours < 18) {
+      light_top.color.setRGB(0.996, 0.816, 0.8); // 낮 시간: 주황색
+      light.color.setRGB(0.996, 0.816, 0.8); // 낮 시간: 주황색
+    } else if (kstHours >= 6 && kstHours < 7) {
+      light_top.color.setRGB(1.0, 0.498, 0.0);
+      light.color.setRGB(1.0, 0.498, 0.0); // 낮 시간: 주황색
+    } else if (kstHours >= 18 && kstHours < 19) {
+      light_top.color.setRGB(1.0, 0.498, 0.0);
+      light.color.setRGB(1.0, 0.498, 0.0);
+    } else {
+      light_top.color.setRGB(0.027, 0.224, 0.322); // 밤 시간: 파란색
+      light.color.setRGB(0.027, 0.224, 0.322); // 밤 시간: 파란색
+    }
+  }
+
+  /* --------------------------------------------------------------------------- */
 
   function getTimeBasedColorValue() {
     const now = new Date();
@@ -531,7 +554,10 @@ window.onload = function init() {
     // 코사인 곡선으로 -1 ~ 1 사이 값을 0 ~ 1로 매핑
     const brightness = (Math.cos(2 * Math.PI * normalizedTime) + 1) / 2;
 
-    return brightness; // 0 (어두운 밤) ~ 1 (밝은 낮) 사이의 값
+    // brightness 값을 0.2에서 1로 조정
+    const adjustedBrightness = 0.2 + brightness * (1 - 0.2);
+
+    return brightness; // 0.2 (어두운 밤) ~ 1 (밝은 낮) 사이의 값
   }
 
   /* --------------------------------------------------------------------------- */
@@ -544,15 +570,95 @@ window.onload = function init() {
 
   // 배경 색상 업데이트 함수 (시간에 따라 배경색이 변화)
   function updateBackgroundColor() {
-    const timeValue = getTimeBasedColorValue(); // 현재 시간 비율
+    const { normalizedTime } = getCurrentTimeInfo();
     const skyColor = new THREE.Color(0x87ceeb); // 밝은 하늘색
     const eveningColor = new THREE.Color(0x1c1c72); // 어두운 저녁색
-    const currentColor = skyColor.lerp(eveningColor, timeValue); // 시간에 따른 색상 보간
+    const currentColor = skyColor.lerp(
+      eveningColor,
+      (Math.cos(2 * Math.PI * normalizedTime) + 1) / 2
+    );
     renderer.setClearColor(currentColor); // 배경 색상 업데이트
   }
 
   /* --------------------------------------------------------------------------- */
+  /* Meteor */
+  let meteors = [];
+  let meteorShowerActive = false;
+  let meteorMode = 0;
+  function createMeteorShower() {
+    // Define the number of meteors you want
+    const meteorCount = 20;
 
+    // Create meteors
+    for (let i = 0; i < meteorCount; i++) {
+      const geometry = new THREE.SphereGeometry(0.1, 8, 8); // Small glowing particles
+      const material = new THREE.MeshBasicMaterial({
+        color: 0xffff99,
+        emissive: 0xffff99,
+      }); // Glow effect
+
+      const meteor = new THREE.Mesh(geometry, material);
+
+      // Random position above the scene
+      meteor.position.set(
+        (Math.random() - 0.5) * 20, // Random x position
+        Math.random() * 10 + 5, // Random y position above the sphere
+        (Math.random() - 0.5) * 20 // Random z position
+      );
+
+      // Add meteor to the scene and meteors array for tracking
+      scene.add(meteor);
+      meteors.push(meteor);
+    }
+  }
+
+  function animateMeteorShower() {
+    // Move each meteor downward
+    meteors.forEach((meteor) => {
+      meteor.position.y -= 0.01; // Speed of falling
+
+      // Reset position if it goes below a certain level
+      if (meteor.position.y < 0) {
+        meteor.position.y = Math.random() * 10 + 5; // Reset to high position
+        meteor.position.x = (Math.random() - 0.5) * 20; // Reset random x position
+        meteor.position.z = (Math.random() - 0.5) * 20; // Reset random z position
+      }
+
+      // // Optionally adjust opacity for fading effect
+      // meteor.material.opacity = Math.random();
+      // meteor.material.transparent = true;
+    });
+  }
+
+  function createStarField() {
+    // Define the number of stars
+    const starCount = 100;
+
+    // Create stars
+    for (let i = 0; i < starCount; i++) {
+      const geometry = new THREE.SphereGeometry(0.05, 8, 8); // Small glowing spheres for stars
+      const material = new THREE.MeshBasicMaterial({
+        color: 0xffffcc,
+        emissive: 0xffffcc,
+      }); // Soft glow
+
+      const star = new THREE.Mesh(geometry, material);
+
+      // Place stars at random positions around the sphere
+      const distance = radius + Math.random() * 5 + 5; // Position stars further from the sphere
+      const theta = Math.random() * 2 * Math.PI; // Random angle in the horizontal plane
+      const phi = Math.random() * Math.PI; // Random angle in the vertical plane
+
+      // Convert spherical coordinates to Cartesian coordinates for positioning
+      star.position.x = distance * Math.sin(phi) * Math.cos(theta);
+      star.position.y = distance * Math.cos(phi);
+      star.position.z = distance * Math.sin(phi) * Math.sin(theta);
+
+      // Add star to the scene and stars array for tracking
+      scene.add(star);
+      meteors.push(star);
+    }
+  }
   /* --------------------------------------------------------------------------- */
   /* slider */
 
@@ -638,11 +744,7 @@ window.onload = function init() {
           child.receiveShadow = true; // Trees receive shadows
         }
       });
-
-      // cat.position.set(0, radius, 1);
       cat.position.setFromSphericalCoords(radius + 0.03, Math.PI / 10, 0);
-      //cat.rotation.z += Math.PI;
-      // cat.rotation.y += Math.PI / 6;
 
       mixer = new THREE.AnimationMixer(cat);
       if (gltf.animations.length > 0) {
@@ -659,130 +761,82 @@ window.onload = function init() {
     }
   );
 
-  let isJumping = false;
-  const originalY = cat ? cat.position.y : 0; // 고양이의 초기 Y 위치
-  let jumpInterval = null;
+  // 회전 및 점프 토글 함수
+  function toggleRotationAndJump() {
+    // 회전 상태를 토글
+    rotate = !rotate;
 
-  // 키보드 이벤트 리스너 추가
-  document.addEventListener("keydown", (event) => {
-    if (event.code === "Space") {
-      if (isJumping) {
-        // 점프 중일 때 스페이스바를 누르면 점프 멈춤
-        clearInterval(jumpInterval);
-        cat.position.y = originalY; // 원래 위치로 초기화
-        isJumping = false;
-      } else {
-        // 점프 시작
-        isJumping = true;
+    // 점프 상태를 초기화하여 고양이가 멈추게 함
+    isJumping = false;
+    jumpDirection = 1; // 초기화 (위로 올라가는 방향으로 설정)
 
-        // 기본적인 점프 애니메이션 (setInterval 사용)
-        let jumpUp = true;
-        const jumpHeight = 0.2;
-        const jumpSpeed = 0.05;
-
-        jumpInterval = setInterval(() => {
-          if (!isJumping) {
-            clearInterval(jumpInterval); // 점프 중지 시 인터벌 종료
-            return;
-          }
-
-          if (jumpUp) {
-            cat.position.y += jumpSpeed;
-            if (cat.position.y >= originalY + jumpHeight) {
-              jumpUp = false;
-            }
-          } else {
-            cat.position.y -= jumpSpeed;
-            if (cat.position.y <= originalY) {
-              cat.position.y = originalY;
-              jumpUp = true; // 다시 점프할 수 있도록 준비
-            }
-          }
-          // render();
-        }, 16); // 약 60fps로 렌더링
-      }
+    // 구와 고양이의 현재 위치 유지
+    if (!rotate && mixer) {
+      mixer.stopAllAction(); // 모든 애니메이션 중지
+    } else if (rotate && mixer) {
+      // 고양이 애니메이션을 재할당하고 재생
+      const action = mixer.clipAction(mixer._actions[0]._clip);
+      action.play();
     }
-  });
+  }
+  window.addEventListener(
+    "keydown",
+    (event) => {
+      if (event.code === "ArrowUp") {
+        console.log("ArrowUp is pushed");
+        event.preventDefault(); // This prevents the default action if not passive
+        handleJump();
+      }
+    },
+    { passive: false }
+  );
 
-  // placeObject(
-  //   filePath = "./models/chick_trio_gltf/scene.gltf",
-  //   scaleX = 0.5, scaleY = 0.5, scaleZ = 0.5,
-  //   posRadius = radius,
-  //   posPhi = Math.PI / 4 + 0.5,
-  //   posTheta = Math.PI / 4,
-  // );
+  window.addEventListener(
+    "keydown",
+    (event) => {
+      if (event.code === "Space") {
+        console.log("Space is pushed");
+        event.preventDefault(); // This prevents the default action if not passive
+        toggleRotationAndJump();
+      }
+    },
+    { passive: false }
+  );
 
-  // placeObject(
-  //   filePath = "./models/picnic_set_free_gltf/scene.gltf",
-  //   scaleX = 0.5, scaleY = 0.5, scaleZ = 0.5,
-  //   posRadius = radius + 0.1,
-  //   posPhi = Math.PI / 4 + 0.7,
-  //   posTheta = Math.PI / 4 - 0.2,
-  // );
+  let isJumping = false; // Variable to check if the cat is currently jumping
+  let jumpHeight = 0.5; // Maximum height of the jump
+  let jumpSpeed = 0.02; // Speed of the jump
+  let jumpDirection = 1; // 1 for up, -1 for down
 
-  // placeObject(
-  //   filePath = "./models/picnic_set_free_gltf/scene.gltf",
-  //   scaleX = 0.5, scaleY = 0.5, scaleZ = 0.5,
-  //   posRadius = radius + 0.1,
-  //   posPhi = Math.PI / 4 + 0.7,
-  //   posTheta = Math.PI / 4 - 0.2,
-  // );
+  function handleJump() {
+    if (isJumping) return; // Prevent multiple jumps
 
-  // placeObject(
-  //   filePath = "./models/pink_book_vdkvcaz_gltf_low/Pink_Book_vdkvcaz_Low.gltf",
-  //   scaleX = 5, scaleY = 5, scaleZ = 5,
-  //   posRadius = radius + 0.1,
-  //   posPhi = Math.PI / 4 + 0.7,
-  //   posTheta = Math.PI / 4 + 0.2,
-  // );
+    isJumping = true;
+    let initialY = cat.position.y; // Store initial Y position of the cat
 
-  // placeObject(
-  //   filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf",
-  //   scaleX = 2, scaleY = 2, scaleZ = 2,
-  //   posRadius = radius,
-  //   posPhi = Math.PI / 4 - 2.5,
-  //   posTheta = Math.PI / 4,
-  // );
+    function jumpAnimation() {
+      // Move the cat up and down
+      cat.position.y += jumpSpeed * jumpDirection;
 
-  // placeObject(
-  //   filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf",
-  //   scaleX = 2, scaleY = 2, scaleZ = 2,
-  //   posRadius = radius,
-  //   posPhi = Math.PI / 4,
-  //   posTheta = Math.PI / 4,
-  // );
+      // If the cat reaches the max height, start descending
+      if (cat.position.y >= initialY + jumpHeight) {
+        jumpDirection = -1; // Change direction to downward
+      }
 
-  // placeObject(
-  //   filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf",
-  //   scaleX = 2, scaleY = 2, scaleZ = 2,
-  //   posRadius = radius,
-  //   posPhi = Math.PI / 4 + 2,
-  //   posTheta = Math.PI / 4,
-  // );
+      // If the cat is back to the initial position, end the jump
+      if (cat.position.y <= initialY && jumpDirection === -1) {
+        cat.position.y = initialY; // Reset to exact initial position
+        isJumping = false; // End the jump by setting isJumping to false
+        jumpDirection = 1; // Reset direction for next jump
+        return;
+      }
 
-  // placeObject(
-  //   filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf",
-  //   scaleX = 2, scaleY = 2, scaleZ = 2,
-  //   posRadius = radius,
-  //   posPhi = Math.PI / 4 + 0.5,
-  //   posTheta = Math.PI / 4 + 1.5,
-  // );
+      // Continue the jump animation
+      requestAnimationFrame(jumpAnimation);
+    }
 
-  // placeObject(
-  //   filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf",
-  //   scaleX = 2, scaleY = 2, scaleZ = 2,
-  //   posRadius = radius,
-  //   posPhi = Math.PI / 4 + 5,
-  //   posTheta = Math.PI / 4 + 1.5,
-  // );
-
-  // placeObject(
-  //   filePath = "./models/phlox_candystrip_flower_cluster_gltf/scene.gltf",
-  //   scaleX = 2, scaleY = 2, scaleZ = 2,
-  //   posRadius = radius,
-  //   posPhi = Math.PI / 4 + 5,
-  //   posTheta = Math.PI / 4 + 5,
-  // );
+    jumpAnimation(); // Start the jump animation
+  }
 
   /* --------------------------------------------------------------------------- */
 
@@ -793,27 +847,6 @@ window.onload = function init() {
     modelName =
       "./models/spring/low-_poly_cherry_blossom_tree_3d_models/scene.gltf";
 
-    // 기존 나무들을 삭제
-    // while (sphere.children.length > 0) {
-    //   sphere.remove(sphere.children[0]);
-    // }
-
-    // 새 모델을 사용해 나무를 다시 생성
-    // createTree();
-
-    // for (var i = 0; i < 2 * Math.PI; i += Math.PI / 6) {
-    //   let phi = Math.PI - Math.PI / 2.1;
-    //   let theta = i;
-    //   placeObject(
-    //     filePath = "./models/spring/pink_big_tree/scene.gltf",
-    //     scaleX = 0.00005, scaleY = 0.00005, scaleZ = 0.00005,
-    //     posRadius = radius,
-    //     posPhi = phi,
-    //     // posPhi = Math.PI / 4 + 0.5,
-    //     posTheta = theta,
-    //     // posTheta = Math.PI / 4,
-    //   );
-    // }
     gltf_loader.load(
       modelName,
       function (gltf) {
@@ -856,59 +889,6 @@ window.onload = function init() {
       }
     );
 
-    //   const objCopy = model.clone();
-    //   let phi = Math.PI - Math.PI / 2.1;
-    //   let theta = i;
-    //   // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
-    //   objCopy.position.setFromSphericalCoordsYZ(radius + 0.1, phi, theta);
-    //   objCopy.rotation.x += i;
-    //   sphere.add(objCopy);
-    // }
-
-    // createFence(sphere_spring);
-    // // 새로운 텍스처 파일 로드
-    // const baseColor = loader.load(
-    //   "./textures/Poliigon_GrassPatchyGround_4585_BaseColor.jpg"
-    // ); // 기본 색상 텍스처
-    // const normalMap = loader.load(
-    //   "./textures/Poliigon_GrassPatchyGround_4585_Normal.jpg"
-    // ); // 노멀 맵
-    // const roughnessMap = loader.load(
-    //   "./textures/Poliigon_GrassPatchyGround_4585_Roughness.jpg"
-    // ); // 거칠기 맵
-    // const heightMap = loader.load(
-    //   "./textures/Poliigon_GrassPatchyGround_4585_Displacement.tiff"
-    // ); // 높이 맵
-    // const ambientOcclusionMap = loader.load(
-    //   "./textures/Poliigon_GrassPatchyGround_4585_AmbientOcclusion.jpg"
-    // ); // 주변광 차단 맵
-
-    // // 텍스처 반복 및 스케일 설정
-    // baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
-    // baseColor.repeat.set(1, 1);
-
-    // normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-    // normalMap.repeat.set(1, 1);
-
-    // roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
-    // roughnessMap.repeat.set(1, 1);
-
-    // heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
-    // heightMap.repeat.set(1, 1);
-
-    // ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
-    //   THREE.RepeatWrapping;
-    // ambientOcclusionMap.repeat.set(1, 1);
-
-    // // 구의 재질 텍스처 업데이트
-    // sphere_spring.material.map = baseColor;
-    // sphere_spring.material.normalMap = normalMap;
-    // sphere_spring.material.roughnessMap = roughnessMap;
-    // sphere_spring.material.displacementMap = heightMap;
-    // sphere_spring.material.aoMap = ambientOcclusionMap;
-
-    // // 텍스처 업데이트 반영
-    // sphere.material.needsUpdate = true;
     placeObject(
       (filePath = "./models/spring/chick_trio_gltf/scene.gltf"),
       (sphere = sphere_spring),
@@ -937,19 +917,12 @@ window.onload = function init() {
       (scaleX = 0.2),
       (scaleY = 0.2),
       (scaleZ = 0.2),
-      (posRadius = radius - 0.1),
-      (posPhi = degreeToRadian(100)),
-      (posTheta = -degreeToRadian(30))
-    );
-    placeObject(
-      (filePath = "./models/spring/picnic_set_free_gltf/scene.gltf"),
-      (sphere = sphere_spring),
-      (scaleX = 0.42),
-      (scaleY = 0.42),
-      (scaleZ = 0.42),
-      (posRadius = radius - 0.1),
-      (posPhi = degreeToRadian(100)),
-      (posTheta = degreeToRadian(10))
+      (posRadius = radius - 0.07),
+      (posPhi = degreeToRadian(80)),
+      (posTheta = -degreeToRadian(35)),
+      (rotX = degreeToRadian(0)),
+      (rotY = degreeToRadian(170)),
+      (rotZ = -degreeToRadian(15))
     );
 
     placeObject(
@@ -975,13 +948,6 @@ window.onload = function init() {
       (posPhi = Math.PI / 4 - 30),
       (posTheta = Math.PI / 4 - 3)
     );
-    // placeObject(
-    //   filePath = "./models/spring/cloud__sun_lowpoly/scene.gltf",
-    //   scaleX = 0.0002, scaleY = 0.0002, scaleZ = 0.0002,
-    //   posRadius = radius + 1,
-    //   posPhi = Math.PI / 4 - 30,
-    //   posTheta = Math.PI / 4 - 3,
-    // );
 
     placeObject(
       (filePath = "./models/spring/pink_big_tree/scene.gltf"),
@@ -1027,11 +993,6 @@ window.onload = function init() {
     // 새로운 나무 모델 경로로 업데이트
     modelName = "./models/summer/tree/scene.gltf";
 
-    // 기존 나무들을 삭제
-    // while (sphere.children.length > 0) {
-    //   sphere.remove(sphere.children[0]);
-    // }
-
     function createTree() {
       let models;
       gltf_loader.load(
@@ -1076,7 +1037,7 @@ window.onload = function init() {
       );
     }
 
-    // // 새 모델을 사용해 나무를 다시 생성
+    // 새 모델을 사용해 나무를 다시 생성
     createTree();
     //createFence();
 
@@ -1297,20 +1258,6 @@ window.onload = function init() {
       -3
     );
 
-    // placeObject(
-    //   "./models/summer/sandcastle/scene.gltf",
-    //   sphere_summer,
-    //   0.004,
-    //   0.004,
-    //   0.004,
-    //   radius - 0.3,
-    //   2.3,
-    //   0.4,
-    //   0,
-    //   Math.PI,
-    //   -0.7
-    // );
-
     placeObject(
       "./models/summer/cactus/scene.gltf",
       sphere_summer,
@@ -1422,44 +1369,6 @@ window.onload = function init() {
       Math.PI,
       2
     );
-
-    // // 새로운 텍스처 파일 로드
-    // const baseColor = loader.load("./textures/Stylized_Sand_001_basecolor.jpg");
-    // const normalMap = loader.load("./textures/Stylized_Sand_001_normal.jpg");
-    // const roughnessMap = loader.load(
-    //   "./textures/Stylized_Sand_001_roughness.jpg"
-    // );
-    // const heightMap = loader.load("./textures/Stylized_Sand_001_height.png");
-    // const ambientOcclusionMap = loader.load(
-    //   "./textures/Stylized_Sand_001_ambientOcclusion.jpg"
-    // );
-
-    // // 텍스처 반복 및 스케일 설정
-    // baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
-    // baseColor.repeat.set(6, 6);
-
-    // normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-    // normalMap.repeat.set(6, 6);
-
-    // roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
-    // roughnessMap.repeat.set(6, 6);
-
-    // heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
-    // heightMap.repeat.set(6, 6);
-
-    // ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
-    //   THREE.RepeatWrapping;
-    // ambientOcclusionMap.repeat.set(6, 6);
-
-    // // 구의 재질 텍스처 업데이트
-    // sphere.material.map = baseColor;
-    // sphere.material.normalMap = normalMap;
-    // sphere.material.roughnessMap = roughnessMap;
-    // sphere.material.displacementMap = heightMap;
-    // sphere.material.aoMap = ambientOcclusionMap;
-
-    // // 텍스처 업데이트 반영
-    // sphere.material.needsUpdate = true;
   }
 
   /* ----- */
@@ -1471,10 +1380,6 @@ window.onload = function init() {
     // 새로운 나무 모델 경로로 업데이트
     modelName = "./models/autumn_objects/pretty_big_tree_3.gltf";
 
-    // 기존 나무들을 삭제
-    // while (sphere.children.length > 0) {
-    //   sphere.remove(sphere.children[0]);
-    // }
     function createFallTree() {
       // 모여있는 나무들
       gltf_loader.load(
@@ -1673,10 +1578,42 @@ window.onload = function init() {
         }
       );
     }
+
+    function createFence() {
+      gltf_loader.load(
+        "./models/autumn_objects/fence_center.gltf",
+        function (gltf) {
+          const model = gltf.scene;
+          model.scale.set(0.05, 0.05, 0.05);
+          model.rotation.y += Math.PI / 2;
+          for (var i = 0; i < 2 * Math.PI; i += Math.PI / 60) {
+            const objCopy = model.clone();
+            let phi = Math.PI / 2.1;
+            let theta = i;
+            // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+            objCopy.position.setFromSphericalCoordsYZ(radius + 0.1, phi, theta);
+            objCopy.rotation.x += i;
+            sphere_autumn.add(objCopy);
+          }
+
+          for (var i = 0; i < 2 * Math.PI; i += Math.PI / 60) {
+            const objCopy = model.clone();
+            let phi = Math.PI - Math.PI / 2.1;
+            let theta = i;
+            // 반지름, phi값, theta 값 (radius, phi, theta) -> phi는 y축 기준, theta는 z축 기준
+            objCopy.position.setFromSphericalCoordsYZ(radius + 0.1, phi, theta);
+            objCopy.rotation.x += i;
+            sphere_autumn.add(objCopy);
+          }
+        },
+        undefined,
+        function (error) {
+          console.error(error);
+        }
+      );
+    }
     // 새 모델을 사용해 나무를 다시 생성
-    // createTree();
-    // createBush();
-    // createFence();
+    createFence();
     createFallTree();
     createBench();
     createFlowerBush();
@@ -1703,8 +1640,6 @@ window.onload = function init() {
         });
 
         model.rotation.z -= Math.PI / 8;
-        // model.position.x += 1;
-        // model.rotation.y -= Math.PI / 2;
         sphere_autumn.add(model);
 
         // 왼쪽 보라색 집 1
@@ -1747,8 +1682,6 @@ window.onload = function init() {
         });
 
         model.rotation.z += Math.PI / 8;
-        // model.position.x += 1;
-        // model.rotation.y -= Math.PI / 2;
         sphere_autumn.add(model);
 
         // 오른쪽 보라색 집 1
@@ -1881,46 +1814,6 @@ window.onload = function init() {
         console.error(error);
       }
     );
-
-    // // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
-    // const baseColor = loader.load(
-    //   "./textures/Stylized_Ground_002_basecolor.png"
-    // ); // 기본 색상 텍스처
-    // const normalMap = loader.load("./textures/Stylized_Ground_002_normal.png"); // 노멀 맵 (표면의 작은 굴곡 표현)
-    // const roughnessMap = loader.load(
-    //   "./textures/Stylized_Ground_002_roughness.png"
-    // ); // 거칠기 맵 (표면의 거칠기 표현)
-    // const heightMap = loader.load("./textures/Stylized_Ground_002_height.png"); // 높이 맵 (높낮이 변화를 표현)
-    // const ambientOcclusionMap = loader.load(
-    //   "./textures/Stylized_Ground_002_ambientOcclusion.png"
-    // ); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
-
-    // // 텍스처 반복 및 스케일 설정
-    // baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
-    // baseColor.repeat.set(6, 6);
-
-    // normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-    // normalMap.repeat.set(6, 6);
-
-    // roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
-    // roughnessMap.repeat.set(6, 6);
-
-    // heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
-    // heightMap.repeat.set(6, 6);
-
-    // ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
-    //   THREE.RepeatWrapping;
-    // ambientOcclusionMap.repeat.set(6, 6);
-
-    // // 구의 재질 텍스처 업데이트
-    // sphere.material.map = baseColor;
-    // sphere.material.normalMap = normalMap;
-    // sphere.material.roughnessMap = roughnessMap;
-    // sphere.material.displacementMap = heightMap;
-    // sphere.material.aoMap = ambientOcclusionMap;
-
-    // // 텍스처 업데이트 반영
-    // sphere.material.needsUpdate = true;
   }
 
   /* ----- */
@@ -1931,11 +1824,6 @@ window.onload = function init() {
 
     // 새로운 나무 모델 경로로 업데이트
     modelName = "./models/winterObject/snowTree/scene.gltf";
-
-    // 기존 나무들을 삭제
-    // while (sphere.children.length > 0) {
-    //   sphere.remove(sphere.children[0]);
-    // }
 
     function createTree() {
       let models;
@@ -2232,40 +2120,6 @@ window.onload = function init() {
         console.error(error);
       }
     );
-
-    // // 텍스처 파일 로드 (구체 표면에 사용할 텍스처 이미지 로드)
-    // const baseColor = loader.load("./textures/Snow_004_COLOR.jpg"); // 기본 색상 텍스처
-    // const normalMap = loader.load("./textures/Snow_004_NORM.jpg"); // 노멀 맵 (표면의 작은 굴곡 표현)
-    // const roughnessMap = loader.load("./textures/Snow_004_ROUGH.jpg"); // 거칠기 맵 (표면의 거칠기 표현)
-    // const heightMap = loader.load("./textures/Snow_004_DISP.png"); // 높이 맵 (높낮이 변화를 표현)
-    // const ambientOcclusionMap = loader.load("./textures/Snow_004_OCC.jpg"); // 주변광 차단 맵 (빛이 덜 도달하는 부분 표현)
-
-    // // 텍스처 반복 및 스케일 설정
-    // baseColor.wrapS = baseColor.wrapT = THREE.RepeatWrapping;
-    // baseColor.repeat.set(4, 4);
-
-    // normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-    // normalMap.repeat.set(1, 1);
-
-    // roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
-    // roughnessMap.repeat.set(1, 1);
-
-    // heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
-    // heightMap.repeat.set(1, 1);
-
-    // ambientOcclusionMap.wrapS = ambientOcclusionMap.wrapT =
-    //   THREE.RepeatWrapping;
-    // ambientOcclusionMap.repeat.set(1, 1);
-
-    // // 구의 재질 텍스처 업데이트
-    // sphere.material.map = baseColor;
-    // sphere.material.normalMap = normalMap;
-    // sphere.material.roughnessMap = roughnessMap;
-    // sphere.material.displacementMap = heightMap;
-    // sphere.material.aoMap = ambientOcclusionMap;
-
-    // // 텍스처 업데이트 반영
-    // sphere.material.needsUpdate = true;
   }
 
   /* ------------------------------------------------------- */
@@ -2279,10 +2133,6 @@ window.onload = function init() {
   winter();
   /* --------------------------------------------------------------------------- */
   /* rendering*/
-
-  // // 하루를 24시간으로 쪼개어 광원이 구를 한 바퀴 돌도록 설정
-  // const rotationSpeed = (2 * Math.PI) / 86400; // 하루 86400초 기준, 한 바퀴 회전하도록 설정
-  // let angle = 0; // 초기 각도
 
   // 렌더 함수 (매 프레임마다 호출하여 장면을 렌더링)
   function render() {
@@ -2298,37 +2148,28 @@ window.onload = function init() {
       sphere_winter.rotation.x -= 0.001; // Adjust rotation speed as needed
     }
 
-    // // 태양의 궤도 설정 (XY 평면에서 원형 궤도로 회전)
-    // const x = orbitRadius * Math.cos(angle); // 태양의 X좌표 (코사인 함수 사용)
-    // // const y = orbitRadius * Math.sin(angle); // 태양의 Y좌표 (사인 함수 사용)
-    // const z = orbitRadius * Math.sin(angle); // 태양의 Z좌표 (사인 함수 사용)
-    // light.position.set(x, 5, z); // 태양(빛)의 새로운 위치 설정
+    if (mixer && rotate) mixer.update(0.004); // Adjust timing for animation
 
-    // angle += rotationSpeed; // 각도를 계속 증가시켜 회전시키기
+    const current_brightness = getTimeBasedColorValue();
 
-    // updateLightPosition();
+    light.intensity = current_brightness;
+    light_top.intensity = current_brightness;
+    setupClock();
+    updateLightPosition();
 
-    const now = new Date();
-    const utcHours = now.getUTCHours();
-    const kstHours = (utcHours + 9) % 24; // UTC를 한국 시간으로 변환
-    // const kstHours = 19; // 한국 시간으로 오전 9시를 설정
+    // Animate meteor shower if active
+    if (meteorShowerActive) {
+      if (meteorMode) {
+        animateMeteorShower();
+      } else {
+        meteors.forEach((star) => {
+          star.material.opacity = 0.8 + Math.random() * 0.2; // Flicker between 0.8 and 1.0 opacity
+          star.material.transparent = true;
+        });
+      }
+    }
 
-    // 각도를 0시부터 24시 기준으로 180도로 매핑 (왼쪽 90도에서 오른쪽 90도로 이동하도록 설정)
-    const angle = (kstHours / 24) * Math.PI - Math.PI;
-
-    // 광원의 위치 설정 (XZ 평면에서만 회전)
-    const x = orbitRadius * Math.cos(angle); // 왼쪽 90도에서 오른쪽 90도까지
-    const z = orbitRadius * Math.sin(angle); // 고양이의 반대쪽으로 이동
-    light.position.set(x, 0, -z); // 광원의 새로운 위치 설정
-    light.lookAt(sphere_spring.position); // 광원이 고양이 쪽을 향하게 설정
-
-    updateBackgroundColor();
-
-    if (mixer) mixer.update(0.007); // Adjust timing for animation
-    // Check for collision and keep cat on sphere
-    // if (cat) {
-    //   keepCatOnSphere();
-    // }
+    // setInterval(updateLightPosition, 1000);
 
     // 그 외 렌더링 관련 코드
     renderer.render(scene, camera); // 현재 프레임을 렌더링
@@ -2338,18 +2179,7 @@ window.onload = function init() {
   // 창 크기가 변경될 때마다 resizeCanvas 함수 호출
   window.addEventListener("resize", resizeCanvas);
 
-  // 고양이 collision detection 수행
-  // function keepCatOnSphere() {
-  //   const sphereCenter = sphere.position; // Sphere center
-  //   const catDirection = cat.position.clone().sub(sphereCenter).normalize(); // Direction vector from sphere to cat
-
-  //   // Adjust position so the cat stays on the surface of the sphere
-  //   const targetPosition = catDirection.multiplyScalar(radius + 0.03); // Offset to keep the cat slightly above the surface
-  //   cat.position.copy(targetPosition);
-  // }
-
   // 초기 렌더링 함수 호출 (첫 프레임을 렌더링하기 위해 호출)
   render();
-  // createTree();
   /* --------------------------------------------------------------------------- */
 };
