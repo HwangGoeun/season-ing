@@ -1,6 +1,6 @@
 let rotate = 0;
 let viewAll = 1;
-let catWalk = 0;
+let catWalk = 1;
 let renderer, scene, camera, light, sphere, cat, mixer;
 const radius = 6;       // Sphere radius
 const orbitRadius = 10; // Orbit radius for light
@@ -83,8 +83,8 @@ function setupLight() {
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.1);
     directionalLight.position.set(-1, 0, 0);
     directionalLight.castShadow = true;
-    directionalLight.shadow.mapSize.width = 512;
-    directionalLight.shadow.mapSize.height = 512;
+    directionalLight.shadow.mapSize.width = 1024;
+    directionalLight.shadow.mapSize.height = 1024;
     directionalLight.shadow.camera.near = 0.5;
     directionalLight.shadow.camera.far = 50;
     directionalLight.shadow.camera.left = -20;
@@ -95,19 +95,26 @@ function setupLight() {
     scene.add(directionalLight);
     return directionalLight;
 }
+
+// 광원 위치 및 색 온도 업데이트 함수
 function updateLightPosition() {
-    const now = new Date();
-    const utcHours = now.getUTCHours();
-    const kstHours = (utcHours + 9) % 24; // UTC를 한국 시간으로 변환
-    
-    // 각도를 0시부터 24시 기준으로 180도로 매핑 (왼쪽 90도에서 오른쪽 90도로 이동하도록 설정)
+    const { kstHours, normalizedTime } = getCurrentTimeInfo();
+
+    // 각도를 0시부터 24시 기준으로 180도로 매핑
     const angle = (kstHours / 24) * Math.PI - Math.PI;
 
     // 광원의 위치 설정 (XZ 평면에서만 회전)
-    const x = orbitRadius * Math.cos(angle); // 왼쪽 90도에서 오른쪽 90도까지
-    const y = orbitRadius * Math.sin(angle); // 고양이의 반대쪽으로 이동
-    light.position.set(x, -y, 0); // 광원의 새로운 위치 설정
-    light.lookAt(sphere.position); // 광원이 고양이 쪽을 향하게 설정
+    const x = orbitRadius * Math.cos(angle);
+    const y = orbitRadius * Math.sin(angle);
+    light.position.set(x, -y, 0);
+    light.lookAt(sphere.position);
+
+    // 색 온도 조정
+    if (kstHours >= 6 && kstHours < 18) {
+        light.color.setHSL(0.1, 1, 0.9); // 낮 시간: 주황색
+    } else {
+        light.color.setHSL(0.6, 1, 0.5); // 밤 시간: 파란색
+    }
 }
 
 /* --------------------------------------------------------------------------- */
@@ -174,6 +181,34 @@ function setupTextureLoader() {
     sphere.material.needsUpdate = true;
 }
 
+/* --------------------------------------------------------------------------- */
+/* time */
+
+// 시간 관련 정보 반환 함수
+function getCurrentTimeInfo() {
+  const now = new Date();
+  const utcHours = now.getUTCHours();
+  // const kstHours = (utcHours + 9) % 24;
+  const kstHours = 0;
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  const seconds = now.getSeconds();
+
+  // 일중 초 단위 계산 (24시간 기준)
+  const secondsInDay = hours * 3600 + minutes * 60 + seconds;
+  const normalizedTime = secondsInDay / 86400;
+
+  return {
+      now,
+      utcHours,
+      kstHours,
+      hours,
+      minutes,
+      seconds,
+      normalizedTime
+  };
+}
+
 // Clock setup
 function setupClock() {
     setInterval(() => {
@@ -182,33 +217,32 @@ function setupClock() {
     }, 1000);
 }
 
-// Update clock display
+// 시계 업데이트 함수
 function updateClock() {
-    const clockElement = document.getElementById("clock");
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const seconds = String(now.getSeconds()).padStart(2, "0");
-    clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+  const { hours, minutes, seconds } = getCurrentTimeInfo();
+  const clockElement = document.getElementById("clock");
+  clockElement.textContent = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
-    // Activate meteor shower at 9 PM
-    if (hours >= 21 && !meteorShowerActive) {
-        meteorShowerActive = true;
-        if (meteorMode) {
-            createMeteorShower();
-        } else {
-            createStarField();
-        }
-    }
+  // 밤 9시에 유성우 활성화
+  if (hours >= 21 && !meteorShowerActive) {
+      meteorShowerActive = true;
+      if (meteorMode) {
+          createMeteorShower();
+      } else {
+          createStarField();
+      }
+  }
 }
 
-// Update background color based on time
+/* --------------------------------------------------------------------------- */
+
+// 배경 색상 업데이트 함수
 function updateBackgroundColor() {
-    const timeValue = getTimeBasedColorValue();
-    const skyColor = new THREE.Color(0x87ceeb);
-    const eveningColor = new THREE.Color(0x1c1c72);
-    const currentColor = skyColor.lerp(eveningColor, timeValue);
-    renderer.setClearColor(currentColor);
+  const { normalizedTime } = getCurrentTimeInfo();
+  const skyColor = new THREE.Color(0x87ceeb);
+  const eveningColor = new THREE.Color(0x1c1c72);
+  const currentColor = skyColor.lerp(eveningColor, (Math.cos(2 * Math.PI * normalizedTime) + 1) / 2);
+  renderer.setClearColor(currentColor);
 }
 
 // Get time-based color value for background
@@ -588,7 +622,7 @@ function spring() {
         rotY = degreeToRadian(170),
         rotZ = -degreeToRadian(15),
       );
-      
+
       placeObject(
         filePath = "./models/spring/japanese_cherry_blossom_-_single_flower/scene.gltf", 
         scaleX = 5, scaleY = 5, scaleZ = 5,
@@ -1016,71 +1050,71 @@ function winter() {
     ambientOcclusionMapPath = "./textures/Snow_004_OCC.jpg"; // 주변광 차단 맵
     setupTextureLoader();
 
-    //집 로드
-    placeObject(
-        "./models/winterObject/winter_house/scene.gltf",
-        scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
-        posRadius = radius,   // 구의 반경
-        posPhi = 20,         // 세로 각도
-        posTheta = -12.8,     // 가로 각도
-        rotX =0 , rotY =Math.PI, rotZ = 0,
-        );
-        placeObject(
-          "./models/winterObject/winter_house/scene.gltf",
-          scaleX = 0.07, scaleY = 0.07, scaleZ = 0.07,
-          posRadius = radius,   // 구의 반경
-          posPhi = 20,         // 세로 각도
-          posTheta = -12.7,     // 가로 각도
-          rotX =0 , rotY =Math.PI, rotZ = 0,
-          );
-          placeObject(
-            "./models/winterObject/winter_house2/scene.gltf",
-            scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
-            posRadius = radius,   // 구의 반경
-            posPhi = 20.2,         // 세로 각도
-            posTheta = -12.4,     // 가로 각도
-            rotX =0 , rotY =Math.PI, rotZ = 0,
-            );
-            placeObject(
-              "./models/winterObject/winter_house2/scene.gltf",
-              scaleX = 0.07, scaleY = 0.07, scaleZ = 0.07,
-              posRadius = radius,   // 구의 반경
-              posPhi = 20.2,         // 세로 각도
-              posTheta = -12.3,     // 가로 각도
-              rotX =0 , rotY =Math.PI, rotZ = 0,
-              );
-              placeObject(
-                "./models/winterObject/winter_house/scene.gltf",
-                scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
-                posRadius = radius,   // 구의 반경
-                posPhi = 20.3,         // 세로 각도
-                posTheta = -12.8,     // 가로 각도
-                rotX =0 , rotY =Math.PI, rotZ = 0,
-                );
-                placeObject(
-                  "./models/winterObject/winter_house/scene.gltf",
-                  scaleX = 0.07, scaleY = 0.07, scaleZ = 0.07,
-                  posRadius = radius,   // 구의 반경
-                  posPhi = 20.3,         // 세로 각도
-                  posTheta = -12.7,     // 가로 각도
-                  rotX =0 , rotY =Math.PI, rotZ = 0,
-                  );      
-                  placeObject(
-                    "./models/winterObject/winter_house2/scene.gltf",
-                    scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
-                    posRadius = radius,   // 구의 반경
-                    posPhi = 20.6,         // 세로 각도
-                    posTheta = -12.3,     // 가로 각도
-                    rotX =0 , rotY =Math.PI, rotZ = 0,
-                    );
-                    placeObject(
-                      "./models/winterObject/winter_house2/scene.gltf",
-                      scaleX = 0.07, scaleY = 0.07, scaleZ = 0.07,
-                      posRadius = radius,   // 구의 반경
-                      posPhi = 20.6,         // 세로 각도
-                      posTheta = -12.4,     // 가로 각도
-                      rotX =0 , rotY =Math.PI, rotZ = 0,
-                      ); 
+    // //집 로드
+    // placeObject(
+    //     "./models/winterObject/winter_house/scene.gltf",
+    //     scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
+    //     posRadius = radius,   // 구의 반경
+    //     posPhi = 20,         // 세로 각도
+    //     posTheta = -12.8,     // 가로 각도
+    //     rotX =0 , rotY =Math.PI, rotZ = 0,
+    //     );
+    //     placeObject(
+    //       "./models/winterObject/winter_house/scene.gltf",
+    //       scaleX = 0.07, scaleY = 0.07, scaleZ = 0.07,
+    //       posRadius = radius,   // 구의 반경
+    //       posPhi = 20,         // 세로 각도
+    //       posTheta = -12.7,     // 가로 각도
+    //       rotX =0 , rotY =Math.PI, rotZ = 0,
+    //       );
+    //       placeObject(
+    //         "./models/winterObject/winter_house2/scene.gltf",
+    //         scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
+    //         posRadius = radius,   // 구의 반경
+    //         posPhi = 20.2,         // 세로 각도
+    //         posTheta = -12.4,     // 가로 각도
+    //         rotX =0 , rotY =Math.PI, rotZ = 0,
+    //         );
+    //         placeObject(
+    //           "./models/winterObject/winter_house2/scene.gltf",
+    //           scaleX = 0.07, scaleY = 0.07, scaleZ = 0.07,
+    //           posRadius = radius,   // 구의 반경
+    //           posPhi = 20.2,         // 세로 각도
+    //           posTheta = -12.3,     // 가로 각도
+    //           rotX =0 , rotY =Math.PI, rotZ = 0,
+    //           );
+    //           placeObject(
+    //             "./models/winterObject/winter_house/scene.gltf",
+    //             scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
+    //             posRadius = radius,   // 구의 반경
+    //             posPhi = 20.3,         // 세로 각도
+    //             posTheta = -12.8,     // 가로 각도
+    //             rotX =0 , rotY =Math.PI, rotZ = 0,
+    //             );
+    //             placeObject(
+    //               "./models/winterObject/winter_house/scene.gltf",
+    //               scaleX = 0.07, scaleY = 0.07, scaleZ = 0.07,
+    //               posRadius = radius,   // 구의 반경
+    //               posPhi = 20.3,         // 세로 각도
+    //               posTheta = -12.7,     // 가로 각도
+    //               rotX =0 , rotY =Math.PI, rotZ = 0,
+    //               );      
+    //               placeObject(
+    //                 "./models/winterObject/winter_house2/scene.gltf",
+    //                 scaleX = 0.1, scaleY = 0.1, scaleZ = 0.1,
+    //                 posRadius = radius,   // 구의 반경
+    //                 posPhi = 20.6,         // 세로 각도
+    //                 posTheta = -12.3,     // 가로 각도
+    //                 rotX =0 , rotY =Math.PI, rotZ = 0,
+    //                 );
+    //                 placeObject(
+    //                   "./models/winterObject/winter_house2/scene.gltf",
+    //                   scaleX = 0.07, scaleY = 0.07, scaleZ = 0.07,
+    //                   posRadius = radius,   // 구의 반경
+    //                   posPhi = 20.6,         // 세로 각도
+    //                   posTheta = -12.4,     // 가로 각도
+    //                   rotX =0 , rotY =Math.PI, rotZ = 0,
+    //                   ); 
         //눈사람 로드     
         placeObject(
            "./models/winterObject/snow_man/scene.gltf",
