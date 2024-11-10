@@ -1,5 +1,5 @@
 rotate = 1;
-viewAll = 1;
+viewAll = 0;
 
 window.onload = function init() {
   // 웹 페이지가 로드되면 init 함수 실행
@@ -659,28 +659,6 @@ window.onload = function init() {
       meteors.push(star);
     }
   }
-  /* --------------------------------------------------------------------------- */
-  /* slider */
-
-  // 슬라이드 바로 광원 밝기 조절
-  const slider = document.getElementById("light-intensity");
-  slider.value = light.intensity; // 슬라이더 초기 값을 광원의 초기 강도와 동기화
-
-  slider.addEventListener("input", function () {
-    light.intensity = parseFloat(slider.value); // 슬라이드 바 값을 광원의 밝기로 설정
-  });
-
-  // Disable controls while interacting with the slider
-  slider.addEventListener("mousedown", () => (controls.enabled = false));
-  slider.addEventListener("mouseup", () => (controls.enabled = true));
-  slider.addEventListener("touchstart", () => (controls.enabled = false));
-  slider.addEventListener("touchend", () => (controls.enabled = true));
-
-  // Update light intensity based on slider value
-  slider.addEventListener("input", function () {
-    light.intensity = parseFloat(slider.value);
-  });
-
   /* --------------------------------------------------------------------------- */
 
   /* --------------------------------------------------------------------------- */
@@ -2148,7 +2126,7 @@ window.onload = function init() {
       sphere_winter.rotation.x -= 0.001; // Adjust rotation speed as needed
     }
 
-    if (mixer && rotate) mixer.update(0.004); // Adjust timing for animation
+    if (mixer && rotate) mixer.update(0.007); // Adjust timing for animation
 
     const current_brightness = getTimeBasedColorValue();
 
