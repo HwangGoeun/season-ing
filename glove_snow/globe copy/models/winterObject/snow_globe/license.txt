@@ -1,0 +1,11 @@
+Model Information:
+* title:	Snow Globe
+* source:	https://sketchfab.com/3d-models/snow-globe-090bfce9ce394b11bcef261636827b94
+* author:	celestial fox (https://sketchfab.com/celestialfox)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Snow Globe" (https://sketchfab.com/3d-models/snow-globe-090bfce9ce394b11bcef261636827b94) by celestial fox (https://sketchfab.com/celestialfox) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

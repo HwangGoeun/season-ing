@@ -1,0 +1,11 @@
+Model Information:
+* title:	Summer drink
+* source:	https://sketchfab.com/3d-models/summer-drink-4336815ca8734e099399473c8669f3ba
+* author:	Broccoletto (https://sketchfab.com/broccoletto)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Summer drink" (https://sketchfab.com/3d-models/summer-drink-4336815ca8734e099399473c8669f3ba) by Broccoletto (https://sketchfab.com/broccoletto) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

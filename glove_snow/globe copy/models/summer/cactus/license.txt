@@ -1,0 +1,11 @@
+Model Information:
+* title:	Cactus On The Beach
+* source:	https://sketchfab.com/3d-models/cactus-on-the-beach-e378cf6c8a79426fabb12657692dc7da
+* author:	Pacheco2099 (https://sketchfab.com/Pacheco2099)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Cactus On The Beach" (https://sketchfab.com/3d-models/cactus-on-the-beach-e378cf6c8a79426fabb12657692dc7da) by Pacheco2099 (https://sketchfab.com/Pacheco2099) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
