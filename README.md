@@ -63,6 +63,6 @@ This project uses various open-source models and textures to enhance the seasona
 | Name           | GitHub                   |
 |----------------|--------------------------|
 | 🌸 Hwang Goeun | https://github.com/HwangGoeun |
-| 🌴 Kwon SoYeong | https://github.com/may0611 |
+| 🌴 Kwon SoYeong | https://github.com/ksy0725 |
 | 🍁 Kang Jiyun | https://github.com/1stMourinhoFan |
-| ☃️ Lee chaeeun | https://github.com/ksy0725 |
+| ☃️ Lee chaeeun | https://github.com/may0611 |
