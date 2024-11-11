@@ -87,14 +87,8 @@ window.onload = function init() {
   light.target = lightTarget; // 빛이 타겟을 향하게 설정
   light.castShadow = true;
 
-  light.shadow.mapSize.width = 8192;
-  light.shadow.mapSize.height = 8192;
-  light.shadow.camera.near = 0.5;
-  light.shadow.camera.far = 50;
-  light.shadow.camera.left = -20;
-  light.shadow.camera.right = 20;
-  light.shadow.camera.top = 20;
-  light.shadow.camera.bottom = -20;
+  light.shadow.mapSize.width = 12288;
+  light.shadow.mapSize.height = 12288;
 
   scene.add(light);
 
@@ -461,7 +455,7 @@ window.onload = function init() {
     const now = new Date();
     const utcHours = now.getUTCHours();
     // const kstHours = (utcHours + 9) % 24;
-    const kstHours = 19;
+    const kstHours = 12;
     const hours = now.getHours();
     const minutes = now.getMinutes();
     const seconds = now.getSeconds();
@@ -2130,7 +2124,7 @@ window.onload = function init() {
     if (mixer && rotate) mixer.update(0.007); // Adjust timing for animation
 
     const current_brightness = getTimeBasedColorValue();
-    console.log(current_brightness);
+    // console.log(current_brightness);
     light.intensity = current_brightness;
     light_top.intensity = current_brightness;
     setupClock();
