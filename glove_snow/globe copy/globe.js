@@ -461,13 +461,13 @@ window.onload = function init() {
     const now = new Date();
     const utcHours = now.getUTCHours();
     const kstHours = (utcHours + 9) % 24;
-    // const kstHours = 15;
+    // const kstHours = 11;
     const hours = now.getHours();
     const minutes = now.getMinutes();
     const seconds = now.getSeconds();
 
     // 일중 초 단위 계산 (24시간 기준)
-    const secondsInDay = hours * 3600 + minutes * 60 + seconds;
+    const secondsInDay = kstHours * 3600 + minutes * 60 + seconds;
     const normalizedTime = secondsInDay / 86400;
 
     return {
@@ -497,7 +497,7 @@ window.onload = function init() {
       minutes
     ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
     // 밤 9시에 유성우 활성화
-    if (kstHours >= 19 && !meteorShowerActive) {
+    if ((kstHours >= 19 || kstHours <= 6) && !meteorShowerActive) {
       meteorShowerActive = true;
       if (meteorMode) {
         createMeteorShower();
@@ -543,12 +543,8 @@ window.onload = function init() {
   /* --------------------------------------------------------------------------- */
 
   function getTimeBasedColorValue() {
-    const now = new Date();
-    const secondsInDay =
-      now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-
     // 0 ~ 1 사이의 비율 계산
-    const normalizedTime = secondsInDay / 86400;
+    const { normalizedTime } = getCurrentTimeInfo();
 
     // 코사인 함수를 사용하여 0시에 어둡고 12시에 밝게 조정
     // 코사인 곡선으로 -1 ~ 1 사이 값을 0 ~ 1로 매핑
@@ -557,7 +553,7 @@ window.onload = function init() {
     // brightness 값을 0.2에서 1로 조정
     const adjustedBrightness = 0.2 + brightness * (1 - 0.2);
 
-    return brightness; // 0.2 (어두운 밤) ~ 1 (밝은 낮) 사이의 값
+    return adjustedBrightness; // 0.2 (어두운 밤) ~ 1 (밝은 낮) 사이의 값
   }
 
   /* --------------------------------------------------------------------------- */
