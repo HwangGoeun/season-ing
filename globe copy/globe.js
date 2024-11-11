@@ -1,5 +1,5 @@
-rotate = 1;
-viewAll = 0;
+rotate = 0;
+viewAll = 1;
 
 window.onload = function init() {
   // 웹 페이지가 로드되면 init 함수 실행
@@ -28,8 +28,8 @@ window.onload = function init() {
   renderer.setSize(window.innerWidth, window.innerHeight); // 초기 창 크기에 맞추어 캔버스 설정
 
   // 장면에 X, Y, Z 축을 표시 (X : Red, Y : Green, Z : Blue)
-  const axes = new THREE.AxesHelper(1000);
-  scene.add(axes);
+  // const axes = new THREE.AxesHelper(1000);
+  // scene.add(axes);
   /* --------------------------------------------------------------------------- */
   /* camera */
 
@@ -355,9 +355,9 @@ window.onload = function init() {
     scaleX = 0,
     scaleY = 0,
     scaleZ = 0,
-    posRadius = radius, // 구의 반경
-    posPhi = 0, // 세로 각도
-    posTheta = 0, // 가로 각도
+    posRadius = radius,
+    posPhi = 0,
+    posTheta = 0,
     rotX = 0,
     rotY = Math.PI,
     rotZ = 0
@@ -379,13 +379,11 @@ window.onload = function init() {
         });
 
         sphere.add(obj);
-        //obj.up.set(1, 0, 0); // 필요에 따라 다른 축을 설정합니다.
         obj.lookAt(sphere.position);
 
         obj.rotation.x += rotX;
         obj.rotation.y += rotY;
         obj.rotation.z += rotZ;
-        // render();
       },
       undefined,
       function (error) {
@@ -455,12 +453,11 @@ window.onload = function init() {
     const now = new Date();
     const utcHours = now.getUTCHours();
     const kstHours = (utcHours + 9) % 24;
-    // const kstHours = 12;
     const hours = now.getHours();
     const minutes = now.getMinutes();
     const seconds = now.getSeconds();
 
-    // 일중 초 단위 계산 (24시간 기준)
+    // Converting 24 hours to seconds
     const secondsInDay = kstHours * 3600 + minutes * 60 + seconds;
     const normalizedTime = secondsInDay / 86400;
 
@@ -485,12 +482,12 @@ window.onload = function init() {
 
   // 시계 업데이트 함수
   function updateClock() {
-    const { kstHours, hours, minutes, seconds } = getCurrentTimeInfo();
+    const { kstHours, minutes, seconds } = getCurrentTimeInfo();
     const clockElement = document.getElementById("clock");
     clockElement.textContent = `${String(kstHours).padStart(2, "0")}:${String(
       minutes
     ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-    // 밤 9시에 유성우 활성화
+    // Meteor Activated (19:00 ~ 06:00)
     if ((kstHours >= 19 || kstHours <= 6) && !meteorShowerActive) {
       meteorShowerActive = true;
       if (meteorMode) {
@@ -507,52 +504,48 @@ window.onload = function init() {
   // 광원 위치 및 색 온도 업데이트 함수
   function updateLightPosition() {
     const { kstHours, normalizedTime } = getCurrentTimeInfo();
-    // console.log(kstHours, normalizedTime);
 
-    // 각도를 0시부터 24시 기준으로 180도로 매핑
+    // Mapping Time 0 to 24 into 180 degrees
     const angle = (kstHours / 24) * Math.PI - Math.PI;
 
-    // 광원의 위치 설정 (XZ 평면에서만 회전)
+    // set light position / only rotate in XZ plane
     const x = orbitRadius * Math.cos(angle);
     const y = orbitRadius * Math.sin(angle);
     light.position.set(x, -y, 0);
     light.lookAt(sphere_spring);
 
-    // 색 온도 조정
+    // Adjust Color Temperature
     if (kstHours >= 7 && kstHours < 18) {
-      light_top.color.setRGB(0.996, 0.816, 0.8); // 낮 시간: 주황색
-      light.color.setRGB(0.996, 0.816, 0.8); // 낮 시간: 주황색
+      // Day time: bright grey
+      light_top.color.setRGB(0.996, 0.816, 0.8);
+      light.color.setRGB(0.996, 0.816, 0.8);
     } else if (kstHours >= 6 && kstHours < 7) {
+      // morning in sunrise color
       light_top.color.setRGB(1.0, 0.498, 0.0);
-      light.color.setRGB(1.0, 0.498, 0.0); // 낮 시간: 주황색
+      light.color.setRGB(1.0, 0.498, 0.0);
     } else if (kstHours >= 18 && kstHours < 19) {
+      // afternoon in sunset color
       light_top.color.setRGB(1.0, 0.498, 0.0);
       light.color.setRGB(1.0, 0.498, 0.0);
     } else {
-      light_top.color.setRGB(0.027, 0.224, 0.322); // 밤 시간: 파란색
-      light.color.setRGB(0.027, 0.224, 0.322); // 밤 시간: 파란색
+      // Night blue color
+      light_top.color.setRGB(0.027, 0.224, 0.322);
+      light.color.setRGB(0.027, 0.224, 0.322);
     }
   }
 
   /* --------------------------------------------------------------------------- */
 
   function getTimeBasedColorValue() {
-    // 0 ~ 1 사이의 비율 계산
     const { normalizedTime } = getCurrentTimeInfo();
 
-    // 코사인 함수를 사용하여 0시에 어둡고 12시에 밝게 조정
-    // 코사인 곡선으로 -1 ~ 1 사이 값을 0 ~ 1로 매핑
-    // const brightness = (Math.cos(2 * Math.PI * normalizedTime) + 1) / 2;
-    // 0.5를 기준으로 대칭적인 변화
+    // 0.5 criteria, get how car with 0.5
     const distanceFromMidday = Math.abs(normalizedTime - 0.5);
 
-    // 거리 값이 0.5에 가까워질수록 brightness가 1에 가까워지도록 수식 수정
+    // distacne near 0.5 will get near to 1 if not near to 0
     const brightness = 1 - distanceFromMidday * 2;
 
-    // brightness 값을 0.2에서 1로 조정
-    // const adjustedBrightness = 0.2 + brightness * (1 - 0.2);
-
-    return brightness; // 0.2 (어두운 밤) ~ 1 (밝은 낮) 사이의 값
+    return brightness; // 0.0 (Dark) ~ 1 (Bright)
   }
 
   /* --------------------------------------------------------------------------- */
@@ -563,16 +556,16 @@ window.onload = function init() {
   /* --------------------------------------------------------------------------- */
   /* background */
 
-  // 배경 색상 업데이트 함수 (시간에 따라 배경색이 변화)
+  // BackgroundColor update function
   function updateBackgroundColor() {
     const { normalizedTime } = getCurrentTimeInfo();
-    const skyColor = new THREE.Color(0x87ceeb); // 밝은 하늘색
-    const eveningColor = new THREE.Color(0x1c1c72); // 어두운 저녁색
+    const skyColor = new THREE.Color(0x87ceeb); // Light sky blue
+    const eveningColor = new THREE.Color(0x1c1c72); // Dark evening color
     const currentColor = skyColor.lerp(
       eveningColor,
       (Math.cos(2 * Math.PI * normalizedTime) + 1) / 2
     );
-    renderer.setClearColor(currentColor); // 배경 색상 업데이트
+    renderer.setClearColor(currentColor); // update Bg Color
   }
 
   /* --------------------------------------------------------------------------- */
@@ -734,20 +727,20 @@ window.onload = function init() {
     }
   );
 
-  // 회전 및 점프 토글 함수
+  // Rotate and Toggle function
   function toggleRotationAndJump() {
-    // 회전 상태를 토글
+    // Toggle rotate state
     rotate = !rotate;
 
-    // 점프 상태를 초기화하여 고양이가 멈추게 함
+    // initialize jump state
     isJumping = false;
-    jumpDirection = 1; // 초기화 (위로 올라가는 방향으로 설정)
+    jumpDirection = 1; // set upward direction
 
-    // 구와 고양이의 현재 위치 유지
+    // maintain location between sphere and cat
     if (!rotate && mixer) {
-      mixer.stopAllAction(); // 모든 애니메이션 중지
+      mixer.stopAllAction(); // Stop motion of cat
     } else if (rotate && mixer) {
-      // 고양이 애니메이션을 재할당하고 재생
+      // reassign cat animation and play
       const action = mixer.clipAction(mixer._actions[0]._clip);
       action.play();
     }
