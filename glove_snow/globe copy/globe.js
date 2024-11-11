@@ -71,9 +71,9 @@ window.onload = function init() {
   // scene.add(light_top); // 장면에 빛 추가
 
   // 방향광(Directional Light) 설정 (특정 방향으로 빛을 쏘는 조명)
-  const light_bright = new THREE.DirectionalLight(0xffffff, 0.3); // 하얀색 빛에 강도는 0.1로 설정
-  light_bright.position.set(0, 12, 0); // 빛이 -X축 방향에서 비추도록 위치 설정
-  scene.add(light_bright); // 장면에 빛 추가
+  // const light_bright = new THREE.DirectionalLight(0xffffff, 0.3); // 하얀색 빛에 강도는 0.1로 설정
+  // light_bright.position.set(0, 12, 0); // 빛이 -X축 방향에서 비추도록 위치 설정
+  // scene.add(light_bright); // 장면에 빛 추가
 
   // 방향광(Directional Light) 설정 (특정 방향으로 빛을 쏘는 조명)
   const light = new THREE.DirectionalLight(0xffffff, 0.1); // 하얀색 빛에 강도는 0.1로 설정
@@ -460,8 +460,8 @@ window.onload = function init() {
   function getCurrentTimeInfo() {
     const now = new Date();
     const utcHours = now.getUTCHours();
-    const kstHours = (utcHours + 9) % 24;
-    // const kstHours = 11;
+    // const kstHours = (utcHours + 9) % 24;
+    const kstHours = 19;
     const hours = now.getHours();
     const minutes = now.getMinutes();
     const seconds = now.getSeconds();
@@ -493,7 +493,7 @@ window.onload = function init() {
   function updateClock() {
     const { kstHours, hours, minutes, seconds } = getCurrentTimeInfo();
     const clockElement = document.getElementById("clock");
-    clockElement.textContent = `${String(hours).padStart(2, "0")}:${String(
+    clockElement.textContent = `${String(kstHours).padStart(2, "0")}:${String(
       minutes
     ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
     // 밤 9시에 유성우 활성화
@@ -548,12 +548,17 @@ window.onload = function init() {
 
     // 코사인 함수를 사용하여 0시에 어둡고 12시에 밝게 조정
     // 코사인 곡선으로 -1 ~ 1 사이 값을 0 ~ 1로 매핑
-    const brightness = (Math.cos(2 * Math.PI * normalizedTime) + 1) / 2;
+    // const brightness = (Math.cos(2 * Math.PI * normalizedTime) + 1) / 2;
+    // 0.5를 기준으로 대칭적인 변화
+    const distanceFromMidday = Math.abs(normalizedTime - 0.5);
+
+    // 거리 값이 0.5에 가까워질수록 brightness가 1에 가까워지도록 수식 수정
+    const brightness = 1 - distanceFromMidday * 2;
 
     // brightness 값을 0.2에서 1로 조정
-    const adjustedBrightness = 0.2 + brightness * (1 - 0.2);
+    // const adjustedBrightness = 0.2 + brightness * (1 - 0.2);
 
-    return adjustedBrightness; // 0.2 (어두운 밤) ~ 1 (밝은 낮) 사이의 값
+    return brightness; // 0.2 (어두운 밤) ~ 1 (밝은 낮) 사이의 값
   }
 
   /* --------------------------------------------------------------------------- */
@@ -2125,7 +2130,7 @@ window.onload = function init() {
     if (mixer && rotate) mixer.update(0.007); // Adjust timing for animation
 
     const current_brightness = getTimeBasedColorValue();
-
+    console.log(current_brightness);
     light.intensity = current_brightness;
     light_top.intensity = current_brightness;
     setupClock();
