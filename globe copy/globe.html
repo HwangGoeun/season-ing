@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Main</title>
+    <script type="text/javascript" src="js/three.min.js"></script>
+    <script type="text/javascript" src="js/TrackballControls.js"></script>
+    <script type="text/javascript" src="globe.js"></script>
+    <style>
+      #slider-container {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 10;
+      }
+
+      input[type="range"] {
+        -webkit-appearance: none;
+        width: 200px;
+        height: 15px;
+        border-radius: 5px;
+        background: #666666; /* 슬라이드 바 배경 색상 */
+        outline: none;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #74a7fe; /* 슬라이드 바 손잡이 색상 */
+        cursor: pointer;
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #74a7fe; /* Firefox용 슬라이드 바 손잡이 색상 */
+        cursor: pointer;
+      }
+
+      body {
+        margin: 0;
+        overflow: hidden; /* 스크롤을 방지하기 위해 overflow hidden */
+      }
+      canvas {
+        display: block;
+      }
+      /* 시계 스타일 */
+      #clock {
+        position: absolute;
+        top: 10px; /* 상단으로부터 10px */
+        left: 50%;
+        transform: translateX(-50%);
+        color: white;
+        font-size: 24px;
+        font-family: "Arial", sans-serif;
+        z-index: 10; /* 시계가 3D 장면 위에 나타나도록 z-index 설정 */
+      }
+
+      /* 버튼 컨테이너 스타일 */
+      #button-container {
+        position: absolute;
+        top: 70px; /* 슬라이더 아래 위치 */
+        left: 20px;
+        z-index: 10; /* 캔버스 위에 표시되도록 z-index 설정 */
+      }
+
+      /* 버튼 스타일 */
+      #action-button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      #action-button:hover {
+        background-color: #45a049; /* 호버 시 색상 변경 */
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 시계 추가 -->
+    <div id="clock"></div>
+
+    <div id="season">
+      <style>
+        #season {
+          position: absolute;
+          top: 70px; /* 위치 조정 */
+          left: 20px;
+          z-index: 10; /* 캔버스 위에 표시 */
+        }
+
+        /* 버튼 공통 스타일 */
+        #season button {
+          padding: 10px 20px;
+          margin: 5px;
+          font-size: 16px;
+          font-weight: bold;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          color: white;
+          transition: background-color 0.3s ease;
+        }
+
+        /* 계절별 버튼 색상 스타일 */
+        #season button[type="summer"] {
+          background-color: #ffa500; /* 오렌지 색 */
+        }
+
+        #season button[type="spring"] {
+          background-color: #00ff7f; /* 스프링 그린 */
+        }
+
+        #season button[type="fall"] {
+          background-color: #ff8c00; /* 가을 주황 */
+        }
+
+        #season button[type="winter"] {
+          background-color: #1e90ff; /* 겨울 파랑 */
+        }
+
+        /* 마우스 호버 시 밝아지는 효과 */
+        #season button:hover {
+          opacity: 0.9;
+        }
+
+        /* 클릭 시 약간의 눌림 효과 */
+        #season button:active {
+          transform: scale(0.95);
+        }
+      </style>
+
+      <!-- 계절 버튼 -->
+      <button type="spring" id="spring">Spring</button>
+      <button type="summer" id="summer">Summer</button>
+      <button type="fall" id="fall">Fall</button>
+      <button type="winter" id="winter">Winter</button>
+    </div>
+
+    <canvas id="gl-canvas" width="1024" height="1024">
+      Oops ... your browser doesn't support the HTML5 canvas element
+    </canvas>
+
+    <!-- <input type="range" id="colorSlider" min="0" max="100" value="0"> -->
+    <canvas id="gl-canvas"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://threejs.org/examples/js/controls/TrackballControls.js"></script>
+    <!-- <script src="script.js"></script> -->
+
+    <!-- Three.js 라이브러리 -->
+    <script type="text/javascript" src="./js/three.js"></script>
+
+    <!-- TrackballControls 추가 -->
+    <script type="text/javascript" src="./js/trackballcontrols.js"></script>
+
+    <!-- globe.js 로드 -->
+    <script type="text/javascript" src="./globe.js"></script>
+
+    <!-- gltf loader 로드 -->
+    <script type="text/javascript" src="./js/GLTFLoader.js"></script>
+    <script src="./js/OrbitControls.js"></script>
+  </body>
+</html>
